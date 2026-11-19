@@ -64,7 +64,7 @@ test('full flow: template → edit → synth → effect → paint → automate �
     page.waitForEvent('download', { timeout: 60_000 }),
     dialog.getByRole('button', { name: 'Export WAV' }).click(),
   ]);
-  expect(download.suggestedFilename()).toMatch(/^Hip-hop Beat - .*\.wav$/);
+  expect(download.suggestedFilename()).toMatch(/^Hip-hop[ _]Beat[ _]-[ _].*\.wav$/);
   await dialog.getByRole('button', { name: 'Close' }).last().click();
 
   // reload: the song is restored with the edits

@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test('automate a filter cutoff and see the knob follow it', async ({ page }) => {
   await page.goto('/');
-  await page.keyboard.press('6'); // Bass (no effects yet)
+  await page.getByRole('row', { name: 'Track Bass' }).click(); // Bass (no effects yet)
   await page.getByRole('tab', { name: /Effects/ }).click();
   await page.getByRole('button', { name: '＋ Add effect' }).click();
   await page.getByRole('menuitem', { name: /Filter/ }).click();

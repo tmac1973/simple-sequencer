@@ -19,7 +19,8 @@ test('edits survive a reload, and a song file round-trips', async ({ page }) => 
     page.waitForEvent('download'),
     page.getByRole('menuitem', { name: /Download song file/ }).click(),
   ]);
-  expect(download.suggestedFilename()).toBe('My Saved Song.json');
+  // WebKit's download names use _ for spaces
+  expect(download.suggestedFilename()).toMatch(/^My[ _]Saved[ _]Song\.json$/);
   const path = await download.path();
 
   // start another song, then re-open the file

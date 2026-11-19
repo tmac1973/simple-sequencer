@@ -13,7 +13,7 @@ for (const fmt of ['WAV', 'MP3']) {
       dialog.getByRole('button', { name: `Export ${fmt}` }).click(),
     ]);
     expect(download.suggestedFilename()).toMatch(
-      new RegExp(`^Lo-fi Beat - \\d{4}-\\d{2}-\\d{2}\\.${fmt.toLowerCase()}$`),
+      new RegExp(`^Lo-fi[ _]Beat[ _]-[ _]\\d{4}-\\d{2}-\\d{2}\\.${fmt.toLowerCase()}$`),
     );
     const path = await download.path();
     const fs = await import('node:fs');
