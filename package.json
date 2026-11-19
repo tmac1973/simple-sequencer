@@ -17,8 +17,11 @@
   },
   "license": "MIT",
   "dependencies": {
+    "immer": "^11.2.10",
+    "nanoid": "^6.0.2",
     "react": "^19.3.1",
-    "react-dom": "^19.3.1"
+    "react-dom": "^19.3.1",
+    "zustand": "^5.1.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
