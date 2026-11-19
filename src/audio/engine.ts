@@ -14,6 +14,8 @@ import {
 } from './scheduler';
 import { TrackGraph } from './trackGraph';
 import { triggerSample } from './voices/sampleVoice';
+import { SynthVoice } from './voices/synthVoice';
+import { degreeToMidi } from '@/model/scale';
 
 /**
  * All audio nodes for one song, built in whatever Tone context is current
@@ -22,6 +24,7 @@ import { triggerSample } from './voices/sampleVoice';
 export class GraphSet {
   readonly master: MasterBus;
   readonly tracks = new Map<string, TrackGraph>();
+  readonly synths = new Map<string, SynthVoice>();
 
   constructor(song: Song) {
     this.master = createMaster();
@@ -31,6 +34,13 @@ export class GraphSet {
   sync(song: Song) {
     const anySolo = song.tracks.some((t) => t.solo);
     const ids = new Set(song.tracks.map((t) => t.id));
+    for (const [id, v] of this.synths) {
+      const t = song.tracks.find((x) => x.id === id);
+      if (!t || t.kind !== 'synth') {
+        v.dispose();
+        this.synths.delete(id);
+      }
+    }
     for (const [id, g] of this.tracks) {
       if (!ids.has(id)) {
         g.dispose();
@@ -39,13 +49,27 @@ export class GraphSet {
     }
     for (const t of song.tracks) {
       const audible = isAudible(t, anySolo);
-      const g = this.tracks.get(t.id);
+      let g = this.tracks.get(t.id);
       if (g) g.update(t, audible);
-      else this.tracks.set(t.id, new TrackGraph(t, this.master.input, audible));
+      else {
+        g = new TrackGraph(t, this.master.input, audible);
+        this.tracks.set(t.id, g);
+      }
+      if (t.kind === 'synth' && t.synth) {
+        const v = this.synths.get(t.id);
+        if (v) v.apply(t.synth);
+        else this.synths.set(t.id, new SynthVoice(t.synth, g.input));
+      }
     }
   }
 
+  releaseAll() {
+    for (const v of this.synths.values()) v.releaseAll();
+  }
+
   dispose() {
+    for (const v of this.synths.values()) v.dispose();
+    this.synths.clear();
     for (const g of this.tracks.values()) g.dispose();
     this.tracks.clear();
     this.master.dispose();
@@ -57,13 +81,25 @@ function dispatchEvent(
   track: Track,
   ev: ScheduledEvent,
   at: number,
-  _beatSec: number,
+  beatSec: number,
+  song: Song,
 ) {
   const g = graphs.tracks.get(track.id);
   if (!g) return;
   if (ev.kind === 'hit' && track.sample) {
     const buf = SampleRegistry.getLoaded(track.sample.sampleId);
     if (buf) triggerSample(g.input, buf, at, ev.velocity, track.sample);
+    return;
+  }
+  if (ev.kind !== 'note' || ev.degree === undefined) return;
+  const midi = degreeToMidi(ev.degree, song.key);
+  const dur = (ev.lengthBeats ?? 0.25) * beatSec;
+  if (track.kind === 'synth') {
+    graphs.synths.get(track.id)?.trigger(midi, dur, at, ev.velocity);
+  } else if (track.sample) {
+    const buf = SampleRegistry.getLoaded(track.sample.sampleId);
+    const rate = 2 ** ((midi - track.sample.rootMidi) / 12);
+    if (buf) triggerSample(g.input, buf, at, ev.velocity, track.sample, rate, dur);
   }
 }
 
@@ -81,7 +117,7 @@ export function scheduleBeat(
   const beatSec = beatSeconds(song.bpm);
   for (const ev of computeBeatEvents(song, ctx, songBeat)) {
     const track = song.tracks.find((t) => t.id === ev.trackId);
-    if (track) dispatchEvent(graphs, track, ev, time + ev.offsetBeats * beatSec, beatSec);
+    if (track) dispatchEvent(graphs, track, ev, time + ev.offsetBeats * beatSec, beatSec, song);
   }
 }
 
@@ -149,6 +185,25 @@ class Engine {
   stop() {
     this.clock.stop();
     this.queue = [];
+    this.graphs?.releaseAll();
+  }
+
+  /** Play one note on a track right now (piano-roll audition). */
+  async auditionNote(trackId: string, degree: number, velocity = 0.8) {
+    if (!this.song) return;
+    await ensureAudioStarted();
+    const graphs = this.ensureGraphs();
+    const track = this.song.tracks.find((t) => t.id === trackId);
+    if (!graphs || !track) return;
+    const ev: ScheduledEvent = {
+      trackId,
+      kind: 'note',
+      offsetBeats: 0,
+      velocity,
+      degree,
+      lengthBeats: 0.5,
+    };
+    dispatchEvent(graphs, track, ev, audioNow() + 0.02, beatSeconds(this.song.bpm), this.song);
   }
 
   /** Audition a sound right now, straight to the master bus. */

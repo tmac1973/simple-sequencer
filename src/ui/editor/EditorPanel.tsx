@@ -154,7 +154,7 @@ export function EditorPanel() {
         {showDrums ? (
           <DrumView />
         ) : notes ? (
-          <PianoRoll track={track} pattern={pattern} />
+          <PianoRoll key={`${track.id}:${pattern.id}`} track={track} pattern={pattern} />
         ) : (
           <StepEditor track={track} pattern={pattern} />
         )}

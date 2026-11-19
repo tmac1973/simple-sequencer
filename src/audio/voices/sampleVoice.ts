@@ -19,6 +19,12 @@ export function triggerSample(
   const gain = new Tone.Gain(velocity * velocity);
   src.connect(gain);
   gain.connect(dest);
+  if (durationSec !== undefined) {
+    // short release so cut-off notes don't click
+    const end = time + durationSec;
+    gain.gain.setValueAtTime(velocity * velocity, Math.max(time, end - 0.012));
+    gain.gain.linearRampToValueAtTime(0, end);
+  }
   src.onended = () => {
     src.dispose();
     gain.dispose();

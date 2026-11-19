@@ -117,3 +117,18 @@ describe('pattern mode loop region', () => {
     expect(songBeatFor(s, songCtx, 8, 2)).toBe(0);
   });
 });
+
+describe('notes follow the key', () => {
+  it('emits degrees, so a key change re-pitches without wrong notes', async () => {
+    const { degreeToMidi } = await import('@/model/scale');
+    const t = createSynthTrack();
+    t.patterns[0]!.notes = [{ start: 0, length: 4, degree: 2, velocity: 1 }];
+    t.blocks = [{ id: 'b', patternId: t.patterns[0]!.id, startBar: 0 }];
+    const s = createSong({ tracks: [t], key: { root: 0, scale: 'minor' } });
+    const [ev] = computeBeatEvents(s, songCtx, 0);
+    expect(degreeToMidi(ev!.degree!, s.key) % 12).toBe(3); // E♭
+    s.key = { root: 9, scale: 'minor' };
+    const [ev2] = computeBeatEvents(s, songCtx, 0);
+    expect(degreeToMidi(ev2!.degree!, s.key) % 12).toBe(0); // C, minor third of A
+  });
+});

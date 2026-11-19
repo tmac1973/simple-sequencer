@@ -124,7 +124,7 @@
 .keyRow select:last-child {
   width: 118px;
 }
-@media (max-width: 1500px) {
+@media (max-width: 1420px) {
   .logoText {
     display: none;
   }
