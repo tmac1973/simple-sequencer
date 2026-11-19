@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LFO Lanes — UI Mock</title>
+<style>
+:root{--bg:#13141b;--panel:#1b1d27;--panel2:#232634;--panel3:#2c3042;--line:#33374a;--text:#eceef6;--muted:#9a9eb5;--dim:#6b6f86;--accent:#8b7bff;--accent2:#b3a8ff;--good:#5ee6a8;--warn:#ffb84d;--pad:#a78bfa}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:40px;}
+button,select{font:inherit;color:inherit;background:var(--panel3);border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer}
+.ghost{background:transparent}
+.muted{color:var(--muted)}.small{font-size:12.5px}
+.note{max-width:1180px;margin:18px auto 10px;color:var(--muted);font-size:13px;padding:0 16px}
+.note b{color:var(--warn)}
+.wrap{display:grid;grid-template-columns:minmax(0,1fr) 330px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+/* timeline */
+.tl{display:grid;grid-template-columns:250px 1fr;align-content:start;background:var(--bg);min-width:0}
+.ruler{display:contents}
+.ruler .h{background:var(--panel);border-bottom:1px solid var(--line);font-size:11px;color:var(--dim);padding:6px 10px}
+.bars{display:grid;grid-template-columns:repeat(8,1fr);background:var(--panel);border-bottom:1px solid var(--line)}
+.bars span{font-size:11px;color:var(--dim);padding:6px 6px;border-left:1px solid var(--line)}
+.trk{padding:10px;border-bottom:1px solid var(--line);background:var(--panel);display:flex;gap:8px;align-items:center}
+.sw{width:10px;height:28px;border-radius:3px;background:var(--pad)}
+.blocks{border-bottom:1px solid var(--line);display:grid;grid-template-columns:repeat(8,1fr);gap:2px;padding:6px 0}
+.blocks i{height:30px;border-radius:6px;background:var(--pad)}
+.lanehead{padding:0 6px 0 14px;border-bottom:1px solid var(--line);background:#191b24;font-size:12.5px;display:flex;align-items:center;gap:6px;height:64px;white-space:nowrap;overflow:hidden}
+.lanehead b{overflow:hidden;text-overflow:ellipsis}
+.lanehead b{font-weight:600}
+.badge{font-size:11px;padding:1px 7px;border-radius:999px;background:#8b7bff33;color:var(--accent2);white-space:nowrap;flex:none}
+.sub{padding-left:28px}
+.lane{border-bottom:1px solid var(--line);background:#171922;position:relative;height:64px}
+.lane svg{position:absolute;inset:0;width:100%;height:100%}
+.callout{position:absolute;right:8px;top:6px;font-size:11.5px;color:var(--warn)}
+/* inspector */
+.insp{background:var(--panel);border-left:1px solid var(--line);padding:12px 14px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:-12px -14px 12px;padding:0 10px}
+.tabs span{padding:10px 12px;color:var(--muted);font-size:13px}
+.tabs span.on{color:var(--text);box-shadow:inset 0 -2px var(--accent)}
+.sect{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);margin:6px 0 8px}
+.card{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:10px}
+.card .hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.seg{display:inline-flex;background:var(--panel3);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:none;border-radius:0;background:transparent;padding:4px 10px;font-size:12.5px}
+.seg button.on{background:var(--accent);color:#fff}
+.shapes{display:flex;gap:4px;margin:4px 0 10px}
+.shapes button{width:40px;height:32px;padding:0;display:grid;place-items:center}
+.shapes button.on{border-color:var(--accent);background:#8b7bff33}
+.row{display:flex;align-items:center;gap:10px;margin:8px 0}
+.row label{width:62px;font-size:12.5px;color:var(--muted)}
+.knob{width:46px;height:46px;border-radius:50%;background:conic-gradient(var(--accent) 0 var(--v),#33374a var(--v) 75%,transparent 75%);transform:rotate(-135deg);display:grid;place-items:center}
+.knob::after{content:"";width:34px;height:34px;border-radius:50%;background:var(--panel2)}
+.knobs{display:flex;gap:16px;margin-top:6px}
+.knobs div{text-align:center;font-size:11.5px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:12px;padding:4px 10px;border-radius:999px;background:var(--panel3);border:1px solid var(--line)}
+.chip.lfo{border-color:#8b7bff88}
+.tip{font-size:12px;color:var(--muted);margin-top:4px}
+</style>
+</head>
+<body>
+
+<div class="note"><b>MOCK ▸ Wobble (LFO) lanes.</b> Any automation lane can switch from <b>✏️ Draw</b> to <b>〰️ Wobble</b>: the knob then moves up and down by itself, in time with the song. The wobble's <b>amount</b> and <b>speed</b> can be automated with their own lanes — here the wobble fades in over 8 bars.</div>
+
+<div class="wrap">
+  <div class="tl">
+    <div class="ruler"><div class="h">TRACKS</div><div class="bars"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div></div>
+
+    <div class="trk"><span class="sw"></span><div><b>Pad</b><div class="small muted">Synth · Soft Pad</div></div></div>
+    <div class="blocks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+    <div class="lanehead">↳ <b>Filter cutoff</b> <span class="badge">〰 Wobble · 1/4</span><span style="flex:1"></span><button class="ghost small">👁</button><button class="ghost small">✕</button></div>
+    <div class="lane"><svg id="wave" viewBox="0 0 800 64" preserveAspectRatio="none"></svg><span class="callout">the knob's movement (made by the wobble, not drawn)</span></div>
+
+    <div class="lanehead sub">↳ <b>· Wobble amount</b><span style="flex:1"></span><button class="ghost small">👁</button><button class="ghost small">✕</button></div>
+    <div class="lane"><svg id="amt" viewBox="0 0 800 64" preserveAspectRatio="none"></svg><span class="callout">a normal lane you draw: fade the wobble in</span></div>
+  </div>
+
+  <div class="insp">
+    <div class="tabs"><span>Sound</span><span>Effects</span><span class="on">Automate</span></div>
+    <div class="sect">Automation for Pad</div>
+    <div class="card">
+      <div class="hd"><b>Filter cutoff</b><span style="flex:1"></span><span class="seg"><button>✏️ Draw</button><button class="on">〰️ Wobble</button></span></div>
+      <div class="small muted" style="margin-bottom:4px">Shape</div>
+      <div class="shapes">
+        <button class="on" title="Smooth"><svg width="26" height="14"><path d="M1 7 Q7 -4 13 7 T25 7" stroke="#eceef6" fill="none" stroke-width="1.8"/></svg></button>
+        <button title="Triangle"><svg width="26" height="14"><path d="M1 13 L7 1 L13 13 L19 1 L25 13" stroke="#eceef6" fill="none" stroke-width="1.8"/></svg></button>
+        <button title="Square (on/off)"><svg width="26" height="14"><path d="M1 13 V1 H8 V13 H15 V1 H22 V13" stroke="#eceef6" fill="none" stroke-width="1.8"/></svg></button>
+        <button title="Ramp up"><svg width="26" height="14"><path d="M1 13 L12 1 V13 L24 1 V13" stroke="#eceef6" fill="none" stroke-width="1.8"/></svg></button>
+        <button title="Ramp down"><svg width="26" height="14"><path d="M1 1 L12 13 V1 L24 13 V1" stroke="#eceef6" fill="none" stroke-width="1.8"/></svg></button>
+        <button title="Random steps"><svg width="26" height="14"><path d="M1 9 H6 V3 H11 V12 H16 V6 H21 V10 H25" stroke="#eceef6" fill="none" stroke-width="1.8"/></svg></button>
+      </div>
+      <div class="row"><label>Speed</label><select><option>1/16 note</option><option>1/8 note</option><option selected>1/4 note (a beat)</option><option>1/2 note</option><option>1 bar</option><option>2 bars</option><option>4 bars</option><option>8 bars</option></select></div>
+      <div class="knobs">
+        <div><div class="knob" style="--v:45%"></div>Amount<br><span style="color:var(--text)">60%</span></div>
+        <div><div class="knob" style="--v:30%"></div>Centre<br><span style="color:var(--text)">40%</span></div>
+      </div>
+      <div class="tip">The knob swings this far either side of the centre. Automate the amount or speed below.</div>
+    </div>
+
+    <div class="sect" style="margin-top:14px">Quick wobbles</div>
+    <div class="chips">
+      <span class="chip lfo">〰 Wobble bass</span><span class="chip lfo">〰 Tremolo</span><span class="chip lfo">〰 Auto-pan</span><span class="chip lfo">〰 Slow sweep</span>
+    </div>
+    <div class="sect" style="margin-top:14px">Add a lane: choose a knob to automate</div>
+    <div class="chips">
+      <span class="chip">＋ Volume</span><span class="chip">＋ Pan</span><span class="chip">＋ Tone</span><span class="chip">＋ Space</span><span class="chip">＋ Chorus · Amount</span>
+      <span class="chip lfo">＋ Filter cutoff · wobble speed</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// draw the mock curves: an amount lane rising over 8 bars, and the wobble it scales
+const W = 800, H = 64, bars = 8, beatsPerCycle = 1;
+const amtAt = (x) => Math.min(1, x / W * 1.15);
+let a = 'M0 ' + (H - 6 - amtAt(0) * (H - 12));
+for (let x = 0; x <= W; x += 4) a += ' L' + x + ' ' + (H - 6 - amtAt(x) * (H - 12));
+document.getElementById('amt').innerHTML =
+  '<path d="' + a + '" stroke="#ffb84d" fill="none" stroke-width="2" vector-effect="non-scaling-stroke"/>' +
+  '<circle cx="0" cy="' + (H - 6) + '" r="4" fill="#ffb84d"/><circle cx="696" cy="6" r="4" fill="#ffb84d"/>';
+const centre = 0.4, depth = 0.6;
+let w = '';
+for (let x = 0; x <= W; x += 1) {
+  const beats = (x / W) * bars * 4;
+  const v = centre + depth * amtAt(x) * 0.5 * Math.sin((2 * Math.PI * beats) / beatsPerCycle);
+  w += (x ? ' L' : 'M') + x + ' ' + (H - 4 - v * (H - 8));
+}
+document.getElementById('wave').innerHTML =
+  '<path d="M0 ' + (H - 4 - centre * (H - 8)) + ' H' + W + '" stroke="#6b6f86" stroke-dasharray="4 4" fill="none" vector-effect="non-scaling-stroke"/>' +
+  '<path d="' + w + '" stroke="#a78bfa" fill="none" stroke-width="1.6" vector-effect="non-scaling-stroke"/>';
+</script>
+</body>
+</html>

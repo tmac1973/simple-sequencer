@@ -69,6 +69,22 @@ describe('every control has a plain-English tooltip', () => {
     }
   });
 
+  it('automate tab with a wobble lane', async () => {
+    const t = useSongStore.getState().song.tracks[4]!;
+    useSongStore
+      .getState()
+      .addWobble(
+        t.id,
+        { kind: 'track', param: 'pan' },
+        { shape: 'sine', rate: 4, depth: 0.8, center: 0.5 },
+      );
+    useUiStore.setState({ inspectorTab: 'automate', selectedTrackId: t.id });
+    render(<AppShell />);
+    await act(async () => {});
+    expect(document.querySelector('[aria-label$="wobble shape"]')).not.toBeNull();
+    expect(missing(document)).toEqual([]);
+  });
+
   it.each([
     'newSong',
     'browser',

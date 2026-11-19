@@ -5,6 +5,8 @@ import type {
   AutomationTarget,
   FxSlot,
   FxType,
+  LfoSettings,
+  LfoShape,
   Note,
   OscType,
   Pattern,
@@ -125,13 +127,33 @@ function targetOf(v: unknown, p: string): AutomationTarget {
       return { kind: 'sampleTone' };
     case 'fx':
       return { kind: 'fx', fxId: str(o.fxId, `${p}.fxId`), param: str(o.param, `${p}.param`) };
+    case 'lfo':
+      return {
+        kind: 'lfo',
+        laneId: str(o.laneId, `${p}.laneId`),
+        param: oneOf(o.param, ['amount', 'speed'] as const, `${p}.param`),
+      };
     default:
       fail(`${p}.kind`, 'is not a known automation target');
   }
 }
-function laneOf(v: unknown, p: string): AutomationLane {
+const LFO_SHAPES: LfoShape[] = ['sine', 'triangle', 'square', 'rampUp', 'rampDown', 'random'];
+function lfoOf(v: unknown, p: string): LfoSettings {
   const o = obj(v, p);
   return {
+    shape: oneOf(o.shape, LFO_SHAPES, `${p}.shape`),
+    rate: Math.round(num(o.rate, `${p}.rate`, 0, 7)),
+    depth: num(o.depth, `${p}.depth`, 0, 1),
+    center: num(o.center, `${p}.center`, 0, 1),
+  };
+}
+function laneOf(v: unknown, p: string): AutomationLane {
+  const o = obj(v, p);
+  const extra: Partial<AutomationLane> = {};
+  if (o.mode !== undefined) extra.mode = oneOf(o.mode, ['draw', 'lfo'] as const, `${p}.mode`);
+  if (o.lfo !== undefined) extra.lfo = lfoOf(o.lfo, `${p}.lfo`);
+  return {
+    ...extra,
     id: str(o.id, `${p}.id`),
     target: targetOf(o.target, `${p}.target`),
     visible: bool(o.visible, `${p}.visible`),
@@ -167,7 +189,12 @@ function trackOf(v: unknown, p: string): Track {
   const fxIds = new Set(fx.map((f) => f.id));
   const automation = arr(o.automation, `${p}.automation`)
     .map((x, i) => laneOf(x, `${p}.automation[${i}]`))
-    .filter((l) => l.target.kind !== 'fx' || fxIds.has(l.target.fxId));
+    .filter((l) => l.target.kind !== 'fx' || fxIds.has(l.target.fxId))
+    .filter(
+      (l, _, all) =>
+        l.target.kind !== 'lfo' ||
+        all.some((x) => x.id === (l.target as { laneId: string }).laneId),
+    );
   const t: Track = {
     id: str(o.id, `${p}.id`),
     name: str(o.name, `${p}.name`),

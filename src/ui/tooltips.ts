@@ -284,6 +284,39 @@ export const TIPS: Record<string, TipCopy> = {
   exportGo: { title: 'Export', body: 'Make the audio file. It downloads when it is ready.' },
   exportCancel: { title: 'Cancel', body: 'Stop making the file.' },
   comingSoon: { title: 'Coming soon', body: 'This part of the app is on its way.' },
+  laneMode: {
+    title: 'Draw or Wobble',
+    body: 'Draw: the knob follows the line you draw. Wobble (an LFO): the knob moves up and down by itself, in time with the song.',
+  },
+  lfoShape: {
+    title: 'Wobble shape',
+    body: 'How the knob moves: smooth waves, straight triangles, on/off jumps, ramps, or random steps.',
+  },
+  lfoSpeed: {
+    title: 'Wobble speed',
+    body: 'How long one wobble takes, in time with the tempo: from a 1/16 note (fast flutter) to 8 bars (slow breathing).',
+  },
+  lfoAmount: { title: 'Wobble amount', body: 'How far the knob swings. 0% = no wobble at all.' },
+  lfoCenter: {
+    title: 'Centre',
+    body: 'The middle of the swing: the knob wobbles around this value.',
+  },
+  'quickWobble.wobble': {
+    title: 'Wobble',
+    body: 'The classic "wub wub": the Tone filter opens and closes on every 1/8 note.',
+  },
+  'quickWobble.tremolo': {
+    title: 'Tremolo',
+    body: 'The volume pulses quickly, like a vintage amp or a shimmering pad.',
+  },
+  'quickWobble.autopan': {
+    title: 'Auto-pan',
+    body: 'The sound sways from left to right and back once a bar. Try it with headphones.',
+  },
+  'quickWobble.sweep': {
+    title: 'Slow sweep',
+    body: 'The Tone filter slowly opens and closes over 8 bars, so the sound breathes.',
+  },
   laneShow: { title: 'Show / hide', body: 'Hide the lane in the timeline. It still plays.' },
   laneAdd: {
     title: 'Add automation',

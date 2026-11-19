@@ -22,6 +22,7 @@ import * as Tone from 'tone';
 import { degreeToMidi } from '@/model/scale';
 import { automatedSet, resetAutomation, scheduleAutomation } from './automation';
 import { valueAt, targetKey } from '@/model/automation';
+import { isLfoLane, lfoValue } from '@/model/lfo';
 import type { AutomationTarget } from '@/model/types';
 
 /**
@@ -310,7 +311,9 @@ class Engine {
     if (!pos || !t) return null;
     const key = targetKey(target);
     const lane = t.automation.find((l) => targetKey(l.target) === key);
-    return lane ? valueAt(lane, pos.beat / BEATS_PER_BAR) : null;
+    if (!lane) return null;
+    if (isLfoLane(lane)) return lfoValue(t, lane, pos.beat);
+    return valueAt(lane, pos.beat / BEATS_PER_BAR);
   }
 
   /** Play one note on a track right now (piano-roll audition). */

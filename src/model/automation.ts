@@ -1,4 +1,5 @@
 import { dbToSlider } from './mixing';
+import { LFO_RATES } from './lfo';
 import type { AutomationLane, AutomationPoint, AutomationTarget, Track } from './types';
 
 /** Stable key for a target, e.g. "track:volume", "fx:<slot>:cutoff". */
@@ -12,6 +13,8 @@ export function targetKey(t: AutomationTarget): string {
       return 'sampleTone';
     case 'fx':
       return `fx:${t.fxId}:${t.param}`;
+    case 'lfo':
+      return `lfo:${t.laneId}:${t.param}`;
   }
 }
 
@@ -55,11 +58,18 @@ export function targetStatic(track: Track, t: AutomationTarget, fxDefault = 0.5)
       return track.sample?.tone ?? 1;
     case 'fx':
       return track.fx.find((f) => f.id === t.fxId)?.params[t.param] ?? fxDefault;
+    case 'lfo': {
+      if (t.param === 'amount') return 1;
+      const lfo = track.automation.find((l) => l.id === t.laneId)?.lfo;
+      return lfo ? lfo.rate / (LFO_RATES.length - 1) : 0.5;
+    }
   }
 }
 
-/** Remove lanes whose effect no longer exists. */
+/** Remove lanes whose effect (or wobble lane) no longer exists. */
 export function pruneLanes(track: Track): AutomationLane[] {
   const ids = new Set(track.fx.map((f) => f.id));
-  return track.automation.filter((l) => l.target.kind !== 'fx' || ids.has(l.target.fxId));
+  const kept = track.automation.filter((l) => l.target.kind !== 'fx' || ids.has(l.target.fxId));
+  const laneIds = new Set(kept.map((l) => l.id));
+  return kept.filter((l) => l.target.kind !== 'lfo' || laneIds.has(l.target.laneId));
 }

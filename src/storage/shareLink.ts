@@ -5,6 +5,7 @@ import type {
   AutomationLane,
   AutomationTarget,
   FxSlot,
+  LfoShape,
   Pattern,
   SampleEdit,
   Song,
@@ -31,7 +32,7 @@ const r3 = (v: number) => Math.round(v * 1000) / 1000;
 
 type Packed = unknown[];
 
-function packTarget(t: AutomationTarget, fx: FxSlot[]): Packed {
+function packTarget(t: AutomationTarget, fx: FxSlot[], lanes: AutomationLane[]): Packed {
   switch (t.kind) {
     case 'track':
       return ['t', t.param];
@@ -41,10 +42,12 @@ function packTarget(t: AutomationTarget, fx: FxSlot[]): Packed {
       return ['s'];
     case 'fx':
       return ['f', fx.findIndex((f) => f.id === t.fxId), t.param];
+    case 'lfo':
+      return ['l', lanes.findIndex((l) => l.id === t.laneId), t.param];
   }
 }
 
-function unpackTarget(p: Packed, fx: FxSlot[]): AutomationTarget {
+function unpackTarget(p: Packed, fx: FxSlot[], laneIds: string[]): AutomationTarget {
   switch (p[0]) {
     case 't':
       return { kind: 'track', param: p[1] as 'volume' | 'pan' };
@@ -52,6 +55,12 @@ function unpackTarget(p: Packed, fx: FxSlot[]): AutomationTarget {
       return { kind: 'synthMacro', macro: p[1] as 'tone' | 'space' };
     case 's':
       return { kind: 'sampleTone' };
+    case 'l':
+      return {
+        kind: 'lfo',
+        laneId: laneIds[p[1] as number] ?? '',
+        param: p[2] === 'speed' ? 'speed' : 'amount',
+      };
     default:
       return { kind: 'fx', fxId: fx[p[1] as number]?.id ?? '', param: String(p[2]) };
   }
@@ -81,11 +90,22 @@ function packTrack(t: Track): Packed {
     b.startBar,
   ]);
   const fx = t.fx.map((f) => [f.type, f.enabled ? 1 : 0, roundParams(f.params)]);
-  const lanes = t.automation.map((l) => [
-    packTarget(l.target, t.fx),
-    l.visible ? 1 : 0,
-    l.points.flatMap((p) => [r3(p.bar), r3(p.value)]),
-  ]);
+  const lanes = t.automation.map((l) => {
+    const packed: Packed = [
+      packTarget(l.target, t.fx, t.automation),
+      l.visible ? 1 : 0,
+      l.points.flatMap((p) => [r3(p.bar), r3(p.value)]),
+    ];
+    if (l.mode === 'lfo' || l.lfo)
+      packed.push([
+        l.mode === 'lfo' ? 1 : 0,
+        l.lfo?.shape ?? 'sine',
+        l.lfo?.rate ?? 2,
+        r3(l.lfo?.depth ?? 0.5),
+        r3(l.lfo?.center ?? 0.5),
+      ]);
+    return packed;
+  });
   const sound = t.sample
     ? [
         t.sample.sampleId,
@@ -163,11 +183,23 @@ function unpackTrack(p: Packed): Track {
     const [type, enabled, params] = f as [FxSlot['type'], number, Record<string, number>];
     return { id: newId(), type, enabled: !!enabled, params };
   });
-  const automation: AutomationLane[] = lanes.map((l) => {
-    const [target, visible, pts] = l as [Packed, number, number[]];
+  const laneIds = lanes.map(() => newId());
+  const automation: AutomationLane[] = lanes.map((l, li) => {
+    const [target, visible, pts, wobble] = l as [Packed, number, number[], Packed | undefined];
     const points: AutomationLane['points'] = [];
     for (let i = 0; i + 1 < pts.length; i += 2) points.push({ bar: pts[i]!, value: pts[i + 1]! });
-    return { id: newId(), target: unpackTarget(target, fx), visible: !!visible, points };
+    const lane: AutomationLane = {
+      id: laneIds[li]!,
+      target: unpackTarget(target, fx, laneIds),
+      visible: !!visible,
+      points,
+    };
+    if (wobble) {
+      const [on, shape, rate, depth, center] = wobble as [number, LfoShape, number, number, number];
+      lane.mode = on ? 'lfo' : 'draw';
+      lane.lfo = { shape, rate, depth, center };
+    }
+    return lane;
   });
   const t: Track = {
     id: newId(),

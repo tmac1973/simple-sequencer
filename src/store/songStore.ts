@@ -21,10 +21,13 @@ import {
   nextPatternName,
 } from '@/model/factories';
 import { clampDb } from '@/model/mixing';
-import { pruneLanes } from '@/model/automation';
+import { pruneLanes, targetKey, targetStatic, valueAt } from '@/model/automation';
+import { DEFAULT_LFO, LFO_RATES } from '@/model/lfo';
 import { deleteBars, duplicateBars, insertBars } from '@/model/bars';
 import type {
+  AutomationLane,
   AutomationPoint,
+  LfoSettings,
   AutomationTarget,
   FxType,
   Note,
@@ -177,6 +180,11 @@ export interface SongStore extends HistoryState {
     gestureId?: string,
   ): void;
   setLaneVisible(trackId: string, laneId: string, visible: boolean): void;
+  /** Switch a lane between drawn points and a wobble (LFO). */
+  setLaneMode(trackId: string, laneId: string, mode: 'draw' | 'lfo'): void;
+  setLfo(trackId: string, laneId: string, patch: Partial<LfoSettings>, gestureId?: string): void;
+  /** Make `target` wobble with these settings (adds the lane if needed). Returns the lane id. */
+  addWobble(trackId: string, target: AutomationTarget, lfo: LfoSettings): string | null;
 
   /** Apply a pattern idea (see library/ideas/apply) as one undo step. */
   applyIdea(
@@ -547,7 +555,10 @@ export const useSongStore = create<SongStore>((set, get) => {
     removeLane: (trackId, laneId) =>
       mutate('Delete automation', (d) => {
         const t = track(d, trackId);
-        if (t) t.automation = t.automation.filter((l) => l.id !== laneId);
+        if (!t) return;
+        t.automation = t.automation.filter((l) => l.id !== laneId);
+        // a wobble's amount/speed lanes go with it
+        t.automation = pruneLanes(t as Track) as typeof t.automation;
       }),
     setLanePoints: (trackId, laneId, points, g) =>
       mutate(
@@ -561,6 +572,55 @@ export const useSongStore = create<SongStore>((set, get) => {
         },
         g,
       ),
+    setLaneMode: (trackId, laneId, mode) =>
+      mutate(mode === 'lfo' ? 'Wobble on' : 'Wobble off', (d) => {
+        const t = track(d, trackId);
+        const l = t?.automation.find((x) => x.id === laneId);
+        if (!t || !l || l.target.kind === 'lfo') return;
+        l.mode = mode;
+        if (mode === 'lfo' && !l.lfo) {
+          const center = valueAt(l as AutomationLane, 0) ?? targetStatic(t as Track, l.target);
+          l.lfo = { ...DEFAULT_LFO, center };
+        }
+      }),
+    setLfo: (trackId, laneId, patch, g) =>
+      mutate(
+        'Wobble',
+        (d) => {
+          const l = track(d, trackId)?.automation.find((x) => x.id === laneId);
+          if (!l) return;
+          const next = { ...DEFAULT_LFO, ...l.lfo, ...patch };
+          next.depth = clamp(next.depth, 0, 1);
+          next.center = clamp(next.center, 0, 1);
+          next.rate = clamp(Math.round(next.rate), 0, LFO_RATES.length - 1);
+          l.lfo = next;
+        },
+        g,
+      ),
+    addWobble(trackId, target, lfo) {
+      const t = get().song.tracks.find((x) => x.id === trackId);
+      if (!t) return null;
+      const existing = t.automation.find((l) => targetKey(l.target) === targetKey(target));
+      const id = existing?.id ?? newId();
+      mutate('Add wobble', (d) => {
+        const dt = track(d, trackId)!;
+        const l = dt.automation.find((x) => x.id === id);
+        if (l) {
+          l.mode = 'lfo';
+          l.lfo = { ...lfo };
+          l.visible = true;
+        } else
+          dt.automation.push({
+            id,
+            target,
+            points: [],
+            visible: true,
+            mode: 'lfo',
+            lfo: { ...lfo },
+          });
+      });
+      return id;
+    },
     setLaneVisible: (trackId, laneId, visible) =>
       mutate('Show automation', (d) => {
         const l = track(d, trackId)?.automation.find((x) => x.id === laneId);

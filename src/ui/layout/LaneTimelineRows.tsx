@@ -1,4 +1,6 @@
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
+import { DEFAULT_LFO, isLfoLane, LFO_RATES, lfoValue } from '@/model/lfo';
+import { useUiStore } from '@/store/uiStore';
 import { newId } from '@/model/factories';
 import type { AutomationLane, AutomationPoint, Track } from '@/model/types';
 import { useSongStore } from '@/store/songStore';
@@ -160,15 +162,70 @@ function LaneRow({ track, lane, bars }: { track: Track; lane: AutomationLane; ba
   );
 }
 
+/** A wobble lane: shows how the knob actually moves. It's set up in the Automate tab. */
+function WobbleRow({ track, lane, bars }: { track: Track; lane: AutomationLane; bars: number }) {
+  const w = bars * BAR_W;
+  const lfo = lane.lfo ?? DEFAULT_LFO;
+  const y = (v: number) => PAD + (1 - v) * (H - 2 * PAD);
+  const path = useMemo(() => {
+    const perBar = Math.min(128, Math.max(16, Math.ceil((4 / LFO_RATES[lfo.rate]!) * 16)));
+    const n = bars * perBar;
+    let d = '';
+    for (let i = 0; i <= n; i++) {
+      const beat = (i / perBar) * 4;
+      d += `${i ? 'L' : 'M'}${((i / perBar) * BAR_W).toFixed(1)} ${y(lfoValue(track, lane, beat)).toFixed(1)}`;
+    }
+    return d;
+    // the curve depends on the lane and on its amount/speed lanes (all in track.automation)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [track.automation, bars]);
+  const openSettings = () => {
+    const ui = useUiStore.getState();
+    ui.selectTrack(track.id);
+    ui.setInspectorTab('automate');
+  };
+  return (
+    <div
+      style={{
+        height: H,
+        borderBottom: '1px solid var(--line)',
+        background: '#171924',
+        position: 'relative',
+        width: w,
+        cursor: 'pointer',
+      }}
+      aria-label={`${track.name} ${targetOption(track, lane.target).label} wobble`}
+      onClick={openSettings}
+      data-tip="Wobble lane|This knob wobbles by itself (an LFO). Click to change its shape, speed and amount in the Automate tab."
+    >
+      <svg width={w} height={H} style={{ display: 'block' }} aria-hidden>
+        <line
+          x1={0}
+          x2={w}
+          y1={y(lfo.center)}
+          y2={y(lfo.center)}
+          stroke="#6b6f86"
+          strokeDasharray="4 4"
+        />
+        <path d={path} fill="none" stroke={track.color} strokeWidth={1.6} />
+      </svg>
+    </div>
+  );
+}
+
 /** Automation lane rows under a track in the timeline. */
 export function LaneTimelineRows({ track, bars }: { track: Track; bars: number }) {
   return (
     <>
       {track.automation
         .filter((l) => l.visible)
-        .map((l) => (
-          <LaneRow key={l.id} track={track} lane={l} bars={bars} />
-        ))}
+        .map((l) =>
+          isLfoLane(l) ? (
+            <WobbleRow key={l.id} track={track} lane={l} bars={bars} />
+          ) : (
+            <LaneRow key={l.id} track={track} lane={l} bars={bars} />
+          ),
+        )}
     </>
   );
 }

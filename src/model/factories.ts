@@ -160,11 +160,17 @@ export function cloneTrackWithNewIds(track: Track): Track {
     fxMap.set(f.id, nid);
     f.id = nid;
   }
+  const laneMap = new Map<string, string>();
   for (const l of copy.automation) {
-    l.id = newId();
+    const nid = newId();
+    laneMap.set(l.id, nid);
+    l.id = nid;
     if (l.target.kind === 'fx')
       l.target = { ...l.target, fxId: fxMap.get(l.target.fxId) ?? l.target.fxId };
   }
+  for (const l of copy.automation)
+    if (l.target.kind === 'lfo')
+      l.target = { ...l.target, laneId: laneMap.get(l.target.laneId) ?? l.target.laneId };
   copy.solo = false;
   return copy;
 }

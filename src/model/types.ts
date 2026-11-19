@@ -176,7 +176,9 @@ export type AutomationTarget =
   | { kind: 'track'; param: 'volume' | 'pan' }
   | { kind: 'synthMacro'; macro: 'tone' | 'space' }
   | { kind: 'sampleTone' }
-  | { kind: 'fx'; fxId: Id; param: string };
+  | { kind: 'fx'; fxId: Id; param: string }
+  /** the amount or speed of another lane's wobble (LFO) */
+  | { kind: 'lfo'; laneId: Id; param: 'amount' | 'speed' };
 
 export interface AutomationPoint {
   /** fractional, 0 ≤ bar ≤ lengthBars */
@@ -185,9 +187,25 @@ export interface AutomationPoint {
   value: number;
 }
 
+export type LfoShape = 'sine' | 'triangle' | 'square' | 'rampUp' | 'rampDown' | 'random';
+
+/** A wobble: the knob moves up and down by itself, in time with the song. */
+export interface LfoSettings {
+  shape: LfoShape;
+  /** index into LFO_RATES (1/16 note … 8 bars) */
+  rate: number;
+  /** 0–1: how far the knob swings (±depth/2 around the centre) */
+  depth: number;
+  /** 0–1: the middle of the swing */
+  center: number;
+}
+
 export interface AutomationLane {
   id: Id;
   target: AutomationTarget;
   points: AutomationPoint[];
   visible: boolean;
+  /** 'lfo' = the knob wobbles by itself (points are kept for switching back). Default 'draw'. */
+  mode?: 'draw' | 'lfo';
+  lfo?: LfoSettings;
 }

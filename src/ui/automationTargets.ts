@@ -1,7 +1,8 @@
 import { FX_DEFS } from '@/audio/effects/registry';
 import { targetKey } from '@/model/automation';
 import { dbToSlider, sliderToDb } from '@/model/mixing';
-import type { AutomationTarget, Track } from '@/model/types';
+import { LFO_RATE_SHORT, rateIndexOf } from '@/model/lfo';
+import type { AutomationTarget, LfoSettings, Track } from '@/model/types';
 import { fmtPan, fmtPct, knobToPan } from './inspector/format';
 
 export interface TargetOption {
@@ -37,6 +38,23 @@ export function targetsFor(track: Track): TargetOption[] {
           format: p.format,
         });
   }
+  // each wobble's amount and speed can be automated too
+  const base = [...out];
+  for (const l of track.automation) {
+    if (l.mode !== 'lfo') continue;
+    const k = targetKey(l.target);
+    const name = base.find((o) => targetKey(o.target) === k)?.label ?? 'Knob';
+    out.push({
+      target: { kind: 'lfo', laneId: l.id, param: 'amount' },
+      label: `${name} · wobble amount`,
+      format: fmtPct,
+    });
+    out.push({
+      target: { kind: 'lfo', laneId: l.id, param: 'speed' },
+      label: `${name} · wobble speed`,
+      format: (v) => LFO_RATE_SHORT[rateIndexOf(v)]!,
+    });
+  }
   return out;
 }
 
@@ -52,3 +70,43 @@ export function targetOption(track: Track, target: AutomationTarget): TargetOpti
 }
 
 export { dbToSlider };
+
+export interface QuickWobble {
+  id: string;
+  label: string;
+  target: AutomationTarget;
+  lfo: LfoSettings;
+}
+
+/** One-click wobbles for a track (only ones that make sense for it). */
+export function quickWobbles(track: Track): QuickWobble[] {
+  const tone: AutomationTarget =
+    track.kind === 'synth' ? { kind: 'synthMacro', macro: 'tone' } : { kind: 'sampleTone' };
+  const vol = dbToSlider(track.volumeDb);
+  return [
+    {
+      id: 'wobble',
+      label: track.kind === 'synth' ? 'Wobble bass' : 'Filter wobble',
+      target: tone,
+      lfo: { shape: 'sine', rate: 1, depth: 0.7, center: 0.45 },
+    },
+    {
+      id: 'tremolo',
+      label: 'Tremolo',
+      target: { kind: 'track', param: 'volume' },
+      lfo: { shape: 'sine', rate: 0, depth: 0.3, center: Math.max(0.15, vol - 0.15) },
+    },
+    {
+      id: 'autopan',
+      label: 'Auto-pan',
+      target: { kind: 'track', param: 'pan' },
+      lfo: { shape: 'sine', rate: 4, depth: 0.8, center: 0.5 },
+    },
+    {
+      id: 'sweep',
+      label: 'Slow sweep',
+      target: tone,
+      lfo: { shape: 'triangle', rate: 7, depth: 0.6, center: 0.5 },
+    },
+  ];
+}

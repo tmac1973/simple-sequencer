@@ -166,3 +166,39 @@
   display: flex;
   justify-content: space-between;
 }
+.subLane {
+  margin-left: 14px;
+}
+.wobble {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.shapes {
+  display: flex;
+  gap: 4px;
+}
+.shapes button {
+  width: 38px;
+  height: 30px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  color: var(--text);
+}
+.shapes button.on {
+  border-color: var(--accent);
+  background: #8b7bff33;
+}
+.speed {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.speed select {
+  flex: 1;
+}
+.knobRow {
+  display: flex;
+  gap: 18px;
+}
