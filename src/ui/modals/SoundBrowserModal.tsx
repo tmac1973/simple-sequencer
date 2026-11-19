@@ -101,14 +101,24 @@ export function SoundBrowserModal({ onClose }: { onClose: () => void }) {
             </a>
           </span>
           <button onClick={onClose}>Cancel</button>
-          <button className="primary" disabled={!picked || picked === current} onClick={use}>
+          <button
+            className="primary"
+            disabled={!picked || picked === current}
+            onClick={use}
+            data-tip="useSound"
+          >
             Use this sound
           </button>
         </>
       }
     >
       <div className={styles.browser}>
-        <div className={styles.cats} role="tablist" aria-label="Sound categories">
+        <div
+          className={styles.cats}
+          role="tablist"
+          aria-label="Sound categories"
+          data-tip="soundCategories"
+        >
           {CATEGORIES.map((c) => (
             <button
               key={c}
@@ -142,6 +152,7 @@ export function SoundBrowserModal({ onClose }: { onClose: () => void }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             aria-label="Search sounds"
+            data-tip="soundSearch"
             autoFocus
           />
           {error && <div className={styles.empty}>{error}</div>}

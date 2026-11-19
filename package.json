@@ -1,6 +1,6 @@
 {
   "name": "simple-sequencer",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "An approachable web-based multitrack beat sequencer",
   "scripts": {
     "dev": "vite",
@@ -13,7 +13,8 @@
     "test:unit": "vitest run --project unit",
     "test:watch": "vitest",
     "e2e": "playwright test",
-    "e2e:local": "E2E_BROWSERS=chromium,firefox playwright test"
+    "e2e:local": "E2E_BROWSERS=chromium,firefox playwright test",
+    "e2e:perf": "PERF=1 E2E_BROWSERS=chromium playwright test perf --workers=1"
   },
   "license": "MIT",
   "dependencies": {

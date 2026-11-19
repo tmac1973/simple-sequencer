@@ -10,6 +10,7 @@ import { ModalHost } from '../modals/ModalHost';
 import { useShortcuts } from '../shortcuts';
 import { useSelectionGuard } from '../hooks/selection';
 import { useWindowDrop } from '../dragDrop';
+import { FirstRunHint } from '../FirstRunHint';
 
 export function AppShell() {
   useShortcuts();
@@ -29,6 +30,7 @@ export function AppShell() {
       <ModalHost />
       <TooltipLayer />
       <ToastHost />
+      <FirstRunHint />
     </div>
   );
 }

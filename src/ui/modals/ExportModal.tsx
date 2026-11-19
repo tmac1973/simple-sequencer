@@ -47,19 +47,19 @@ export function ExportModal({ onClose }: { onClose: () => void }) {
       footer={
         <>
           {busy && (
-            <button onClick={cancelExport} style={{ marginRight: 'auto' }}>
+            <button onClick={cancelExport} style={{ marginRight: 'auto' }} data-tip="exportCancel">
               Cancel export
             </button>
           )}
           <button onClick={onClose}>Close</button>
-          <button className="primary" disabled={busy} onClick={start}>
+          <button className="primary" disabled={busy} onClick={start} data-tip="exportGo">
             {busy ? 'Exporting…' : `Export ${format.toUpperCase()}`}
           </button>
         </>
       }
     >
       <div className="sect">Audio file, to listen to or share</div>
-      <div className={styles.opts} role="radiogroup" aria-label="Format">
+      <div className={styles.opts} role="radiogroup" aria-label="Format" data-tip="exportFormat">
         <button
           role="radio"
           aria-checked={format === 'mp3'}
@@ -87,6 +87,7 @@ export function ExportModal({ onClose }: { onClose: () => void }) {
           <>
             Quality
             <select
+              data-tip="exportQuality"
               aria-label="MP3 quality"
               value={kbps}
               onChange={(e) => setKbps(Number(e.target.value) as 128 | 192 | 320)}
@@ -101,6 +102,7 @@ export function ExportModal({ onClose }: { onClose: () => void }) {
             Bit depth
             <select
               aria-label="WAV bit depth"
+              data-tip="exportQuality"
               value={bits}
               onChange={(e) => setBits(Number(e.target.value) as 16 | 24)}
             >
@@ -113,7 +115,7 @@ export function ExportModal({ onClose }: { onClose: () => void }) {
       <div className="sect" style={{ marginTop: 18 }}>
         What to export
       </div>
-      <div className={styles.opts} role="radiogroup" aria-label="Range">
+      <div className={styles.opts} role="radiogroup" aria-label="Range" data-tip="exportRange">
         <button
           role="radio"
           aria-checked={range === 'song'}
@@ -145,6 +147,7 @@ export function ExportModal({ onClose }: { onClose: () => void }) {
           Repeat the loop
           <select
             aria-label="Repeats"
+            data-tip="exportRepeats"
             value={repeats}
             onChange={(e) => setRepeats(Number(e.target.value) as 1 | 2 | 4 | 8)}
           >

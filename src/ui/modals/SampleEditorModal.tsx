@@ -120,6 +120,7 @@ export function SampleEditorModal({ onClose }: { onClose: () => void }) {
             Edits only change this track. The original sound stays as it is.
           </span>
           <button
+            data-tip="resetEdit"
             onClick={() =>
               a.setSampleEdit(track.id, {
                 start: 0,

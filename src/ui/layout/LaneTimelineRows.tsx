@@ -91,7 +91,15 @@ function LaneRow({ track, lane, bars }: { track: Track; lane: AutomationLane; ba
         onPointerLeave={() => setHover(null)}
       >
         {Array.from({ length: Math.ceil(bars / 4) }, (_, i) => (
-          <line key={i} x1={i * 4 * BAR_W} x2={i * 4 * BAR_W} y1={0} y2={H} stroke="var(--line)" />
+          <line
+            key={i}
+            x1={i * 4 * BAR_W}
+            x2={i * 4 * BAR_W}
+            y1={0}
+            y2={H}
+            stroke="var(--line)"
+            pointerEvents="none"
+          />
         ))}
         {path && (
           <>

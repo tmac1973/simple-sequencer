@@ -70,7 +70,7 @@ export function NewSongModal({ onClose }: { onClose: () => void }) {
       }
     >
       <div className="sect">Start from a template, which is already playable</div>
-      <div className={styles.tpls} role="radiogroup" aria-label="Templates">
+      <div className={styles.tpls} role="radiogroup" aria-label="Templates" data-tip="templates">
         {TEMPLATES.map((t) => (
           <button
             key={t.id}

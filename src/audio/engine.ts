@@ -273,9 +273,13 @@ class Engine {
     return this.graphs;
   }
 
+  private playToken = 0;
+
   async play(fromBar = 0) {
     if (!this.song) return;
+    const token = ++this.playToken;
     await ensureAudioStarted();
+    if (token !== this.playToken) return; // stopped while starting
     const g = this.ensureGraphs();
     if (g) g.automated = automatedSet(this.song);
     this.fromBar = fromBar;
@@ -287,6 +291,7 @@ class Engine {
   private lastBeat: number | null = null;
 
   stop() {
+    this.playToken++;
     this.clock.stop();
     this.queue = [];
     const g = this.graphs;

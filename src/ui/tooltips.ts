@@ -177,6 +177,35 @@ export const TIPS: Record<string, TipCopy> = {
     title: 'Knob',
     body: 'Drag up or down to change. Double-click to reset. Hold Shift for fine control.',
   },
+  templates: {
+    title: 'Templates',
+    body: 'Pick a starting point. Every template is already playable. Press Space to hear it.',
+  },
+  soundCategories: {
+    title: 'Sound types',
+    body: 'Browse sounds by type. My Sounds holds the sounds you imported or recorded.',
+  },
+  soundSearch: {
+    title: 'Search',
+    body: 'Type a name, kit or type of sound, like "kick", "808" or "snap".',
+  },
+  useSound: { title: 'Use this sound', body: 'Put the selected sound on this track.' },
+  resetEdit: { title: 'Reset', body: 'Undo every edit and go back to the original sound.' },
+  exportFormat: {
+    title: 'File type',
+    body: 'MP3 is small and plays everywhere. WAV is full quality.',
+  },
+  exportQuality: {
+    title: 'Quality',
+    body: 'Higher quality sounds better but makes a bigger file.',
+  },
+  exportRange: {
+    title: 'What to export',
+    body: 'The whole song, or just the pattern you are editing, repeated a few times.',
+  },
+  exportRepeats: { title: 'Repeats', body: 'How many times the pattern loop plays in the file.' },
+  exportGo: { title: 'Export', body: 'Make the audio file. It downloads when it is ready.' },
+  exportCancel: { title: 'Cancel', body: 'Stop making the file.' },
   comingSoon: { title: 'Coming soon', body: 'This part of the app is on its way.' },
   laneShow: { title: 'Show / hide', body: 'Hide the lane in the timeline. It still plays.' },
   laneAdd: {
