@@ -34,6 +34,9 @@ export type Genre =
   | 'jazz'
   | 'reggae'
   | 'latin'
+  | 'afro'
+  | 'rnb'
+  | 'techno'
   | 'pop';
 
 export const GENRES: { id: Genre; label: string }[] = [
@@ -51,6 +54,9 @@ export const GENRES: { id: Genre; label: string }[] = [
   { id: 'jazz', label: 'Jazz' },
   { id: 'reggae', label: 'Reggae' },
   { id: 'latin', label: 'Latin' },
+  { id: 'afro', label: 'Afrobeats' },
+  { id: 'rnb', label: 'R&B & soul' },
+  { id: 'techno', label: 'Techno' },
   { id: 'pop', label: 'Pop' },
 ];
 
@@ -64,8 +70,12 @@ export type DrumPart =
   | 'tom'
   | 'tomhi'
   | 'ride'
+  | 'crash'
   | 'shaker'
+  | 'tambourine'
+  | 'clave'
   | 'conga'
+  | 'bongo'
   | 'cowbell';
 
 /** Display order and names for parts (also the name of a track created for a part). */
@@ -79,8 +89,12 @@ export const PARTS: { id: DrumPart; label: string }[] = [
   { id: 'tom', label: 'Low tom' },
   { id: 'tomhi', label: 'High tom' },
   { id: 'ride', label: 'Ride' },
+  { id: 'crash', label: 'Crash' },
   { id: 'shaker', label: 'Shaker' },
+  { id: 'tambourine', label: 'Tambourine' },
+  { id: 'clave', label: 'Claves' },
   { id: 'conga', label: 'Conga' },
+  { id: 'bongo', label: 'Bongo' },
   { id: 'cowbell', label: 'Cowbell' },
 ];
 
@@ -96,12 +110,16 @@ export const KITS: Record<KitId, Record<DrumPart, string>> = {
     clap: 'lib:dusty-snap',
     hat: 'lib:dusty-hat',
     openhat: 'lib:dusty-hat-open',
-    rim: 'lib:808-rim',
+    rim: 'lib:perc-rim-click',
     tom: 'lib:dusty-tom-lo',
     tomhi: 'lib:dusty-tom-hi',
     ride: 'lib:dusty-ride',
     shaker: 'lib:club-perc-shaker',
-    conga: 'lib:club-perc-bong',
+    conga: 'lib:perc-conga-open',
+    bongo: 'lib:perc-bongo-hi',
+    tambourine: 'lib:perc-tambourine',
+    clave: 'lib:perc-claves',
+    crash: 'lib:dusty-crash',
     cowbell: 'lib:dusty-cowbell',
   },
   '808': {
@@ -110,12 +128,16 @@ export const KITS: Record<KitId, Record<DrumPart, string>> = {
     clap: 'lib:808-clap',
     hat: 'lib:808-hat',
     openhat: 'lib:808-hat-open',
-    rim: 'lib:808-rim',
+    rim: 'lib:perc-rim-click',
     tom: 'lib:808-tom',
     tomhi: 'lib:dusty-tom-hi',
     ride: 'lib:dusty-ride',
     shaker: 'lib:club-perc-shaker',
-    conga: 'lib:club-perc-bong',
+    conga: 'lib:perc-conga-open',
+    bongo: 'lib:perc-bongo-hi',
+    tambourine: 'lib:perc-tambourine',
+    clave: 'lib:perc-claves',
+    crash: 'lib:analog-crash',
     cowbell: 'lib:dusty-cowbell',
   },
   club: {
@@ -124,12 +146,16 @@ export const KITS: Record<KitId, Record<DrumPart, string>> = {
     clap: 'lib:club-clap',
     hat: 'lib:club-hat',
     openhat: 'lib:club-hat-open',
-    rim: 'lib:808-rim',
+    rim: 'lib:perc-rim-click',
     tom: 'lib:dusty-tom-lo',
     tomhi: 'lib:dusty-tom-hi',
     ride: 'lib:dusty-ride',
     shaker: 'lib:club-perc-shaker',
-    conga: 'lib:club-perc-bong',
+    conga: 'lib:perc-conga-open',
+    bongo: 'lib:perc-bongo-hi',
+    tambourine: 'lib:perc-tambourine',
+    clave: 'lib:perc-claves',
+    crash: 'lib:dusty-crash',
     cowbell: 'lib:dusty-cowbell',
   },
   analog: {
@@ -138,12 +164,16 @@ export const KITS: Record<KitId, Record<DrumPart, string>> = {
     clap: 'lib:analog-clap',
     hat: 'lib:analog-hat',
     openhat: 'lib:analog-hat-open',
-    rim: 'lib:analog-perc-hat',
+    rim: 'lib:perc-rim-click',
     tom: 'lib:808-tom',
     tomhi: 'lib:dusty-tom-hi',
     ride: 'lib:dusty-ride',
     shaker: 'lib:club-perc-shaker',
-    conga: 'lib:club-perc-bong',
+    conga: 'lib:perc-conga-open',
+    bongo: 'lib:perc-bongo-hi',
+    tambourine: 'lib:perc-tambourine',
+    clave: 'lib:perc-claves',
+    crash: 'lib:analog-crash',
     cowbell: 'lib:dusty-cowbell',
   },
 };

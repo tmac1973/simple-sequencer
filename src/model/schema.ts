@@ -31,7 +31,18 @@ const FX_TYPES: FxType[] = [
   'chorus',
   'bitcrush',
 ];
-const OSC_TYPES: OscType[] = ['sine', 'triangle', 'sawtooth', 'square', 'fmsine', 'fatsawtooth'];
+const OSC_TYPES: OscType[] = [
+  'sine',
+  'triangle',
+  'sawtooth',
+  'square',
+  'fmsine',
+  'fatsawtooth',
+  'fatsquare',
+  'fattriangle',
+  'amsine',
+  'fmsquare',
+];
 
 type Obj = Record<string, unknown>;
 

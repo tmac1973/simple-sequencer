@@ -5,6 +5,7 @@ export const CATEGORIES = [
   'Snares',
   'Hi-hats',
   'Claps & snaps',
+  'Cymbals',
   'Percussion',
   'FX & risers',
   'Melodic one-shots',

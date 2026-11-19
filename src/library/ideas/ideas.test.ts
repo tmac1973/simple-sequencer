@@ -4,9 +4,9 @@ import { drumIdea, hitsOf } from './model';
 import manifest from '../../../public/samples/manifest.json';
 
 describe('pattern ideas content', () => {
-  it('has 61 ideas in the planned groups', () => {
+  it('has 106 ideas in the planned groups', () => {
     const count = (c: string) => IDEAS.filter((i) => i.category === c).length;
-    expect(IDEAS).toHaveLength(61);
+    expect(IDEAS).toHaveLength(106);
     expect([
       count('groove'),
       count('fill'),
@@ -14,7 +14,7 @@ describe('pattern ideas content', () => {
       count('bass'),
       count('chords'),
       count('melody'),
-    ]).toEqual([22, 6, 5, 12, 10, 6]);
+    ]).toEqual([37, 10, 10, 20, 17, 12]);
   });
 
   it('has unique ids and names', () => {
@@ -91,8 +91,12 @@ describe('pattern ideas content', () => {
     expect(findIdeas('bass', null, 'boom bap').map((i) => i.id)).toEqual([
       'boom-bap-straight',
       'boom-bap-swung',
+      'hiphop-90s',
     ]);
-    expect(findIdeas('groove', 'reggae', '').map((i) => i.id)).toEqual(['reggae-one-drop']);
+    expect(findIdeas('groove', 'reggae', '').map((i) => i.id)).toEqual([
+      'reggae-one-drop',
+      'reggae-steppers',
+    ]);
   });
 
   it('parses drum lines and rejects wrong lengths', () => {

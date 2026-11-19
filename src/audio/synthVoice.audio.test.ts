@@ -3,6 +3,7 @@ import * as Tone from 'tone';
 import { SynthVoice } from './voices/synthVoice';
 import { createSynthTrack } from '@/model/factories';
 import { midiToFreq } from '@/model/scale';
+import { PRESETS } from './synthPresets';
 
 function dominantFreq(data: Float32Array, sr: number): number {
   // zero-crossing estimate over the steady middle part
@@ -29,5 +30,29 @@ describe('synth voice', () => {
     );
     const f = dominantFreq(out.getChannelData(0), 44100);
     expect(Math.abs(f - midiToFreq(midi - 12)) / midiToFreq(midi - 12)).toBeLessThan(0.02);
+  });
+
+  it.each(PRESETS.map((p) => p.id))('preset %s makes a clean, audible sound', async (presetId) => {
+    const t = createSynthTrack({ presetId, macros: { space: 0 } });
+    const out = await Tone.Offline(
+      () => {
+        const dest = new Tone.Gain().toDestination();
+        const v = new SynthVoice(t.synth!, dest);
+        v.trigger(60, 1, 0, 0.9);
+      },
+      1.2,
+      1,
+      44100,
+    );
+    const d = out.getChannelData(0);
+    let peak = 0;
+    let bad = false;
+    for (const x of d) {
+      if (!Number.isFinite(x)) bad = true;
+      peak = Math.max(peak, Math.abs(x));
+    }
+    expect(bad).toBe(false);
+    expect(peak).toBeGreaterThan(0.02);
+    expect(peak).toBeLessThan(1.5);
   });
 });

@@ -8,7 +8,6 @@ import {
   IDEAS,
   ideaById,
   isDrumCategory,
-  KIT_NAMES,
   partLabel,
   type Genre,
   type IdeaCategory,
@@ -16,6 +15,9 @@ import {
 } from '@/library/ideas';
 import { buildPreviewSong, planIdea, type IdeaPlan } from '@/library/ideas/apply';
 import { keyLabel } from '@/model/scale';
+import { loadManifest } from '@/library/manifest';
+import { soundInfo } from '@/library/soundNames';
+import { useSoundNamesVersion } from '../hooks/useSoundNames';
 import type { Track } from '@/model/types';
 import { useSongStore } from '@/store/songStore';
 import { useUiStore } from '@/store/uiStore';
@@ -106,6 +108,8 @@ function NoteArt({ idea, color }: { idea: PatternIdea; color: string }) {
 const pct = (v: number) => `${Math.round(v * 100)}%`;
 
 function Mapping({ plan }: { plan: IdeaPlan }) {
+  useSoundNamesVersion();
+  useEffect(() => void loadManifest().catch(() => undefined), []);
   if (plan.noteTrack)
     return (
       <div className={styles.map}>
@@ -120,7 +124,7 @@ function Mapping({ plan }: { plan: IdeaPlan }) {
       {plan.parts.map((a) => (
         <div key={a.part} className={a.trackId ? '' : styles.newTrack}>
           {a.label} → <b>{a.trackId ? a.trackName : 'new track'}</b>
-          {!a.trackId && plan.kit && ` (${KIT_NAMES[plan.kit]})`}
+          {!a.trackId && a.sampleId && ` (${soundInfo(a.sampleId).name})`}
         </div>
       ))}
       {plan.skipped.length > 0 && (

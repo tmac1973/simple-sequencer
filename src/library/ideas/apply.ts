@@ -57,6 +57,11 @@ export function fitNotes(notes: Note[], scale: ScaleName): Note[] {
 const PART_BY_ID: [RegExp, DrumPart][] = [
   [/hat-open/, 'openhat'],
   [/analog-perc-hat|-rim|808-tick/, 'rim'],
+  [/crash|splash|elec-cymbal/, 'crash'],
+  [/tambourine/, 'tambourine'],
+  [/claves/, 'clave'],
+  [/bongo/, 'bongo'],
+  [/agogo/, 'cowbell'],
   [/-kick|808-boom|808-zum/, 'kick'],
   [/-snare/, 'snare'],
   [/clap|snap/, 'clap'],
@@ -65,22 +70,26 @@ const PART_BY_ID: [RegExp, DrumPart][] = [
   [/tom/, 'tom'],
   [/ride/, 'ride'],
   [/cowbell/, 'cowbell'],
-  [/shaker/, 'shaker'],
+  [/shaker|cabasa/, 'shaker'],
   [/bong|conga/, 'conga'],
 ];
 
 const PART_BY_NAME: [RegExp, DrumPart][] = [
   [/open/, 'openhat'],
+  [/crash|splash/, 'crash'],
+  [/tamb/, 'tambourine'],
+  [/clave/, 'clave'],
+  [/bongo/, 'bongo'],
   [/kick|\bbd\b|bass ?drum/, 'kick'],
   [/snare|\bsd\b/, 'snare'],
   [/clap|snap/, 'clap'],
   [/hat|\bhh\b/, 'hat'],
-  [/rim|stick|clave/, 'rim'],
+  [/rim|stick/, 'rim'],
   [/high tom|hi tom/, 'tomhi'],
   [/tom/, 'tom'],
-  [/ride|cymbal|crash/, 'ride'],
+  [/ride|cymbal/, 'ride'],
   [/shak/, 'shaker'],
-  [/conga|bongo|bong/, 'conga'],
+  [/conga|bong/, 'conga'],
   [/cowbell|bell/, 'cowbell'],
 ];
 

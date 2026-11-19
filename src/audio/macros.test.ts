@@ -25,7 +25,7 @@ describe('synth macros', () => {
     expect(r.attack).toBe(1.5);
     expect(r.oscType).toBe('square');
   });
-  it('has 10 distinct presets', () => {
-    expect(new Set(PRESETS.map((p) => p.id)).size).toBe(10);
+  it('has 20 distinct presets', () => {
+    expect(new Set(PRESETS.map((p) => p.id)).size).toBe(20);
   });
 });

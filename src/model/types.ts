@@ -84,7 +84,17 @@ export interface SampleTrackSettings {
   tone: number;
 }
 
-export type OscType = 'sine' | 'triangle' | 'sawtooth' | 'square' | 'fmsine' | 'fatsawtooth';
+export type OscType =
+  | 'sine'
+  | 'triangle'
+  | 'sawtooth'
+  | 'square'
+  | 'fmsine'
+  | 'fatsawtooth'
+  | 'fatsquare'
+  | 'fattriangle'
+  | 'amsine'
+  | 'fmsquare';
 
 export interface SynthAdvanced {
   oscType: OscType;

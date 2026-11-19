@@ -1,16 +1,30 @@
 import { CHORDS, BASSLINES, MELODIES } from './tonal';
 import { FILLS, GROOVES, PERCUSSION } from './drums';
+import {
+  MORE_BASSLINES,
+  MORE_CHORDS,
+  MORE_FILLS,
+  MORE_GROOVES,
+  MORE_MELODIES,
+  MORE_PERCUSSION,
+} from './more';
 import { GENRES, type Genre, type IdeaCategory, type PatternIdea } from './model';
 
 export * from './model';
 
 export const IDEAS: PatternIdea[] = [
   ...GROOVES,
+  ...MORE_GROOVES,
   ...FILLS,
+  ...MORE_FILLS,
   ...PERCUSSION,
+  ...MORE_PERCUSSION,
   ...BASSLINES,
+  ...MORE_BASSLINES,
   ...CHORDS,
+  ...MORE_CHORDS,
   ...MELODIES,
+  ...MORE_MELODIES,
 ];
 
 const BY_ID = new Map(IDEAS.map((i) => [i.id, i]));

@@ -29,6 +29,26 @@ describe('matching drum parts to tracks', () => {
     expect(partOfTrack(user)).toBe('clap');
     expect(partOfTrack(createSampleTrack({ name: 'Open HH', sampleId: 'user:x' }))).toBe('openhat');
     expect(partOfTrack(createSampleTrack({ name: 'Thing', sampleId: 'user:x' }))).toBeNull();
+    expect(partOfTrack(createSampleTrack({ name: 'X', sampleId: 'lib:perc-crash' }))).toBe('crash');
+    expect(partOfTrack(createSampleTrack({ name: 'X', sampleId: 'lib:dusty-splash' }))).toBe(
+      'crash',
+    );
+    expect(partOfTrack(createSampleTrack({ name: 'X', sampleId: 'lib:dusty-ride-jazz' }))).toBe(
+      'ride',
+    );
+    expect(partOfTrack(createSampleTrack({ name: 'X', sampleId: 'lib:perc-tambourine' }))).toBe(
+      'tambourine',
+    );
+    expect(partOfTrack(createSampleTrack({ name: 'X', sampleId: 'lib:perc-claves' }))).toBe(
+      'clave',
+    );
+    expect(partOfTrack(createSampleTrack({ name: 'X', sampleId: 'lib:perc-bongo-hi' }))).toBe(
+      'bongo',
+    );
+    expect(partOfTrack(createSampleTrack({ name: 'X', sampleId: 'lib:perc-conga-open' }))).toBe(
+      'conga',
+    );
+    expect(partOfTrack(createSampleTrack({ name: 'My Claves', sampleId: 'user:x' }))).toBe('clave');
     expect(songKit(buildHouse())).toBe('club');
     expect(songKit(buildHiphop())).toBe('808');
     expect(songKit(createSong())).toBeNull();

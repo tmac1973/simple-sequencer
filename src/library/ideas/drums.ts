@@ -409,16 +409,15 @@ export const FILLS: PatternIdea[] = [
     },
   }),
   drumIdea({
-    id: 'fill-big-hit',
-    name: 'Big hit on the one',
+    id: 'fill-crash',
+    name: 'Crash on the one',
     category: 'fill',
     genres: ['rock', 'pop', 'funk', 'house'],
-    description: 'Kick, cymbal and open hat together on beat 1, then let it ring. A great ending.',
+    description: 'Kick and crash cymbal together on beat 1, then let it ring. A great ending.',
     bpm: [60, 180],
     lines: {
       kick: 'X... .... .... ....',
-      ride: 'X... .... .... ....',
-      openhat: 'X... .... .... ....',
+      crash: 'X... .... .... ....',
     },
   }),
   drumIdea({
@@ -476,7 +475,7 @@ export const PERCUSSION: PatternIdea[] = [
     description: 'The famous two-bar rhythm: three hits, then two.',
     bpm: [90, 120],
     bars: 2,
-    lines: { rim: 'X..X ..X. .... .... | .... X... X... ....' },
+    lines: { clave: 'X..X ..X. .... .... | .... X... X... ....' },
   }),
   drumIdea({
     id: 'perc-cowbell-disco',

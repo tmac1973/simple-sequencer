@@ -18,6 +18,10 @@ const OSC: { value: OscType; label: string }[] = [
   { value: 'square', label: 'Square (hollow)' },
   { value: 'fmsine', label: 'FM (bell-like)' },
   { value: 'fatsawtooth', label: 'Fat saw (wide)' },
+  { value: 'fatsquare', label: 'Fat square (organ-ish)' },
+  { value: 'fattriangle', label: 'Fat triangle (soft & wide)' },
+  { value: 'amsine', label: 'AM (breathy)' },
+  { value: 'fmsquare', label: 'FM square (growly)' },
 ];
 
 interface AdvDef {

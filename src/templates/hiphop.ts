@@ -97,7 +97,7 @@ export function buildHiphop(): Song {
 
   const rim = drumTrack(
     'Rim',
-    'lib:808-rim',
+    'lib:perc-rim-click',
     [
       {
         name: 'A',
