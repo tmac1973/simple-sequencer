@@ -48,3 +48,15 @@ export function blockAt(track: Track, bar: number): BlockHit | null {
   }
   return best;
 }
+
+/** The bar right after the last pattern block on any track (at least 1). */
+export function contentEndBar(song: { tracks: Track[] }): number {
+  let end = 1;
+  for (const t of song.tracks) {
+    for (const b of t.blocks) {
+      const p = t.patterns.find((x) => x.id === b.patternId);
+      if (p) end = Math.max(end, b.startBar + p.lengthBars);
+    }
+  }
+  return end;
+}

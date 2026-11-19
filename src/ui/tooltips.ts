@@ -83,6 +83,16 @@ export const TIPS: Record<string, TipCopy> = {
     body: 'Click to remove it. Click an empty bar to paint.',
   },
   addBars: { title: 'Longer song', body: 'Add 4 more bars to the end of the song.' },
+  removeBars: { title: 'Shorter song', body: 'Remove 4 bars from the end of the song.' },
+  shortenBlocked: {
+    title: 'Shorter song',
+    body: 'There are pattern blocks in the last bars. Remove them first, or use Trim.',
+  },
+  trimSong: { title: 'Trim', body: 'Make the song end right after its last pattern block.' },
+  songEnd: {
+    title: 'Song end',
+    body: 'Drag left or right to make the song shorter or longer. It stops at your last pattern block.',
+  },
 
   // editor
   patterns: {

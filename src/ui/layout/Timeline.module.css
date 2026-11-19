@@ -121,3 +121,34 @@
   background: var(--line);
   pointer-events: none;
 }
+
+.lengthTools {
+  display: flex;
+  align-items: center;
+  margin-left: 8px;
+  flex: none;
+}
+.lengthTools .addBars {
+  margin: 4px 2px;
+}
+.endHandle {
+  position: absolute;
+  top: 2px;
+  width: 14px;
+  height: 30px;
+  border-radius: 4px;
+  background: var(--accent);
+  cursor: ew-resize;
+  z-index: 3;
+  touch-action: none;
+}
+.endHandle::after {
+  content: '';
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 8px;
+  bottom: 8px;
+  border-left: 2px solid #fff8;
+  border-right: 2px solid #fff8;
+}

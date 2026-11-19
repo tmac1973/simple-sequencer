@@ -121,3 +121,14 @@ describe('schema', () => {
     expect(() => migrateSong({ ...song(), version: 9 })).toThrow(/newer version/);
   });
 });
+
+describe('contentEndBar', () => {
+  it('is the bar after the last block on any track (at least 1)', async () => {
+    const { contentEndBar } = await import('./timing');
+    expect(contentEndBar(createSong())).toBe(1);
+    const t = createSampleTrack();
+    t.patterns[0]!.lengthBars = 2;
+    t.blocks = [{ id: 'a', patternId: t.patterns[0]!.id, startBar: 5 }];
+    expect(contentEndBar(createSong({ tracks: [t] }))).toBe(7);
+  });
+});

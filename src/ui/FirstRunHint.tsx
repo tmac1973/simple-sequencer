@@ -20,8 +20,8 @@ function markSeen() {
 }
 
 /**
- * Two gentle tips on the very first visit: press play, then click a square. Never blocks
- * clicks (only the "Got it" button is clickable) and goes away for good afterwards.
+ * Two gentle tips on the very first visit: press play, then click a square. Completely
+ * click-through, so it never blocks anything; Esc hides it, and it goes away for good afterwards.
  */
 export function FirstRunHint() {
   const [step, setStep] = useState<0 | 1 | 2>(() => (seen() ? 2 : 0));
@@ -49,6 +49,17 @@ export function FirstRunHint() {
 
   useEffect(() => {
     if (step === 2) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return;
+      setStep(2);
+      markSeen();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [step]);
+
+  useEffect(() => {
+    if (step === 2) return;
     const find = () => {
       const el =
         step === 0
@@ -68,10 +79,6 @@ export function FirstRunHint() {
   }, [step]);
 
   if (step === 2 || !anchor) return null;
-  const done = () => {
-    setStep(2);
-    markSeen();
-  };
   const text =
     step === 0
       ? 'Press Space or ▶ to hear your song.'
@@ -102,19 +109,7 @@ export function FirstRunHint() {
       <span>
         {step + 1}/2 · {text}
       </span>
-      <button
-        onClick={done}
-        style={{
-          pointerEvents: 'auto',
-          background: '#ffffff33',
-          border: 'none',
-          color: '#fff',
-          padding: '3px 9px',
-        }}
-        data-tip="Hide tips|Don't show these first-time tips again."
-      >
-        Got it
-      </button>
+      <span style={{ opacity: 0.75, fontWeight: 400, fontSize: 12 }}>Esc to hide</span>
     </div>
   );
 }

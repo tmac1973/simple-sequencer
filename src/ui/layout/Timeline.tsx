@@ -1,7 +1,7 @@
 import { memo, useEffect, useRef, useState } from 'react';
 import { MAX_SONG_BARS } from '@/model/constants';
 import { newId } from '@/model/factories';
-import { blockAt } from '@/model/timing';
+import { blockAt, contentEndBar } from '@/model/timing';
 import type { Pattern, Track } from '@/model/types';
 import { getLoopRegion, usesNotes } from '@/audio/scheduler';
 import { playContextOf } from '@/audio/useEngineSync';
@@ -166,13 +166,62 @@ const TimelineRow = memo(function TimelineRow({
   );
 });
 
+const RULER_EXTRA = 220;
+
+/** Change the song length, never cutting off pattern blocks, and keep the start flag inside. */
+function setLength(bars: number) {
+  const s = useSongStore.getState();
+  const next = Math.max(contentEndBar(s.song), Math.min(MAX_SONG_BARS, bars));
+  s.setLength(next);
+  const ui = useUiStore.getState();
+  if (ui.songStartBar >= next) ui.setSongStartBar(next - 1);
+}
+
+/** Drag the end of the song left or right (snaps to bars). */
+function EndHandle({ bars }: { bars: number }) {
+  const drag = useRef<{ x: number; start: number } | null>(null);
+  return (
+    <div
+      className={styles.endHandle}
+      style={{ left: bars * BAR_W - 7 }}
+      role="slider"
+      aria-label="Song end"
+      aria-valuenow={bars}
+      aria-valuemin={1}
+      aria-valuemax={MAX_SONG_BARS}
+      tabIndex={0}
+      onPointerDown={(e) => {
+        e.stopPropagation();
+        (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+        drag.current = { x: e.clientX, start: useSongStore.getState().song.lengthBars };
+      }}
+      onPointerMove={(e) => {
+        const d = drag.current;
+        if (!d) return;
+        const next = d.start + Math.round((e.clientX - d.x) / BAR_W);
+        if (next !== useSongStore.getState().song.lengthBars) setLength(next);
+      }}
+      onPointerUp={() => (drag.current = null)}
+      onKeyDown={(e) => {
+        if (e.key === 'ArrowLeft') setLength(bars - 1);
+        else if (e.key === 'ArrowRight') setLength(bars + 1);
+        else return;
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+      {...tip('songEnd')}
+    />
+  );
+}
+
 function Ruler({ bars }: { bars: number }) {
   const song = useSongStore((s) => s.song);
   const ui = useUiStore();
   const region = getLoopRegion(song, playContextOf(ui));
   const inLoop = (b: number) => b >= region.startBar && b < region.startBar + region.lengthBars;
+  const contentEnd = contentEndBar(song);
   return (
-    <div className={styles.ruler} style={{ width: bars * BAR_W + 120 }}>
+    <div className={styles.ruler} style={{ width: bars * BAR_W + RULER_EXTRA }}>
       {Array.from({ length: bars }, (_, b) => (
         <div
           key={b}
@@ -186,14 +235,35 @@ function Ruler({ bars }: { bars: number }) {
           )}
         </div>
       ))}
-      <button
-        className={styles.addBars}
-        disabled={song.lengthBars >= MAX_SONG_BARS}
-        onClick={() => useSongStore.getState().setLength(song.lengthBars + 4)}
-        {...tip('addBars')}
-      >
-        ＋ 4 bars
-      </button>
+      <EndHandle bars={bars} />
+      <div className={styles.lengthTools}>
+        <button
+          className={styles.addBars}
+          disabled={song.lengthBars - 4 < contentEnd}
+          onClick={() => setLength(song.lengthBars - 4)}
+          aria-label="Remove 4 bars"
+          {...tip(song.lengthBars - 4 < contentEnd ? 'shortenBlocked' : 'removeBars')}
+        >
+          − 4
+        </button>
+        <button
+          className={styles.addBars}
+          disabled={song.lengthBars >= MAX_SONG_BARS}
+          onClick={() => setLength(song.lengthBars + 4)}
+          aria-label="Add 4 bars"
+          {...tip('addBars')}
+        >
+          ＋ 4
+        </button>
+        <button
+          className={styles.addBars}
+          disabled={song.lengthBars === contentEnd}
+          onClick={() => setLength(contentEnd)}
+          {...tip('trimSong')}
+        >
+          ⇤ Trim
+        </button>
+      </div>
     </div>
   );
 }
@@ -227,7 +297,7 @@ export function Timeline() {
 
   return (
     <div className={styles.timeline} ref={scroller} data-timeline-scroll aria-label="Song timeline">
-      <div className={styles.inner} style={{ width: bars * BAR_W + 120 }}>
+      <div className={styles.inner} style={{ width: bars * BAR_W + RULER_EXTRA }}>
         <Ruler bars={bars} />
         {tracks.map((t) => (
           <div key={t.id}>
