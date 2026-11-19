@@ -1,0 +1,21 @@
+:root {
+  --bg: #13141b;
+  --panel: #1b1d27;
+  --panel2: #232634;
+  --panel3: #2c3042;
+  --line: #33374a;
+  --line-soft: #22252f;
+  --text: #eceef6;
+  --muted: #9a9eb5;
+  --dim: #6b6f86;
+  --accent: #8b7bff;
+  --accent2: #b3a8ff;
+  --good: #5ee6a8;
+  --warn: #ffb84d;
+  --bad: #ff6b6b;
+  --r: 10px;
+  --bar-w: 64px;
+  --row-h: 46px;
+  --lane-h: 64px;
+  color-scheme: dark;
+}
