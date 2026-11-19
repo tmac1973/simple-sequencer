@@ -81,10 +81,11 @@ export function Knob({
 }: KnobProps) {
   const drag = useRef<{ y: number; v: number; id: string } | null>(null);
   const clamp = (v: number) => Math.min(1, Math.max(0, v));
-  const emit = (v: number, id: string) => !disabled && onChange?.(clamp(v), id);
+  const locked = disabled || automated;
+  const emit = (v: number, id: string) => !locked && onChange?.(clamp(v), id);
 
   const onPointerDown = (e: React.PointerEvent) => {
-    if (disabled || e.button !== 0) return;
+    if (locked || e.button !== 0) return;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     drag.current = { y: e.clientY, v: value, id: newId() };
   };
@@ -108,7 +109,7 @@ export function Knob({
   const text = format ? format(value) : `${Math.round(value * 100)}%`;
   return (
     <div
-      className={`${styles.knob} ${disabled ? styles.disabled : ''}`}
+      className={`${styles.knob} ${locked ? styles.disabled : ''}`}
       role="slider"
       aria-label={label}
       aria-valuemin={0}

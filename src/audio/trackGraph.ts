@@ -34,9 +34,10 @@ export class TrackGraph {
     this.pre.connect(this.channel);
   }
 
-  update(track: Track, audible: boolean) {
-    this.channel.volume.rampTo(channelDb(track.volumeDb), 0.02);
-    this.channel.pan.rampTo(track.pan, 0.02);
+  /** `skip` = params currently driven by automation. */
+  update(track: Track, audible: boolean, skip?: { volume?: boolean; pan?: boolean }) {
+    if (!skip?.volume) this.channel.volume.rampTo(channelDb(track.volumeDb), 0.02);
+    if (!skip?.pan) this.channel.pan.rampTo(track.pan, 0.02);
     if (this.channel.mute !== !audible) this.channel.mute = !audible;
   }
 

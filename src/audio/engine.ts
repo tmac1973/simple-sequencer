@@ -20,6 +20,9 @@ import { FX_DEFS, type FxInstance } from './effects/registry';
 import type { FxSlot } from '@/model/types';
 import * as Tone from 'tone';
 import { degreeToMidi } from '@/model/scale';
+import { automatedSet, resetAutomation, scheduleAutomation } from './automation';
+import { valueAt, targetKey } from '@/model/automation';
+import type { AutomationTarget } from '@/model/types';
 
 /**
  * All audio nodes for one song, built in whatever Tone context is current
@@ -34,6 +37,8 @@ export class GraphSet {
   /** effect instances by slot id */
   readonly fx = new Map<string, { slot: FxSlot; inst: FxInstance }>();
   private lastFx = new Map<string, FxSlot[]>();
+  /** "<trackId>|<targetKey>" of params automation is driving right now (only while playing) */
+  automated = new Set<string>();
 
   constructor(song: Song) {
     this.master = createMaster();
@@ -66,7 +71,8 @@ export class GraphSet {
     for (const t of song.tracks) {
       const audible = isAudible(t, anySolo);
       let g = this.tracks.get(t.id);
-      if (g) g.update(t, audible);
+      const auto = (k: string) => this.automated.has(`${t.id}|${k}`);
+      if (g) g.update(t, audible, { volume: auto('track:volume'), pan: auto('track:pan') });
       else {
         g = new TrackGraph(t, this.master.input, audible);
         this.tracks.set(t.id, g);
@@ -74,8 +80,9 @@ export class GraphSet {
       if (t.kind === 'sample' && t.sample) {
         const hz = toneToHz(t.sample.tone);
         const f = this.sampleTone.get(t.id);
-        if (f) f.frequency.rampTo(hz, 0.02);
-        else
+        if (f) {
+          if (!auto('sampleTone')) f.frequency.rampTo(hz, 0.02);
+        } else
           this.sampleTone.set(
             t.id,
             new Tone.Filter({ type: 'lowpass', frequency: hz, rolloff: -12, Q: 0.5 }).connect(
@@ -85,7 +92,7 @@ export class GraphSet {
       }
       if (t.kind === 'synth' && t.synth) {
         const v = this.synths.get(t.id);
-        if (v) v.apply(t.synth);
+        if (v) v.apply(t.synth, { tone: auto('macro:tone'), space: auto('macro:space') });
         else this.synths.set(t.id, new SynthVoice(t.synth, g.input));
       }
       this.syncFx(t, g, song.bpm);
@@ -110,7 +117,8 @@ export class GraphSet {
       }
       if (e.slot !== slot) {
         for (const [k, v] of Object.entries(slot.params))
-          if (e.slot.params[k] !== v) e.inst.set(k, v);
+          if (e.slot.params[k] !== v && !this.automated.has(`${t.id}|fx:${slot.id}:${k}`))
+            e.inst.set(k, v);
         e.slot = slot;
       }
       e.inst.setTempo?.(bpm);
@@ -199,12 +207,14 @@ export function scheduleBeat(
   ctx: PlayContext,
   songBeat: number,
   time: number,
+  jump = false,
 ) {
   const beatSec = beatSeconds(song.bpm);
   for (const ev of computeBeatEvents(song, ctx, songBeat)) {
     const track = song.tracks.find((t) => t.id === ev.trackId);
     if (track) dispatchEvent(graphs, track, ev, time + ev.offsetBeats * beatSec, beatSec, song);
   }
+  scheduleAutomation(graphs, song, songBeat, time, beatSec, jump);
 }
 
 export function warmSamples(song: Song) {
@@ -242,6 +252,7 @@ class Engine {
   setSong(song: Song) {
     this.song = song;
     warmSamples(song);
+    if (this.graphs && this.clock.running) this.graphs.automated = automatedSet(song);
     this.graphs?.sync(song);
   }
 
@@ -262,16 +273,35 @@ class Engine {
   async play(fromBar = 0) {
     if (!this.song) return;
     await ensureAudioStarted();
-    this.ensureGraphs();
+    const g = this.ensureGraphs();
+    if (g) g.automated = automatedSet(this.song);
     this.fromBar = fromBar;
     this.queue = [];
+    this.lastBeat = null;
     this.clock.start(audioNow() + 0.06);
   }
+
+  private lastBeat: number | null = null;
 
   stop() {
     this.clock.stop();
     this.queue = [];
-    this.graphs?.releaseAll();
+    const g = this.graphs;
+    if (g) {
+      g.releaseAll();
+      g.automated = new Set();
+      if (this.song) resetAutomation(g, this.song, audioNow());
+    }
+  }
+
+  /** Current automated value (0–1) of a target while playing, else null. */
+  onParamValue(trackId: string, target: AutomationTarget): number | null {
+    const pos = this.position();
+    const t = this.song?.tracks.find((x) => x.id === trackId);
+    if (!pos || !t) return null;
+    const key = targetKey(target);
+    const lane = t.automation.find((l) => targetKey(l.target) === key);
+    return lane ? valueAt(lane, pos.beat / BEATS_PER_BAR) : null;
   }
 
   /** Play one note on a track right now (piano-roll audition). */
@@ -335,7 +365,9 @@ class Engine {
     const graphs = this.graphs;
     if (!song || !graphs) return;
     const songBeat = songBeatFor(song, this.ctx, counter, this.fromBar);
-    scheduleBeat(graphs, song, this.ctx, songBeat, time);
+    const jump = this.lastBeat === null || songBeat !== this.lastBeat + 1;
+    this.lastBeat = songBeat;
+    scheduleBeat(graphs, song, this.ctx, songBeat, time, jump);
     this.queue.push({ time, songBeat, beatSec: beatSeconds(song.bpm) });
     if (this.queue.length > 64) this.queue.splice(0, this.queue.length - 64);
   }

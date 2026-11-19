@@ -22,7 +22,7 @@ import { useSongStore } from '@/store/songStore';
 import { Knob } from '../components/Knob';
 import { Segmented, Toggle } from '../components/controls';
 import { tip } from '../tooltips';
-import { useAutomatedParams } from './automated';
+import { useAutoKnob } from '../hooks/useAutoKnob';
 import styles from './Inspector.module.css';
 
 function ParamControl({
@@ -38,7 +38,7 @@ function ParamControl({
 }) {
   const a = useSongStore.getState();
   const v = slot.params[def.key] ?? def.default;
-  const automated = useAutomatedParams(track);
+  const auto = useAutoKnob(track, { kind: 'fx', fxId: slot.id, param: def.key });
   if (def.choices) {
     const n = def.choices.length;
     return (
@@ -68,11 +68,11 @@ function ParamControl({
       label={def.label}
       size={size}
       color={track.color}
-      value={v}
+      value={auto.live ?? v}
       defaultValue={def.default}
       format={def.format}
       tipKey={def.tip ?? `fx.${slot.type}.${def.key}`}
-      automated={automated.has(`fx:${slot.id}:${def.key}`)}
+      automated={auto.automated}
       onChange={(nv, g) => a.setFxParam(track.id, slot.id, def.key, nv, g)}
     />
   );

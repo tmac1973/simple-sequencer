@@ -20,6 +20,7 @@ import {
   pitchToKnob,
 } from './format';
 import { RootNoteSelect } from './RootNoteSelect';
+import { useAutoKnob } from '../hooks/useAutoKnob';
 import styles from './Inspector.module.css';
 
 export function SampleSoundTab({ track }: { track: Track }) {
@@ -28,6 +29,8 @@ export function SampleSoundTab({ track }: { track: Track }) {
   const a = useSongStore.getState();
   const ui = useUiStore.getState();
   const info = soundInfo(s.sampleId);
+  const toneA = useAutoKnob(track, { kind: 'sampleTone' });
+  const panA = useAutoKnob(track, { kind: 'track', param: 'pan' });
   return (
     <>
       <div className={styles.card}>
@@ -85,7 +88,8 @@ export function SampleSoundTab({ track }: { track: Track }) {
           label="Tone"
           tipKey="tone"
           color={track.color}
-          value={s.tone}
+          value={toneA.live ?? s.tone}
+          automated={toneA.automated}
           defaultValue={1}
           format={fmtTone}
           onChange={(v, g) => a.setSampleSettings(track.id, { tone: v }, g)}
@@ -94,7 +98,8 @@ export function SampleSoundTab({ track }: { track: Track }) {
           label="Pan"
           tipKey="pan"
           color={track.color}
-          value={panToKnob(track.pan)}
+          value={panA.live ?? panToKnob(track.pan)}
+          automated={panA.automated}
           defaultValue={0.5}
           format={(v) => fmtPan(knobToPan(v))}
           onChange={(v, g) => a.setPan(track.id, knobToPan(v), g)}

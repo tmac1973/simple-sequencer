@@ -33,7 +33,8 @@ export class SynthVoice {
     );
   }
 
-  apply(settings: SynthTrackSettings) {
+  /** `skip` = macros currently driven by automation (leave those params alone). */
+  apply(settings: SynthTrackSettings, skip?: { tone?: boolean; space?: boolean }) {
     if (this.settings === settings) return;
     this.settings = settings;
     const preset = getPreset(settings.presetId);
@@ -53,10 +54,10 @@ export class SynthVoice {
       },
       portamento: p.glide,
     });
-    this.toneFilter.frequency.rampTo(p.toneCutoffHz, 0.03);
+    if (!skip?.tone) this.toneFilter.frequency.rampTo(p.toneCutoffHz, 0.03);
     this.vibrato.frequency.value = p.vibratoRate;
     this.vibrato.depth.rampTo(p.vibratoDepth, 0.03);
-    this.space.wet.rampTo(p.spaceWet, 0.03);
+    if (!skip?.space) this.space.wet.rampTo(p.spaceWet, 0.03);
   }
 
   trigger(midi: number, durationSec: number, time: number, velocity: number) {

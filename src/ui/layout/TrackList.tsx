@@ -23,6 +23,7 @@ import { useSoundNamesVersion } from '../hooks/useSoundNames';
 import { tip } from '../tooltips';
 import { onScroll } from './scrollSync';
 import { LaneRows } from './LaneRows';
+import { useAutoKnob } from '../hooks/useAutoKnob';
 import styles from './TrackList.module.css';
 
 export function trackIcon(t: Track): string {
@@ -50,6 +51,7 @@ function TrackRow({ track, index, selected }: { track: Track; index: number; sel
   const [renaming, setRenaming] = useState(false);
   const [menu, setMenu] = useState<{ x: number; y: number } | null>(null);
   const gesture = useRef(newId());
+  const volA = useAutoKnob(track, { kind: 'track', param: 'volume' });
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: track.id,
   });
@@ -140,7 +142,8 @@ function TrackRow({ track, index, selected }: { track: Track; index: number; sel
         className={styles.vol}
         min={0}
         max={1000}
-        value={Math.round(dbToSlider(track.volumeDb) * 1000)}
+        value={Math.round((volA.live ?? dbToSlider(track.volumeDb)) * 1000)}
+        disabled={volA.automated}
         aria-label={`${track.name} volume`}
         onPointerDown={(e) => {
           e.stopPropagation();
@@ -151,7 +154,7 @@ function TrackRow({ track, index, selected }: { track: Track; index: number; sel
           a.setVolume(track.id, sliderToDb(Number(e.target.value) / 1000), gesture.current)
         }
         onDoubleClick={() => a.setVolume(track.id, 0)}
-        {...tip('volume')}
+        {...tip(volA.automated ? 'volumeAutomated' : 'volume')}
       />
       <div className={styles.ms}>
         <button

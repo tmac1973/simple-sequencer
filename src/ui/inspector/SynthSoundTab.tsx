@@ -8,6 +8,7 @@ import { Knob } from '../components/Knob';
 import { Chip } from '../components/controls';
 import { tip } from '../tooltips';
 import { fmtPan, fmtPct, knobToPan, panToKnob } from './format';
+import { useAutoKnob } from '../hooks/useAutoKnob';
 import styles from './Inspector.module.css';
 
 const OSC: { value: OscType; label: string }[] = [
@@ -58,6 +59,9 @@ export function SynthSoundTab({ track }: { track: Track }) {
   const [open, setOpen] = useState(false);
   const resolved = resolveSynthParams(getPreset(s.presetId), s.macros, s.advanced);
   const cats = Object.keys(CATEGORY_LABEL) as PresetCategory[];
+  const toneA = useAutoKnob(track, { kind: 'synthMacro', macro: 'tone' });
+  const spaceA = useAutoKnob(track, { kind: 'synthMacro', macro: 'space' });
+  const panA = useAutoKnob(track, { kind: 'track', param: 'pan' });
   const setAdv = (patch: Partial<SynthAdvanced>, g?: string) =>
     a.setSynthSettings(track.id, { advanced: { ...s.advanced, ...patch } }, g);
 
@@ -96,7 +100,8 @@ export function SynthSoundTab({ track }: { track: Track }) {
           label="Tone"
           tipKey="macroTone"
           color={track.color}
-          value={s.macros.tone}
+          value={toneA.live ?? s.macros.tone}
+          automated={toneA.automated}
           defaultValue={0.55}
           format={(v) => (v < 0.35 ? 'Darker' : v > 0.75 ? 'Brighter' : fmtPct(v))}
           onChange={(v, g) => a.setSynthMacro(track.id, 'tone', v, g)}
@@ -113,7 +118,8 @@ export function SynthSoundTab({ track }: { track: Track }) {
           label="Space"
           tipKey="macroSpace"
           color={track.color}
-          value={s.macros.space}
+          value={spaceA.live ?? s.macros.space}
+          automated={spaceA.automated}
           defaultValue={0.2}
           onChange={(v, g) => a.setSynthMacro(track.id, 'space', v, g)}
         />
@@ -131,7 +137,8 @@ export function SynthSoundTab({ track }: { track: Track }) {
           label="Pan"
           tipKey="pan"
           color={track.color}
-          value={panToKnob(track.pan)}
+          value={panA.live ?? panToKnob(track.pan)}
+          automated={panA.automated}
           defaultValue={0.5}
           format={(v) => fmtPan(knobToPan(v))}
           onChange={(v, g) => a.setPan(track.id, knobToPan(v), g)}

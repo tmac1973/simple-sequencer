@@ -53,6 +53,10 @@ export const TIPS: Record<string, TipCopy> = {
     body: 'Click to edit this track. Double-click the name to rename. Right-click for more. Drag to reorder.',
   },
   volume: { title: 'Volume', body: 'How loud this track is.' },
+  volumeAutomated: {
+    title: 'Volume (automated)',
+    body: 'This volume is automated. Edit its lane in the timeline.',
+  },
   mute: { title: 'Mute', body: 'Silence this track.' },
   solo: { title: 'Solo', body: 'Hear only this track (and any other soloed tracks).' },
   addSample: {
@@ -174,6 +178,11 @@ export const TIPS: Record<string, TipCopy> = {
     body: 'Drag up or down to change. Double-click to reset. Hold Shift for fine control.',
   },
   comingSoon: { title: 'Coming soon', body: 'This part of the app is on its way.' },
+  laneShow: { title: 'Show / hide', body: 'Hide the lane in the timeline. It still plays.' },
+  laneAdd: {
+    title: 'Add automation',
+    body: 'Adds a line under the track in the timeline. Click the line to add points and shape how this knob moves.',
+  },
   fxToggle: { title: 'On / off', body: 'Switch this effect off to hear the difference.' },
   fxRemove: { title: 'Remove effect', body: 'Take this effect off the track. You can undo it.' },
   'fx.reverb.size': {

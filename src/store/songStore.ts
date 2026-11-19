@@ -21,6 +21,7 @@ import {
   nextPatternName,
 } from '@/model/factories';
 import { clampDb } from '@/model/mixing';
+import { pruneLanes } from '@/model/automation';
 import type {
   AutomationPoint,
   AutomationTarget,
@@ -479,9 +480,7 @@ export const useSongStore = create<SongStore>((set, get) => {
         const t = track(d, trackId);
         if (!t) return;
         t.fx = t.fx.filter((f) => f.id !== fxId);
-        t.automation = t.automation.filter(
-          (l) => !(l.target.kind === 'fx' && l.target.fxId === fxId),
-        );
+        t.automation = pruneLanes(t as Track) as typeof t.automation;
       }),
     moveFx: (trackId, fxId, to) =>
       mutate('Reorder effects', (d) => {
