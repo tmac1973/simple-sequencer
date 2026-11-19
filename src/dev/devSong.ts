@@ -3,7 +3,7 @@ import type { Song } from '@/model/types';
 
 /** A small hard-coded song using generated test sounds (judge engine timing by ear). */
 export function createDevSong(): Song {
-  const kick = createSampleTrack({ name: 'Kick', sampleId: 'dev:kick' });
+  const kick = createSampleTrack({ name: 'Kick', sampleId: 'lib:dusty-kick' });
   kick.patterns = [
     createPattern({ name: 'A', steps: [0, 8].map((index) => ({ index, velocity: 1 })) }),
     createPattern({
@@ -16,14 +16,14 @@ export function createDevSong(): Song {
     patternId: kick.patterns[b % 4 === 3 ? 1 : 0]!.id,
     startBar: b,
   }));
-  const snare = createSampleTrack({ name: 'Snare', sampleId: 'dev:snare' }, [kick]);
+  const snare = createSampleTrack({ name: 'Snare', sampleId: 'lib:dusty-snare' }, [kick]);
   snare.patterns[0]!.steps = [4, 12].map((index) => ({ index, velocity: 0.9 }));
   snare.blocks = [0, 1, 2, 3, 4, 5, 6, 7].map((b) => ({
     id: `s${b}`,
     patternId: snare.patterns[0]!.id,
     startBar: b,
   }));
-  const hat = createSampleTrack({ name: 'Hat', sampleId: 'dev:hat' }, [kick, snare]);
+  const hat = createSampleTrack({ name: 'Hat', sampleId: 'lib:dusty-hat' }, [kick, snare]);
   hat.patterns[0]!.steps = Array.from({ length: 16 }, (_, i) => ({
     index: i,
     velocity: i % 2 ? 0.45 : 0.8,

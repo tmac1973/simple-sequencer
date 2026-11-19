@@ -1,6 +1,8 @@
 import { useUiStore } from '@/store/uiStore';
 import { Modal } from '../components/controls';
 import { ShortcutsModal } from './ShortcutsModal';
+import { SoundBrowserModal } from './SoundBrowserModal';
+import { CreditsModal } from './CreditsModal';
 
 function ComingSoon({ title, onClose }: { title: string; onClose: () => void }) {
   return (
@@ -26,12 +28,12 @@ export function ModalHost() {
     case 'newSong':
       return <ComingSoon title="Start a song" onClose={close} />;
     case 'browser':
-      return <ComingSoon title="Choose a sound" onClose={close} />;
+      return <SoundBrowserModal onClose={close} />;
     case 'sampleEditor':
       return <ComingSoon title="Edit sample" onClose={close} />;
     case 'export':
       return <ComingSoon title="Export" onClose={close} />;
     case 'credits':
-      return <ComingSoon title="Credits" onClose={close} />;
+      return <CreditsModal onClose={close} />;
   }
 }
