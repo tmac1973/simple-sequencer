@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-for (const name of ['Empty', 'Lo-fi Beat', 'House', 'Hip-hop']) {
+for (const name of ['Empty', 'Lo-fi Beat', 'House', 'Hip-hop', 'Trip-hop']) {
   test(`template ${name} loads and plays`, async ({ page }) => {
     await page.goto('/');
     await page.getByRole('button', { name: '📁 Songs' }).click();

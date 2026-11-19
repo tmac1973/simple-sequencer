@@ -3,9 +3,10 @@ import { buildEmpty } from './empty';
 import { buildHiphop } from './hiphop';
 import { buildHouse } from './house';
 import { buildLofi } from './lofi';
+import { buildTriphop } from './triphop';
 
 export interface Template {
-  id: 'empty' | 'lofi' | 'house' | 'hiphop';
+  id: 'empty' | 'lofi' | 'house' | 'hiphop' | 'triphop';
   name: string;
   description: string;
   build(): Song;
@@ -35,6 +36,12 @@ export const TEMPLATES: Template[] = [
     name: 'Hip-hop',
     description: '92 BPM · boom-bap drums, triplet hats, piano, vocal chop',
     build: buildHiphop,
+  },
+  {
+    id: 'triphop',
+    name: 'Trip-hop',
+    description: '82 BPM · heavy dusty drums, vinyl, dark pad, vibes in echo',
+    build: buildTriphop,
   },
 ];
 

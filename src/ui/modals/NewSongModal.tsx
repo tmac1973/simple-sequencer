@@ -56,7 +56,7 @@ export function NewSongModal({ onClose }: { onClose: () => void }) {
     <Modal
       title="Start a song"
       onClose={onClose}
-      width={880}
+      width={960}
       footer={
         <>
           <span style={{ marginRight: 'auto' }} className="small muted">
