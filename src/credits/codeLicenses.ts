@@ -13,4 +13,5 @@ export const CODE_LICENSES: CodeLicense[] = [
   { name: 'Immer', license: 'MIT', url: 'https://github.com/immerjs/immer' },
   { name: 'nanoid', license: 'MIT', url: 'https://github.com/ai/nanoid' },
   { name: 'dnd kit', license: 'MIT', url: 'https://github.com/clauderic/dnd-kit' },
+  { name: 'idb', license: 'ISC', url: 'https://github.com/jakearchibald/idb' },
 ];

@@ -15,6 +15,8 @@ import {
 import { TrackGraph } from './trackGraph';
 import { triggerSample } from './voices/sampleVoice';
 import { SynthVoice } from './voices/synthVoice';
+import { toneToHz } from './voices/sampleTiming';
+import * as Tone from 'tone';
 import { degreeToMidi } from '@/model/scale';
 
 /**
@@ -25,6 +27,8 @@ export class GraphSet {
   readonly master: MasterBus;
   readonly tracks = new Map<string, TrackGraph>();
   readonly synths = new Map<string, SynthVoice>();
+  /** per sample track: the "Tone" lowpass every hit goes through */
+  readonly sampleTone = new Map<string, Tone.Filter>();
 
   constructor(song: Song) {
     this.master = createMaster();
@@ -41,6 +45,13 @@ export class GraphSet {
         this.synths.delete(id);
       }
     }
+    for (const [id, f] of this.sampleTone) {
+      const t = song.tracks.find((x) => x.id === id);
+      if (!t || t.kind !== 'sample') {
+        f.dispose();
+        this.sampleTone.delete(id);
+      }
+    }
     for (const [id, g] of this.tracks) {
       if (!ids.has(id)) {
         g.dispose();
@@ -55,6 +66,18 @@ export class GraphSet {
         g = new TrackGraph(t, this.master.input, audible);
         this.tracks.set(t.id, g);
       }
+      if (t.kind === 'sample' && t.sample) {
+        const hz = toneToHz(t.sample.tone);
+        const f = this.sampleTone.get(t.id);
+        if (f) f.frequency.rampTo(hz, 0.02);
+        else
+          this.sampleTone.set(
+            t.id,
+            new Tone.Filter({ type: 'lowpass', frequency: hz, rolloff: -12, Q: 0.5 }).connect(
+              g.input,
+            ),
+          );
+      }
       if (t.kind === 'synth' && t.synth) {
         const v = this.synths.get(t.id);
         if (v) v.apply(t.synth);
@@ -67,7 +90,14 @@ export class GraphSet {
     for (const v of this.synths.values()) v.releaseAll();
   }
 
+  /** Where sample voices for a track connect. */
+  sampleInput(trackId: string): Tone.InputNode | undefined {
+    return this.sampleTone.get(trackId) ?? this.tracks.get(trackId)?.input;
+  }
+
   dispose() {
+    for (const f of this.sampleTone.values()) f.dispose();
+    this.sampleTone.clear();
     for (const v of this.synths.values()) v.dispose();
     this.synths.clear();
     for (const g of this.tracks.values()) g.dispose();
@@ -86,9 +116,11 @@ function dispatchEvent(
 ) {
   const g = graphs.tracks.get(track.id);
   if (!g) return;
+  const sIn = graphs.sampleInput(track.id) ?? g.input;
   if (ev.kind === 'hit' && track.sample) {
     const buf = SampleRegistry.getLoaded(track.sample.sampleId);
-    if (buf) triggerSample(g.input, buf, at, ev.velocity, track.sample);
+    const hold = track.sample.edit.loop ? (ev.lengthBeats ?? 0.25) * beatSec : undefined;
+    if (buf) triggerSample(sIn, buf, at, ev.velocity, track.sample, 1, hold);
     return;
   }
   if (ev.kind !== 'note' || ev.degree === undefined) return;
@@ -99,7 +131,7 @@ function dispatchEvent(
   } else if (track.sample) {
     const buf = SampleRegistry.getLoaded(track.sample.sampleId);
     const rate = 2 ** ((midi - track.sample.rootMidi) / 12);
-    if (buf) triggerSample(g.input, buf, at, ev.velocity, track.sample, rate, dur);
+    if (buf) triggerSample(sIn, buf, at, ev.velocity, track.sample, rate, dur);
   }
 }
 
@@ -219,15 +251,29 @@ class Engine {
       edit: { ...DEFAULT_SAMPLE_EDIT },
     };
     const rate = midi !== undefined ? 2 ** ((midi - s.rootMidi) / 12) : 1;
+    this.stopPreview();
+    const dest = new Tone.Gain(1).connect(graphs.master.input);
+    this.previewOut = dest;
     triggerSample(
-      graphs.master.input,
+      dest,
       buf,
       audioNow() + 0.02,
       0.9,
       s,
       rate,
-      Math.min(buf.duration, 4),
+      s.edit.loop ? 2 : Math.min(buf.duration * 4, 6),
     );
+  }
+
+  private previewOut: Tone.Gain | null = null;
+
+  /** Cut off any sound being previewed. */
+  stopPreview() {
+    const p = this.previewOut;
+    if (!p) return;
+    this.previewOut = null;
+    p.gain.rampTo(0, 0.02);
+    setTimeout(() => p.dispose(), 100);
   }
 
   private onBeat(counter: number, time: number) {

@@ -5,6 +5,7 @@ import { Timeline } from './Timeline';
 import { EditorPanel } from '../editor/EditorPanel';
 import { Inspector } from '../inspector/Inspector';
 import { TooltipLayer } from '../components/TooltipLayer';
+import { ToastHost } from '../components/ToastHost';
 import { ModalHost } from '../modals/ModalHost';
 import { useShortcuts } from '../shortcuts';
 import { useSelectionGuard } from '../hooks/selection';
@@ -25,6 +26,7 @@ export function AppShell() {
       </section>
       <ModalHost />
       <TooltipLayer />
+      <ToastHost />
     </div>
   );
 }

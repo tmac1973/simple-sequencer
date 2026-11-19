@@ -29,7 +29,11 @@ export function SoundBrowserModal({ onClose }: { onClose: () => void }) {
   );
   const [query, setQuery] = useState('');
   const [picked, setPicked] = useState<string>(current);
-  const user = useUserSounds();
+  const user = useUserSounds((snd) => {
+    setCategory(MY);
+    setQuery('');
+    setPicked(snd.id);
+  });
 
   useEffect(() => {
     loadManifest()

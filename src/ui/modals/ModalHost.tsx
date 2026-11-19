@@ -3,6 +3,7 @@ import { Modal } from '../components/controls';
 import { ShortcutsModal } from './ShortcutsModal';
 import { SoundBrowserModal } from './SoundBrowserModal';
 import { CreditsModal } from './CreditsModal';
+import { SampleEditorModal } from './SampleEditorModal';
 
 function ComingSoon({ title, onClose }: { title: string; onClose: () => void }) {
   return (
@@ -30,7 +31,7 @@ export function ModalHost() {
     case 'browser':
       return <SoundBrowserModal onClose={close} />;
     case 'sampleEditor':
-      return <ComingSoon title="Edit sample" onClose={close} />;
+      return <SampleEditorModal onClose={close} />;
     case 'export':
       return <ComingSoon title="Export" onClose={close} />;
     case 'credits':
