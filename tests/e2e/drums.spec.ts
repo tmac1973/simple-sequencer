@@ -10,6 +10,7 @@ test('build a drum pattern, paint it, play it and undo', async ({ page }) => {
   await expect(page.getByRole('button', { name: /Step 9 on/ })).toBeVisible();
   // paint 4 bars on the new track's timeline row
   const row = page.getByLabel('Drum timeline', { exact: true });
+  await row.scrollIntoViewIfNeeded();
   const box = (await row.boundingBox())!;
   await page.mouse.move(box.x + 20, box.y + 20);
   await page.mouse.down();

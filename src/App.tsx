@@ -5,13 +5,13 @@ import { registerLibraryResolver } from './library/libraryResolver';
 import { loadManifest } from './library/manifest';
 import { registerUserResolver } from './storage/userSamples';
 import { useSongStore } from './store/songStore';
-import { createDevSong } from './dev/devSong';
+import { buildLofi } from './templates/lofi';
 
 registerDevSamples();
 registerLibraryResolver();
 registerUserResolver();
 loadManifest().catch((e) => console.warn('[library]', e));
-useSongStore.getState().loadSong(createDevSong());
+useSongStore.getState().loadSong(buildLofi());
 
 export function App() {
   useEngineSync();

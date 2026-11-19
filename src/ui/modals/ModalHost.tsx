@@ -4,6 +4,7 @@ import { ShortcutsModal } from './ShortcutsModal';
 import { SoundBrowserModal } from './SoundBrowserModal';
 import { CreditsModal } from './CreditsModal';
 import { SampleEditorModal } from './SampleEditorModal';
+import { NewSongModal } from './NewSongModal';
 
 function ComingSoon({ title, onClose }: { title: string; onClose: () => void }) {
   return (
@@ -27,7 +28,7 @@ export function ModalHost() {
     case 'shortcuts':
       return <ShortcutsModal onClose={close} />;
     case 'newSong':
-      return <ComingSoon title="Start a song" onClose={close} />;
+      return <NewSongModal onClose={close} />;
     case 'browser':
       return <SoundBrowserModal onClose={close} />;
     case 'sampleEditor':
