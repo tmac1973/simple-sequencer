@@ -99,6 +99,37 @@ export const TIPS: Record<string, TipCopy> = {
     title: 'Patterns',
     body: 'Each track can have several patterns (A, B, C…). Click one to edit it and to paint it on the timeline.',
   },
+  ideas: {
+    title: 'Pattern ideas',
+    body: 'Ready-made drum grooves, basslines, chords and melodies from real music styles. Preview them with your own sounds, then drop one in and tweak it.',
+  },
+  ideaCategories: {
+    title: 'Idea types',
+    body: 'Drum ideas fill your whole kit. Basslines, chords and melodies go on a synth or melodic track.',
+  },
+  ideaGenres: { title: 'Genres', body: 'Show only ideas from one style of music.' },
+  ideaSearch: {
+    title: 'Search ideas',
+    body: 'Search every idea by name, style or description, e.g. “walking” or “trap”.',
+  },
+  ideaCard: { title: 'Pick this idea', body: 'Select it to see where it goes before you add it.' },
+  ideaPreview: {
+    title: 'Preview',
+    body: 'Hear the idea looping with your own sounds and key. Your song stays exactly as it is.',
+  },
+  ideaFeel: {
+    title: 'Tempo & swing',
+    body: 'Also change the song to the tempo and swing this idea was made for. Your tempo is kept if it already fits.',
+  },
+  ideaPairs: { title: 'Goes well with', body: 'Ideas that sound great together with this one.' },
+  ideaAddNew: {
+    title: 'Add as new pattern',
+    body: 'Put the idea in the next free pattern letter, so your current patterns stay as they are.',
+  },
+  ideaUse: {
+    title: 'Use this idea',
+    body: 'Replace the selected pattern with this idea. One Ctrl+Z puts everything back.',
+  },
   newPattern: {
     title: 'New pattern',
     body: 'Make a fresh empty pattern, or copy this one to start a variation.',

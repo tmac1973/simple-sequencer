@@ -12,6 +12,8 @@ vi.mock('@/audio/engine', () => ({
     play: vi.fn(),
     preview: vi.fn(),
     stopPreview: vi.fn(),
+    previewSong: vi.fn(() => Promise.resolve()),
+    stopSongPreview: vi.fn(),
     auditionNote: vi.fn(),
     position: () => null,
     onParamValue: () => null,
@@ -67,18 +69,23 @@ describe('every control has a plain-English tooltip', () => {
     }
   });
 
-  it.each(['newSong', 'browser', 'sampleEditor', 'export', 'credits', 'shortcuts'] as ModalId[])(
-    'modal %s',
-    async (m) => {
-      useUiStore.setState({
-        openModal: m,
-        selectedTrackId: useSongStore.getState().song.tracks[0]!.id,
-      });
-      render(<AppShell />);
-      await act(async () => {});
-      const dialog = document.querySelector('[role=dialog]')!;
-      expect(dialog).not.toBeNull();
-      expect(missing(dialog)).toEqual([]);
-    },
-  );
+  it.each([
+    'newSong',
+    'browser',
+    'sampleEditor',
+    'export',
+    'credits',
+    'shortcuts',
+    'ideas',
+  ] as ModalId[])('modal %s', async (m) => {
+    useUiStore.setState({
+      openModal: m,
+      selectedTrackId: useSongStore.getState().song.tracks[0]!.id,
+    });
+    render(<AppShell />);
+    await act(async () => {});
+    const dialog = document.querySelector('[role=dialog]')!;
+    expect(dialog).not.toBeNull();
+    expect(missing(dialog)).toEqual([]);
+  });
 });

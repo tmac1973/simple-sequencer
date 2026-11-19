@@ -26,6 +26,7 @@ function markSeen() {
 export function FirstRunHint() {
   const [step, setStep] = useState<0 | 1 | 2>(() => (seen() ? 2 : 0));
   const [anchor, setAnchor] = useState<DOMRect | null>(null);
+  const modalOpen = useUiStore((u) => u.openModal !== null);
   // advance: step 0 → 1 when the user plays; step 1 → done on their first edit
   useEffect(
     () =>
@@ -78,7 +79,7 @@ export function FirstRunHint() {
     };
   }, [step]);
 
-  if (step === 2 || !anchor) return null;
+  if (step === 2 || !anchor || modalOpen) return null;
   const text =
     step === 0
       ? 'Press Space or ▶ to hear your song.'

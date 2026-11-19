@@ -173,3 +173,13 @@
   height: 26px;
   border-radius: 5px;
 }
+.ideasBtn {
+  background: linear-gradient(135deg, #8b7bff, #ff7ac6);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  padding: 5px 12px;
+}
+.ideasBtn:hover {
+  filter: brightness(1.1);
+}

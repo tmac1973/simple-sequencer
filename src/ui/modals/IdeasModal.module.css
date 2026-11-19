@@ -1,0 +1,250 @@
+.for {
+  color: var(--muted);
+  font-weight: 400;
+  font-size: 14px;
+}
+.body {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 16px;
+  min-height: 460px;
+  margin: -20px -22px;
+}
+.cats {
+  border-right: 1px solid var(--line);
+  padding: 12px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.catGroup {
+  display: contents;
+}
+.cats button {
+  display: flex;
+  justify-content: space-between;
+  text-align: left;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+.cats button span {
+  color: var(--dim);
+}
+.cats button.on {
+  background: var(--panel3);
+  color: var(--text);
+}
+.sep {
+  height: 1px;
+  background: var(--line);
+  margin: 8px 4px;
+}
+.keyNote {
+  font-size: 12px;
+  color: var(--dim);
+  line-height: 1.4;
+  margin: 0 10px;
+}
+.main {
+  padding: 14px 18px 14px 0;
+  min-width: 0;
+}
+.filters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.filters button {
+  padding: 3px 11px;
+  border-radius: 999px;
+  font-size: 12.5px;
+}
+.filters button.on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.search {
+  width: 100%;
+  padding: 8px 12px !important;
+  border-radius: 9px !important;
+  margin-bottom: 12px;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  max-height: 52vh;
+  overflow: auto;
+  padding-right: 4px;
+}
+.card {
+  background: var(--panel2);
+  border: 2px solid var(--line);
+  border-radius: 13px;
+  padding: 11px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  cursor: pointer;
+}
+.card:hover {
+  border-color: #8b7bff88;
+}
+.card.on {
+  border-color: var(--accent);
+}
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.cardName {
+  background: none;
+  border: none;
+  padding: 0;
+  font-weight: 700;
+  font-size: 14.5px;
+  text-align: left;
+}
+.pv {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  flex: none;
+}
+.pv.playing {
+  background: var(--good);
+  border-color: var(--good);
+  color: #10241a;
+}
+.art {
+  background: #151720;
+  border-radius: 8px;
+  padding: 7px;
+  display: grid;
+  gap: 3px;
+}
+.artRow {
+  display: grid;
+  gap: 1px;
+  align-items: center;
+}
+.artRow span {
+  font-size: 9.5px;
+  color: var(--dim);
+  white-space: nowrap;
+  overflow: hidden;
+}
+.artRow i {
+  height: 8px;
+  border-radius: 2px;
+  background: #262937;
+}
+.artRow i.barLine {
+  box-shadow: -1px 0 0 #4a4f68;
+}
+.roll {
+  position: relative;
+  height: 58px;
+  display: block;
+}
+.roll i {
+  position: absolute;
+  height: 6px;
+  border-radius: 2px;
+}
+.roll i.rollBar {
+  top: 0;
+  bottom: 0;
+  height: auto;
+  width: 1px;
+  background: #33374a;
+}
+.desc {
+  font-size: 12.5px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+.tags {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.tag {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #ffffff10;
+  color: var(--muted);
+}
+.tag.genre {
+  background: #8b7bff33;
+  color: var(--accent2, #b3a8ff);
+}
+.apply {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px;
+  align-items: center;
+}
+.applyTitle {
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.map {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 12.5px;
+}
+.map div {
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 5px 9px;
+}
+.map div.newTrack {
+  border-style: dashed;
+  color: var(--warn);
+}
+.skipped {
+  font-size: 12.5px;
+  color: var(--warn);
+}
+.map .skipped {
+  border: none;
+  background: none;
+}
+.feel,
+.pairs {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.feel label {
+  color: var(--text);
+  cursor: pointer;
+}
+.link {
+  background: none;
+  border: none;
+  padding: 0 4px;
+  color: var(--accent2, #b3a8ff);
+  text-decoration: underline;
+  font-size: 12.5px;
+}
+.actions {
+  display: flex;
+  gap: 8px;
+}

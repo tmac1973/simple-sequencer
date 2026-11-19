@@ -5,6 +5,7 @@ import { CreditsModal } from './CreditsModal';
 import { SampleEditorModal } from './SampleEditorModal';
 import { NewSongModal } from './NewSongModal';
 import { ExportModal } from './ExportModal';
+import { IdeasModal } from './IdeasModal';
 
 export function ModalHost() {
   const open = useUiStore((s) => s.openModal);
@@ -24,5 +25,7 @@ export function ModalHost() {
       return <ExportModal onClose={close} />;
     case 'credits':
       return <CreditsModal onClose={close} />;
+    case 'ideas':
+      return <IdeasModal onClose={close} />;
   }
 }

@@ -277,6 +277,7 @@ class Engine {
 
   async play(fromBar = 0) {
     if (!this.song) return;
+    this.stopSongPreview();
     const token = ++this.playToken;
     await ensureAudioStarted();
     if (token !== this.playToken) return; // stopped while starting
@@ -366,6 +367,64 @@ class Engine {
     this.previewOut = null;
     p.gain.rampTo(0, 0.02);
     setTimeout(() => p.dispose(), 100);
+  }
+
+  private songPreview: { graphs: GraphSet; clock: BeatClock } | null = null;
+  private songPreviewToken = 0;
+
+  /** True while a stand-alone preview song (a pattern idea) is looping. */
+  get previewingSong() {
+    return this.songPreview !== null || this.songPreviewPending;
+  }
+  private songPreviewPending = false;
+
+  /**
+   * Loop a separate little song (e.g. a pattern idea on the user's own sounds) on its own
+   * graph and clock, so the real song's audio graph and playback are never touched.
+   */
+  async previewSong(song: Song) {
+    this.stopSongPreview();
+    const token = ++this.songPreviewToken;
+    this.songPreviewPending = true;
+    try {
+      await ensureAudioStarted();
+      await Promise.all(
+        song.tracks.map((t) =>
+          t.sample ? SampleRegistry.get(t.sample.sampleId).catch(() => null) : null,
+        ),
+      );
+      if (token !== this.songPreviewToken) return;
+      const graphs = new GraphSet(song);
+      await graphs.ready();
+      if (token !== this.songPreviewToken) {
+        graphs.dispose();
+        return;
+      }
+      const ctx: PlayContext = { playMode: 'song', selectedTrackId: null, selectedPatternId: {} };
+      const total = song.lengthBars * BEATS_PER_BAR;
+      const clock = new BeatClock(
+        () => audioNow(),
+        () => beatSeconds(song.bpm),
+        (counter, time) =>
+          scheduleBeat(graphs, song, ctx, counter % total, time, counter % total === 0),
+      );
+      this.songPreview = { graphs, clock };
+      clock.start(audioNow() + 0.06);
+    } finally {
+      if (token === this.songPreviewToken) this.songPreviewPending = false;
+    }
+  }
+
+  stopSongPreview() {
+    this.songPreviewToken++;
+    this.songPreviewPending = false;
+    const p = this.songPreview;
+    if (!p) return;
+    this.songPreview = null;
+    p.clock.stop();
+    p.graphs.releaseAll();
+    p.graphs.master.input.gain.rampTo(0, 0.03);
+    setTimeout(() => p.graphs.dispose(), 250);
   }
 
   private onBeat(counter: number, time: number) {

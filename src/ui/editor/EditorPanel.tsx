@@ -120,6 +120,13 @@ export function EditorPanel() {
             ]}
           />
         </div>
+        <button
+          className={styles.ideasBtn}
+          onClick={() => ui.openModalId('ideas')}
+          {...tip('ideas')}
+        >
+          💡 Ideas
+        </button>
         <div className="spacer" />
         {notes && (
           <div className={styles.inline} {...tip('chordStamp')}>

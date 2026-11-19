@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pattern Ideas — UI Mock</title>
+<style>
+:root{--bg:#13141b;--panel:#1b1d27;--panel2:#232634;--panel3:#2c3042;--line:#33374a;--text:#eceef6;--muted:#9a9eb5;--dim:#6b6f86;--accent:#8b7bff;--accent2:#b3a8ff;--good:#5ee6a8;--warn:#ffb84d;--bad:#ff6b6b}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.35 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-width:1280px}
+button{font:inherit;color:inherit;background:var(--panel3);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
+button:hover{border-color:var(--accent)}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.ghost{background:transparent}
+.muted{color:var(--muted)}.small{font-size:12px}
+/* editor strip (context) */
+.editor{background:var(--panel);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:10px 14px}
+.title{display:flex;align-items:center;gap:8px;font-weight:700}
+.sw{width:12px;height:12px;border-radius:4px;background:#ff6b6b}
+.chip{width:30px;height:28px;border-radius:7px;display:grid;place-items:center;font-weight:700;background:var(--panel3);border:none}
+.chip.on{background:#ff6b6b;color:#10121a}
+.seg{display:inline-flex;background:var(--panel3);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{border:none;border-radius:0;background:transparent;padding:5px 10px}
+.seg button.on{background:var(--accent);color:#fff}
+.ideasBtn{background:linear-gradient(135deg,#8b7bff,#ff7ac6);border:none;color:#fff;font-weight:700;box-shadow:0 0 0 3px #8b7bff44}
+.callout{font-size:12px;color:var(--warn)}
+/* modal */
+.scrim{padding:26px 0;display:flex;justify-content:center;background:radial-gradient(#00000055,#000000aa)}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:16px;width:1080px;box-shadow:0 30px 80px #0008}
+.mh{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--line)}
+.mh h2{margin:0;font-size:19px}
+.body{display:grid;grid-template-columns:200px 1fr;min-height:560px}
+.cats{border-right:1px solid var(--line);padding:12px 10px;display:flex;flex-direction:column;gap:2px}
+.cats div{padding:8px 10px;border-radius:8px;display:flex;justify-content:space-between;color:var(--muted);cursor:pointer}
+.cats div.on{background:var(--panel3);color:var(--text)}
+.cats .sep{height:1px;background:var(--line);margin:8px 4px;padding:0}
+.main{padding:14px 18px}
+.filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.f{padding:4px 11px;border-radius:999px;background:var(--panel3);border:1px solid var(--line);font-size:12.5px;cursor:pointer}
+.f.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.search{flex:1;min-width:200px;padding:8px 12px;border-radius:9px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font:inherit}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.card{background:var(--panel2);border:2px solid var(--line);border-radius:13px;padding:12px;display:flex;flex-direction:column;gap:8px;cursor:pointer}
+.card.on{border-color:var(--accent)}
+.card .top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.card b{font-size:14.5px}
+.tags{display:flex;gap:5px;flex-wrap:wrap}
+.tag{font-size:11px;padding:2px 7px;border-radius:999px;background:#ffffff10;color:var(--muted)}
+.tag.genre{background:#8b7bff33;color:var(--accent2)}
+.art{background:#151720;border-radius:8px;padding:7px;display:grid;gap:3px}
+.row{display:grid;grid-template-columns:44px repeat(16,1fr);gap:2px;align-items:center}
+.row span{font-size:9.5px;color:var(--dim)}
+.row i{height:9px;border-radius:2px;background:#262937}
+.roll{position:relative;height:54px}
+.roll i{position:absolute;height:6px;border-radius:2px}
+.pv{width:30px;height:30px;border-radius:50%;padding:0;display:grid;place-items:center;font-size:11px;flex:none}
+.pv.playing{background:var(--good);border-color:var(--good);color:#10241a}
+/* detail / apply bar */
+.apply{border-top:1px solid var(--line);padding:14px 22px;display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center}
+.map{display:flex;gap:8px;flex-wrap:wrap;font-size:12.5px}
+.map div{background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:5px 9px}
+.map .new{border-style:dashed;color:var(--warn)}
+.feel{font-size:12.5px;color:var(--muted);margin-top:6px}
+.feel label{color:var(--text)}
+.actions{display:flex;gap:8px}
+.note{max-width:1080px;margin:14px auto;color:var(--muted);font-size:12.5px}
+</style>
+</head>
+<body>
+
+<div class="note"><b style="color:var(--warn)">MOCK ▸</b> The pattern editor gets a new <b>💡 Ideas</b> button. It opens the window below: browse by type and genre, preview with your own sounds, then use or add.</div>
+
+<div class="editor">
+  <div class="title"><span class="sw"></span>Kick · Steps</div>
+  <button class="chip on">A</button><button class="chip">B</button><button class="chip">＋</button>
+  <div class="seg"><button>1 bar</button><button class="on">2</button><button>3</button><button>4</button></div>
+  <div class="seg"><button class="on">16ths</button><button>Triplets</button></div>
+  <button class="ideasBtn">💡 Ideas</button>
+  <span class="callout">← new</span>
+  <span style="flex:1"></span>
+  <span class="small muted">Show all drums</span>
+  <button class="ghost small">Clear</button>
+</div>
+
+<div class="scrim"><div class="modal">
+  <div class="mh"><h2>Pattern ideas <span class="muted" style="font-weight:400;font-size:14px">· for <span style="color:#ff6b6b">your drum kit</span></span></h2><button class="ghost">✕</button></div>
+  <div class="body">
+    <div class="cats">
+      <div class="on">🥁 Drum grooves <span>22</span></div>
+      <div>💥 Fills &amp; builds <span>6</span></div>
+      <div>🪘 Percussion <span>5</span></div>
+      <div class="sep"></div>
+      <div>〰️ Basslines <span>12</span></div>
+      <div>🎹 Chords <span>10</span></div>
+      <div>🎵 Melodies <span>6</span></div>
+      <div class="sep"></div>
+      <div class="small" style="color:var(--dim);cursor:default;line-height:1.4">Melodies, basslines and chords always fit your song's key (C minor).</div>
+    </div>
+    <div class="main">
+      <div class="filters">
+        <span class="f on">All</span><span class="f">Hip-hop</span><span class="f">Lo-fi</span><span class="f">Trap</span><span class="f">House</span><span class="f">Disco</span><span class="f">Drum &amp; bass</span><span class="f">Trip-hop</span><span class="f">Funk</span><span class="f">Rock</span><span class="f">Jazz</span><span class="f">Reggae</span><span class="f">Latin</span>
+      </div>
+      <div class="filters"><input class="search" placeholder="Search ideas… e.g. 'boom bap', 'shuffle', 'rolls'"></div>
+      <div class="grid" id="grid"></div>
+    </div>
+  </div>
+  <div class="apply">
+    <div>
+      <div style="font-weight:700;margin-bottom:6px">Boom-bap (swung) <span class="muted small" style="font-weight:400">· fills your whole kit</span></div>
+      <div class="map">
+        <div>Kick → <b>Kick</b></div><div>Snare → <b>Snare</b></div><div>Hats → <b>Hi-hat</b></div><div class="new">Rim → <b>new track</b> (808 Rim)</div>
+      </div>
+      <div class="feel">Sounds best around <b>88–96 BPM</b> with <b>25% swing</b> · <label><input type="checkbox" checked> also set tempo &amp; swing</label></div>
+    </div>
+    <div class="actions">
+      <button>▶ Preview</button>
+      <button title="Put it in the next free pattern letter on each track">＋ Add as new pattern</button>
+      <button class="primary">Use (replace A)</button>
+    </div>
+  </div>
+</div></div>
+
+<script>
+const C={kick:'#ff6b6b',snare:'#ffb84d',hat:'#ffe066',perc:'#5ee6a8'};
+const drum=(name,tags,bpm,rows)=>({name,tags,bpm,rows});
+const items=[
+ drum('Boom-bap (swung)',['Hip-hop','Swing'],'88–96',{Kick:[0,7,10],Snare:[4,12],Hats:[0,2,4,6,8,10,12,14],Rim:[14]}),
+ drum('Lazy lo-fi',['Lo-fi','Swing'],'70–85',{Kick:[0,9],Snare:[4,12],Hats:[0,2,4,6,8,10,12,14]}),
+ drum('Trap with rolls',['Trap','Triplets'],'130–150',{Kick:[0,6,10],Snare:[8],Hats:[0,2,3,4,6,8,10,11,12,13,14,15]}),
+ drum('Four on the floor',['House'],'120–128',{Kick:[0,4,8,12],Clap:[4,12],'Open hat':[2,6,10,14]}),
+ drum('Disco',['Disco','House'],'110–125',{Kick:[0,4,8,12],Snare:[4,12],'Open hat':[2,6,10,14],Hats:[0,1,3,4,5,7,8,9,11,12,13,15]}),
+ drum('Two-step',['Drum & bass'],'170–176',{Kick:[0,10],Snare:[4,12],Hats:[0,2,4,6,8,10,12,14]}),
+ drum('Trip-hop half-time',['Trip-hop'],'75–90',{Kick:[0,7,10],Snare:[8],Hats:[0,2,4,6,8,10,12,14]}),
+ drum('Funk 16ths',['Funk'],'95–110',{Kick:[0,3,10],Snare:[4,7,12,15],Hats:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]}),
+ drum('Rock basic',['Rock'],'100–140',{Kick:[0,8,10],Snare:[4,12],Hats:[0,2,4,6,8,10,12,14]}),
+];
+const rowEl=(label,steps,color)=>`<div class="row"><span>${label}</span>${Array.from({length:16},(_,i)=>`<i style="${steps.includes(i)?`background:${color}`:''}"></i>`).join('')}</div>`;
+const colorFor=l=>/kick/i.test(l)?C.kick:/snare|clap/i.test(l)?C.snare:/hat/i.test(l)?C.hat:C.perc;
+document.getElementById('grid').innerHTML=items.map((it,k)=>`
+ <div class="card ${k===0?'on':''}">
+  <div class="top"><div><b>${it.name}</b><div class="tags" style="margin-top:4px">${it.tags.map((t,i)=>`<span class="tag ${i===0?'genre':''}">${t}</span>`).join('')}<span class="tag">${it.bpm} BPM</span></div></div>
+  <button class="pv ${k===0?'playing':''}" title="Preview with your sounds">${k===0?'■':'▶'}</button></div>
+  <div class="art">${Object.entries(it.rows).map(([l,s])=>rowEl(l,s,colorFor(l))).join('')}</div>
+ </div>`).join('');
+</script>
+
+<div class="note">And on a <b>synth track</b> (here: Bass), the same window shows basslines. Notes are stored as scale steps, so they always fit your key.</div>
+<div class="scrim"><div class="modal">
+  <div class="mh"><h2>Pattern ideas <span class="muted" style="font-weight:400;font-size:14px">· for <span style="color:#4dc9ff">Bass</span></span></h2><button class="ghost">✕</button></div>
+  <div class="body">
+    <div class="cats">
+      <div>🥁 Drum grooves <span>22</span></div>
+      <div>💥 Fills &amp; builds <span>6</span></div>
+      <div>🪘 Percussion <span>5</span></div>
+      <div class="sep"></div>
+      <div class="on">〰️ Basslines <span>12</span></div>
+      <div>🎹 Chords <span>10</span></div>
+      <div>🎵 Melodies <span>6</span></div>
+    </div>
+    <div class="main">
+      <div class="filters"><span class="f on">All</span><span class="f">Hip-hop</span><span class="f">House</span><span class="f">Disco</span><span class="f">Funk</span><span class="f">Jazz</span><span class="f">Reggae</span><span class="f">Rock</span><span class="f">Trap</span></div>
+      <div class="grid" id="grid2"></div>
+    </div>
+  </div>
+  <div class="apply">
+    <div>
+      <div style="font-weight:700;margin-bottom:6px">Walking bass <span class="muted small" style="font-weight:400">· 2 bars · follows i → iv</span></div>
+      <div class="feel">Sounds best around <b>110–140 BPM</b> with <b>50% swing</b> · <label><input type="checkbox"> also set tempo &amp; swing</label><br>Tip: pair it with the <b>"Jazz ii–V–i"</b> chords for the full sound.</div>
+    </div>
+    <div class="actions">
+      <button>▶ Preview</button>
+      <button>＋ Add as new pattern</button>
+      <button class="primary">Use (replace A)</button>
+    </div>
+  </div>
+</div></div>
+<script>
+const bass=[
+ ['Root notes',['Any'],'Any',[[0,6,0],[8,6,0],[16,6,-2],[24,6,-3]]],
+ ['Octave bounce',['Disco','House'],'110–125',[[0,2,0],[2,2,7],[4,2,0],[6,2,7],[8,2,0],[10,2,7],[12,2,0],[14,2,7],[16,2,-2],[18,2,5],[20,2,-2],[22,2,5],[24,2,-3],[26,2,4],[28,2,-3],[30,2,4]]],
+ ['Walking bass',['Jazz','Swing'],'110–140',[[0,4,0],[4,4,1],[8,4,2],[12,4,4],[16,4,3],[20,4,2],[24,4,1],[28,4,-1]]],
+ ['Funk syncopation',['Funk'],'95–110',[[0,2,0],[3,1,0],[6,2,7],[10,1,0],[11,2,2],[14,2,4],[16,2,3],[19,1,3],[22,2,5],[26,2,4],[29,2,2]]],
+ ['One-drop',['Reggae'],'70–80',[[4,3,0],[8,2,4],[12,3,2],[20,3,-2],[24,2,2],[28,3,0]]],
+ ['808 long notes',['Trap','Hip-hop'],'130–150',[[0,10,0],[10,6,0],[16,12,-2],[28,4,-3]]],
+];
+const roll=(notes)=>{const lo=Math.min(...notes.map(n=>n[2])),hi=Math.max(...notes.map(n=>n[2]));const span=Math.max(4,hi-lo+1);return notes.map(([s,l,d])=>`<i style="left:${s/32*100}%;width:calc(${l/32*100}% - 2px);top:${(hi-d)/span*48}px;background:#4dc9ff"></i>`).join('')};
+document.getElementById('grid2').innerHTML=bass.map(([n,tags,bpm,notes],k)=>`
+ <div class="card ${k===2?'on':''}"><div class="top"><div><b>${n}</b><div class="tags" style="margin-top:4px">${tags.map((t,i)=>`<span class="tag ${i===0?'genre':''}">${t}</span>`).join('')}<span class="tag">${bpm} BPM</span></div></div><button class="pv">▶</button></div>
+ <div class="art"><div class="roll">${roll(notes)}</div></div></div>`).join('');
+</script>
+
+</body>
+</html>

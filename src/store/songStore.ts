@@ -38,6 +38,8 @@ import type {
   TrackKind,
 } from '@/model/types';
 import { emptyHistory, record, redo, undo, type HistoryState } from './history';
+import { applyIdea, type ApplyResult, type IdeaPlan } from '@/library/ideas/apply';
+import type { PatternIdea } from '@/library/ideas/model';
 
 const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
 
@@ -170,6 +172,14 @@ export interface SongStore extends HistoryState {
     gestureId?: string,
   ): void;
   setLaneVisible(trackId: string, laneId: string, visible: boolean): void;
+
+  /** Apply a pattern idea (see library/ideas/apply) as one undo step. */
+  applyIdea(
+    idea: PatternIdea,
+    plan: IdeaPlan,
+    setFeel: boolean,
+    selectedTrackId?: string | null,
+  ): ApplyResult | null;
 }
 
 export const useSongStore = create<SongStore>((set, get) => {
@@ -535,6 +545,14 @@ export const useSongStore = create<SongStore>((set, get) => {
         const l = track(d, trackId)?.automation.find((x) => x.id === laneId);
         if (l) l.visible = visible;
       }),
+
+    applyIdea(idea, plan, setFeel, selectedTrackId) {
+      let result: ApplyResult | null = null;
+      mutate(plan.mode === 'new' ? 'Add pattern idea' : 'Use pattern idea', (d) => {
+        result = applyIdea(d as Song, idea, plan, { setFeel, selectedTrackId });
+      });
+      return result;
+    },
   };
 });
 

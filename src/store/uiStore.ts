@@ -3,7 +3,7 @@ import { create } from 'zustand';
 export type InspectorTab = 'sound' | 'fx' | 'automate';
 export type PlayMode = 'pattern' | 'song';
 export type ModalId =
-  null | 'newSong' | 'browser' | 'sampleEditor' | 'export' | 'credits' | 'shortcuts';
+  null | 'newSong' | 'browser' | 'sampleEditor' | 'export' | 'credits' | 'shortcuts' | 'ideas';
 export type ChordStamp = 'off' | 'triad' | 'seventh';
 
 export interface UiState {
