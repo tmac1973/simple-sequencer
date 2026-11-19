@@ -1,0 +1,123 @@
+.timeline {
+  overflow: auto;
+  position: relative;
+  background: var(--bg);
+  min-width: 0;
+}
+.inner {
+  position: relative;
+}
+.ruler {
+  height: 34px;
+  display: flex;
+  position: sticky;
+  top: 0;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  z-index: 4;
+}
+.rc {
+  width: var(--bar-w);
+  flex: none;
+  border-left: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--muted);
+  padding: 4px 6px;
+  cursor: pointer;
+  position: relative;
+}
+.rc:hover {
+  background: var(--panel2);
+}
+.rc.loop {
+  background: rgba(139, 123, 255, 0.2);
+  color: var(--accent2);
+}
+.flag {
+  position: absolute;
+  left: -1px;
+  bottom: 0;
+  color: var(--good);
+  font-size: 10px;
+  line-height: 1;
+}
+.addBars {
+  flex: none;
+  margin: 4px 8px;
+  padding: 2px 8px;
+  font-size: 11px;
+}
+.row {
+  height: var(--row-h);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+  cursor: pointer;
+  touch-action: none;
+  background-image:
+    linear-gradient(to right, var(--line) 1px, transparent 1px),
+    linear-gradient(to right, var(--line-soft) 1px, transparent 1px);
+  background-size:
+    calc(var(--bar-w) * 4) 100%,
+    var(--bar-w) 100%;
+}
+.row.sel {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+.blk {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  border-radius: 7px;
+  display: flex;
+  align-items: flex-end;
+  padding: 3px 6px;
+  font-weight: 700;
+  font-size: 12px;
+  color: #10121a;
+  overflow: hidden;
+}
+.blk.joinL {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.blk.joinR {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.blk svg {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 4px;
+  bottom: 16px;
+  width: calc(100% - 8px);
+  height: calc(100% - 20px);
+  opacity: 0.55;
+}
+.ghost {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  border-radius: 7px;
+  border: 2px dashed currentColor;
+  opacity: 0.35;
+  pointer-events: none;
+}
+.playhead {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  background: #fff;
+  box-shadow: 0 0 8px #fff8;
+  pointer-events: none;
+  z-index: 5;
+  display: none;
+}
+.end {
+  position: absolute;
+  top: 34px;
+  bottom: 0;
+  width: 2px;
+  background: var(--line);
+  pointer-events: none;
+}

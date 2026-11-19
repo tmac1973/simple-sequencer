@@ -113,3 +113,7 @@ kbd {
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+html,
+body {
+  overflow: hidden;
+}

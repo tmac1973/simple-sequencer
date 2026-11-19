@@ -136,9 +136,9 @@ export interface SongStore extends HistoryState {
   removeNote(trackId: string, patternId: string, noteIndex: number): void;
   clearPattern(trackId: string, patternId: string): void;
 
-  paintBlock(trackId: string, patternId: string, bar: number): void;
+  paintBlock(trackId: string, patternId: string, bar: number, gestureId?: string): void;
   removeBlock(trackId: string, blockId: string): void;
-  removeBlockAt(trackId: string, bar: number): void;
+  removeBlockAt(trackId: string, bar: number, gestureId?: string): void;
 
   setSampleSettings(trackId: string, patch: Partial<SampleTrackSettings>, gestureId?: string): void;
   setSampleEdit(
@@ -387,40 +387,48 @@ export const useSongStore = create<SongStore>((set, get) => {
         }
       }),
 
-    paintBlock: (trackId, patternId, bar) =>
-      mutate('Paint pattern', (d) => {
-        const t = track(d, trackId);
-        const p = t?.patterns.find((x) => x.id === patternId);
-        if (!t || !p || bar < 0 || bar >= MAX_SONG_BARS) return;
-        if (t.blocks.some((b) => b.startBar === bar && b.patternId === patternId)) return;
-        const end = bar + p.lengthBars;
-        t.blocks = t.blocks.filter((b) => b.startBar < bar || b.startBar >= end);
-        t.blocks.push({ id: newId(), patternId, startBar: bar });
-        t.blocks.sort((a, b) => a.startBar - b.startBar);
-        if (end > d.lengthBars) d.lengthBars = Math.min(MAX_SONG_BARS, end);
-      }),
+    paintBlock: (trackId, patternId, bar, g) =>
+      mutate(
+        'Paint pattern',
+        (d) => {
+          const t = track(d, trackId);
+          const p = t?.patterns.find((x) => x.id === patternId);
+          if (!t || !p || bar < 0 || bar >= MAX_SONG_BARS) return;
+          if (t.blocks.some((b) => b.startBar === bar && b.patternId === patternId)) return;
+          const end = bar + p.lengthBars;
+          t.blocks = t.blocks.filter((b) => b.startBar < bar || b.startBar >= end);
+          t.blocks.push({ id: newId(), patternId, startBar: bar });
+          t.blocks.sort((a, b) => a.startBar - b.startBar);
+          if (end > d.lengthBars) d.lengthBars = Math.min(MAX_SONG_BARS, end);
+        },
+        g,
+      ),
     removeBlock: (trackId, blockId) =>
       mutate('Remove block', (d) => {
         const t = track(d, trackId);
         if (t) t.blocks = t.blocks.filter((b) => b.id !== blockId);
       }),
-    removeBlockAt: (trackId, bar) =>
-      mutate('Remove block', (d) => {
-        const t = track(d, trackId);
-        if (!t) return;
-        let best: (typeof t.blocks)[number] | undefined;
-        for (const b of t.blocks) {
-          const p = t.patterns.find((x) => x.id === b.patternId);
-          if (
-            p &&
-            b.startBar <= bar &&
-            bar < b.startBar + p.lengthBars &&
-            (!best || b.startBar > best.startBar)
-          )
-            best = b;
-        }
-        if (best) t.blocks = t.blocks.filter((b) => b !== best);
-      }),
+    removeBlockAt: (trackId, bar, g) =>
+      mutate(
+        'Remove block',
+        (d) => {
+          const t = track(d, trackId);
+          if (!t) return;
+          let best: (typeof t.blocks)[number] | undefined;
+          for (const b of t.blocks) {
+            const p = t.patterns.find((x) => x.id === b.patternId);
+            if (
+              p &&
+              b.startBar <= bar &&
+              bar < b.startBar + p.lengthBars &&
+              (!best || b.startBar > best.startBar)
+            )
+              best = b;
+          }
+          if (best) t.blocks = t.blocks.filter((b) => b !== best);
+        },
+        g,
+      ),
 
     setSampleSettings: (trackId, patch, g) =>
       mutate(

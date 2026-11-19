@@ -1,0 +1,151 @@
+.list {
+  background: var(--panel);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.head {
+  height: 34px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 12px;
+}
+.head b {
+  color: var(--text);
+}
+.scroller {
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+.row {
+  height: var(--row-h);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-right: 8px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+  position: relative;
+  background: var(--panel);
+}
+.row.sel {
+  background: var(--panel2);
+}
+.row.dragging {
+  opacity: 0.85;
+  z-index: 5;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+.sw {
+  width: 6px;
+  align-self: stretch;
+  flex: none;
+  cursor: grab;
+}
+.ti {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  flex: none;
+}
+.nm {
+  flex: 1;
+  min-width: 0;
+}
+.nm b {
+  display: block;
+  font-weight: 600;
+  font-size: 13.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nm span {
+  display: block;
+  font-size: 11.5px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.rename {
+  width: 100%;
+  padding: 2px 4px !important;
+  font-weight: 600;
+}
+.vol {
+  width: 46px;
+  height: 4px;
+  accent-color: var(--muted);
+  flex: none;
+}
+.ms {
+  display: flex;
+  gap: 3px;
+  flex: none;
+}
+.ms button {
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 5px;
+}
+.ms button.m.on {
+  background: var(--warn);
+  color: #2a1c00;
+  border-color: var(--warn);
+}
+.ms button.s.on {
+  background: var(--good);
+  color: #06261a;
+  border-color: var(--good);
+}
+.lane {
+  height: var(--lane-h);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  padding: 0 8px 0 22px;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  background: #171924;
+}
+.lane b {
+  color: var(--text);
+  font-weight: 600;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.lane button {
+  padding: 1px 6px;
+  font-size: 11px;
+}
+.add {
+  margin: 10px;
+  display: flex;
+  gap: 6px;
+}
+.add button {
+  flex: 1;
+  font-size: 12.5px;
+  padding: 6px 4px;
+}
+.empty {
+  padding: 16px 12px;
+  color: var(--muted);
+  font-size: 12.5px;
+}

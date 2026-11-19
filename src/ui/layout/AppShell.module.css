@@ -15,3 +15,11 @@
   grid-template-columns: 1fr 340px;
   min-height: 0;
 }
+.app {
+  overflow: hidden;
+}
+.arrange > *,
+.bottom > * {
+  min-width: 0;
+  min-height: 0;
+}

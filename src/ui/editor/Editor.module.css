@@ -1,0 +1,175 @@
+.panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: var(--panel);
+}
+.head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--line);
+  flex-wrap: wrap;
+  min-height: 56px;
+}
+.title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.title .sw {
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+}
+.chips {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.chip {
+  width: 30px;
+  height: 28px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  padding: 0;
+  border: 2px solid transparent;
+  background: var(--panel3);
+}
+.chip.on {
+  color: #10121a;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.flabel {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--dim);
+}
+.inline {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.body {
+  flex: 1;
+  overflow: auto;
+  padding: 14px;
+  min-height: 0;
+}
+.empty {
+  color: var(--muted);
+  padding: 30px;
+  text-align: center;
+}
+
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 1040px;
+}
+.barRow {
+  display: grid;
+  gap: 6px;
+}
+.pad {
+  aspect-ratio: 1 / 1.1;
+  border-radius: 9px;
+  background: var(--panel3);
+  border: 1px solid var(--line);
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  padding: 0;
+  touch-action: none;
+}
+.pad.beat {
+  background: #30344a;
+}
+.pad.on {
+  border-color: transparent;
+}
+.pad.now {
+  outline: 2px solid #fff;
+  outline-offset: 1px;
+}
+.vel {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+.nums {
+  display: grid;
+  gap: 6px;
+  font-size: 10.5px;
+  color: var(--dim);
+  text-align: center;
+  margin-top: -4px;
+}
+.hint {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 12.5px;
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+}
+
+.drum {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 6px 10px;
+  align-items: center;
+}
+.drumName {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  padding: 4px 6px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  text-align: left;
+}
+.drumName.sel {
+  background: var(--panel3);
+}
+.drumName i {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  flex: none;
+}
+.drumName small {
+  color: var(--muted);
+  font-weight: 400;
+}
+.drumPads {
+  display: grid;
+  gap: 3px;
+}
+.drumPads .pad {
+  aspect-ratio: auto;
+  height: 26px;
+  border-radius: 5px;
+}

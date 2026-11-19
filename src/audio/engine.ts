@@ -1,4 +1,5 @@
-import type { Song, Track } from '@/model/types';
+import type { SampleTrackSettings, Song, Track } from '@/model/types';
+import { createSong, DEFAULT_SAMPLE_EDIT } from '@/model/factories';
 import { BEATS_PER_BAR, beatSeconds } from '@/model/timing';
 import { audioNow, ensureAudioStarted } from './context';
 import { createMaster, type MasterBus } from './master';
@@ -150,6 +151,30 @@ class Engine {
     this.queue = [];
   }
 
+  /** Audition a sound right now, straight to the master bus. */
+  async preview(sampleId: string, settings?: SampleTrackSettings, midi?: number) {
+    await ensureAudioStarted();
+    const graphs = this.ensureGraphs() ?? (this.graphs = new GraphSet(this.song ?? emptySong()));
+    const buf = await SampleRegistry.get(sampleId);
+    const s = settings ?? {
+      sampleId,
+      melodic: false,
+      rootMidi: 60,
+      tone: 1,
+      edit: { ...DEFAULT_SAMPLE_EDIT },
+    };
+    const rate = midi !== undefined ? 2 ** ((midi - s.rootMidi) / 12) : 1;
+    triggerSample(
+      graphs.master.input,
+      buf,
+      audioNow() + 0.02,
+      0.9,
+      s,
+      rate,
+      Math.min(buf.duration, 4),
+    );
+  }
+
   private onBeat(counter: number, time: number) {
     const song = this.song;
     const graphs = this.graphs;
@@ -172,5 +197,7 @@ class Engine {
     return { beat, bar: Math.floor(beat / BEATS_PER_BAR) };
   }
 }
+
+const emptySong = () => createSong();
 
 export const engine = new Engine();

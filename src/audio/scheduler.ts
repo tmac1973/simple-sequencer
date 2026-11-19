@@ -196,3 +196,31 @@ export class BeatClock {
     }
   }
 }
+
+/**
+ * Which step of `pattern` is sounding at fractional song beat `beat`, or null if that pattern
+ * isn't the one playing on `track` right now.
+ */
+export function patternStepAt(
+  song: Song,
+  ctx: PlayContext,
+  track: Track,
+  pattern: Pattern,
+  beat: number,
+): number | null {
+  const bar = Math.floor(beat / BEATS_PER_BAR);
+  let patternBar: number;
+  if (ctx.playMode === 'pattern' && (ctx.selectedTrackId ?? song.tracks[0]?.id) === track.id) {
+    if (selectedPattern(track, ctx).id !== pattern.id) return null;
+    const r = getLoopRegion(song, ctx);
+    patternBar = (bar - r.startBar) % pattern.lengthBars;
+  } else {
+    const hit = blockAt(track, bar);
+    if (!hit || hit.pattern.id !== pattern.id) return null;
+    patternBar = (bar - hit.block.startBar) % pattern.lengthBars;
+  }
+  const inBar = beat - bar * BEATS_PER_BAR;
+  return (
+    patternBar * pattern.stepsPerBar + Math.floor((inBar * pattern.stepsPerBar) / BEATS_PER_BAR)
+  );
+}
