@@ -6,3 +6,4 @@ blob-report
 samples-src/raw
 .vitest-attachments
 *.log
+.vitest/

@@ -1,7 +1,7 @@
 import type { SampleTrackSettings, Song, Track } from '@/model/types';
 import { createSong, DEFAULT_SAMPLE_EDIT } from '@/model/factories';
 import { BEATS_PER_BAR, beatSeconds } from '@/model/timing';
-import { audioNow, ensureAudioStarted } from './context';
+import { audioHeardNow, audioNow, ensureAudioStarted } from './context';
 import { createMaster, type MasterBus } from './master';
 import { SampleRegistry } from './sampleRegistry';
 import {
@@ -442,7 +442,7 @@ class Engine {
   /** Where the listener is right now (accounts for lookahead). Null when stopped. */
   position(): PlayPosition | null {
     if (!this.clock.running) return null;
-    const now = audioNow();
+    const now = audioHeardNow();
     let cur: QueuedBeat | undefined;
     for (const q of this.queue) if (q.time <= now) cur = q;
     if (!cur) return null;

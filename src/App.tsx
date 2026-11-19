@@ -7,8 +7,10 @@ import { registerUserResolver } from './storage/userSamples';
 import { useSongStore } from './store/songStore';
 import { buildLofi } from './templates/lofi';
 import { startPersistence } from './storage/session';
+import { configureAudioContext } from './audio/context';
 import { watchSharedLinks } from './ui/sharedLink';
 
+configureAudioContext();
 registerDevSamples();
 registerLibraryResolver();
 registerUserResolver();
