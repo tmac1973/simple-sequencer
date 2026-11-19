@@ -5,7 +5,8 @@ export interface StoredSample {
   id: string;
   name: string;
   mime: string;
-  bytes: Blob;
+  /** raw file bytes (stored as an ArrayBuffer: more reliable than Blobs across browsers) */
+  bytes: ArrayBuffer;
   /** SHA-256 hex of the bytes */
   hash: string;
   durationMs: number;
@@ -67,8 +68,14 @@ export async function guard<T>(fn: () => Promise<T>): Promise<T> {
   }
 }
 
-export async function sha256(blob: Blob): Promise<string> {
-  const buf = await blob.arrayBuffer();
+export async function sha256(data: Blob | ArrayBuffer): Promise<string> {
+  const buf = data instanceof ArrayBuffer ? data : await data.arrayBuffer();
   const h = await crypto.subtle.digest('SHA-256', buf);
   return [...new Uint8Array(h)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+/** Stored bytes as an ArrayBuffer copy (tolerates records saved as Blobs by early builds). */
+export async function bytesOf(s: StoredSample): Promise<ArrayBuffer> {
+  const b = s.bytes as ArrayBuffer | Blob;
+  return b instanceof Blob ? b.arrayBuffer() : b.slice(0);
 }

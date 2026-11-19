@@ -1,9 +1,9 @@
-import { useMemo, useState, type ReactNode } from 'react';
+import { useMemo, useState } from 'react';
 import { usesNotes } from '@/audio/scheduler';
 import { SampleRegistry } from '@/audio/sampleRegistry';
 import type { Song } from '@/model/types';
-import { useSongStore } from '@/store/songStore';
-import { useUiStore } from '@/store/uiStore';
+import { openSong } from '@/storage/session';
+import { SongLibrary } from './SongLibrary';
 import { TEMPLATES, kitsUsed, type Template } from '@/templates';
 import { Modal } from '../components/controls';
 import { stopPlayback } from '../transport';
@@ -40,23 +40,15 @@ function Art({ song }: { song: Song }) {
 export function loadTemplate(t: Template) {
   stopPlayback();
   const song = t.build();
-  useSongStore.getState().loadSong(song);
   for (const id of kitsUsed(song)) SampleRegistry.warm(id);
-  const ui = useUiStore.getState();
-  ui.selectTrack(song.tracks[0]?.id ?? null);
-  ui.setSongStartBar(0);
+  // The current song is already autosaved in the library, so no need to ask first.
+  void openSong(song);
 }
 
-export function NewSongModal({ onClose, extra }: { onClose: () => void; extra?: ReactNode }) {
+export function NewSongModal({ onClose }: { onClose: () => void }) {
   const [picked, setPicked] = useState<Template['id']>('lofi');
-  const [confirm, setConfirm] = useState(false);
   const previews = useMemo(() => Object.fromEntries(TEMPLATES.map((t) => [t.id, t.build()])), []);
-  const dirty = useSongStore((s) => s.past.length > 0);
   const create = () => {
-    if (dirty && !confirm) {
-      setConfirm(true);
-      return;
-    }
     loadTemplate(TEMPLATES.find((t) => t.id === picked)!);
     onClose();
   };
@@ -67,16 +59,12 @@ export function NewSongModal({ onClose, extra }: { onClose: () => void; extra?: 
       width={880}
       footer={
         <>
-          {confirm ? (
-            <span style={{ marginRight: 'auto', color: 'var(--warn)' }}>
-              Replace the current song? Your changes aren't saved yet.
-            </span>
-          ) : (
-            <span style={{ marginRight: 'auto' }} />
-          )}
+          <span style={{ marginRight: 'auto' }} className="small muted">
+            Your current song is saved automatically.
+          </span>
           <button onClick={onClose}>Cancel</button>
           <button className="primary" onClick={create}>
-            {confirm ? 'Replace and create' : 'Create'}
+            Create
           </button>
         </>
       }
@@ -89,16 +77,10 @@ export function NewSongModal({ onClose, extra }: { onClose: () => void; extra?: 
             role="radio"
             aria-checked={picked === t.id}
             className={`${styles.tpl} ${picked === t.id ? styles.on : ''}`}
-            onClick={() => {
-              setPicked(t.id);
-              setConfirm(false);
-            }}
+            onClick={() => setPicked(t.id)}
             onDoubleClick={() => {
-              setPicked(t.id);
-              if (!dirty) {
-                loadTemplate(t);
-                onClose();
-              }
+              loadTemplate(t);
+              onClose();
             }}
           >
             <Art song={previews[t.id]!} />
@@ -107,7 +89,7 @@ export function NewSongModal({ onClose, extra }: { onClose: () => void; extra?: 
           </button>
         ))}
       </div>
-      {extra}
+      <SongLibrary onOpened={onClose} />
     </Modal>
   );
 }

@@ -6,12 +6,15 @@ import { loadManifest } from './library/manifest';
 import { registerUserResolver } from './storage/userSamples';
 import { useSongStore } from './store/songStore';
 import { buildLofi } from './templates/lofi';
+import { startPersistence } from './storage/session';
 
 registerDevSamples();
 registerLibraryResolver();
 registerUserResolver();
 loadManifest().catch((e) => console.warn('[library]', e));
 useSongStore.getState().loadSong(buildLofi());
+if (typeof indexedDB !== 'undefined')
+  void startPersistence().catch((e) => console.warn('[storage]', e));
 
 export function App() {
   useEngineSync();

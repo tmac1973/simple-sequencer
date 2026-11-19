@@ -4,7 +4,7 @@ import { registerSoundNames } from '@/library/soundNames';
 import { SampleRegistry } from '@/audio/sampleRegistry';
 import { decodeAudio } from '@/audio/decode';
 import type { Song } from '@/model/types';
-import { db, guard, sha256, type StoredSample } from './db';
+import { bytesOf, db, guard, sha256, type StoredSample } from './db';
 
 export interface UserSoundMeta {
   id: string;
@@ -59,19 +59,24 @@ export async function addUserSample(
   blob: Blob,
   opts: { durationMs?: number; id?: string } = {},
 ): Promise<UserSoundMeta> {
-  const hash = await sha256(blob);
+  const bytes = await blob.arrayBuffer();
+  const hash = await sha256(bytes);
   const existing = await findUserSampleByHash(hash);
   if (existing) return toMeta(existing);
   let durationMs = opts.durationMs;
   if (durationMs === undefined) {
-    const buf = await decodeAudio(await blob.arrayBuffer());
-    durationMs = Math.round(buf.duration * 1000);
+    try {
+      const buf = await decodeAudio(bytes.slice(0));
+      durationMs = Math.round(buf.duration * 1000);
+    } catch {
+      durationMs = 0;
+    }
   }
   const rec: StoredSample = {
     id: opts.id ?? `user:${nanoid(10)}`,
     name: name.trim().slice(0, 60) || 'My sound',
     mime: blob.type || 'application/octet-stream',
-    bytes: blob,
+    bytes,
     hash,
     durationMs,
     createdAt: Date.now(),
@@ -130,7 +135,7 @@ export function registerUserResolver() {
   SampleRegistry.addResolver('user', async (id) => {
     const s = await getUserSampleBlob(id);
     if (!s) throw new Error('This custom sound is not in this browser.');
-    return decodeAudio(await s.bytes.arrayBuffer());
+    return decodeAudio(await bytesOf(s));
   });
   registerUserNames();
 }

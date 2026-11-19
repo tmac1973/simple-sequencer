@@ -9,10 +9,12 @@ import { ToastHost } from '../components/ToastHost';
 import { ModalHost } from '../modals/ModalHost';
 import { useShortcuts } from '../shortcuts';
 import { useSelectionGuard } from '../hooks/selection';
+import { useWindowDrop } from '../dragDrop';
 
 export function AppShell() {
   useShortcuts();
   useSelectionGuard();
+  useWindowDrop();
   return (
     <div className={styles.app}>
       <TopBar />
