@@ -162,7 +162,7 @@
 
 .menu {
   position: fixed;
-  z-index: 600;
+  z-index: 850; /* above the first-run tip */
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: 10px;

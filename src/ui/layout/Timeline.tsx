@@ -7,6 +7,8 @@ import { getLoopRegion, usesNotes } from '@/audio/scheduler';
 import { playContextOf } from '@/audio/useEngineSync';
 import { useSongStore } from '@/store/songStore';
 import { useUiStore } from '@/store/uiStore';
+import { canInsertBars } from '@/model/bars';
+import { ContextMenu, type MenuItem } from '../components/controls';
 import { selectedPatternOf, useSelection } from '../hooks/selection';
 import { usePlayheadFrame } from '../hooks/usePlayhead';
 import { tip } from '../tooltips';
@@ -214,9 +216,51 @@ function EndHandle({ bars }: { bars: number }) {
   );
 }
 
+const plural = (n: number) => (n > 1 ? 's' : '');
+const range = (from: number, n: number) =>
+  n > 1 ? `bars ${from + 1}–${from + n}` : `bar ${from + 1}`;
+
+/** Right-click menu for a bar number: insert, duplicate or delete bars across every track. */
+function barMenu(b: number): MenuItem[] {
+  const { song } = useSongStore.getState();
+  const s = useSongStore.getState();
+  const after = () => {
+    const ui = useUiStore.getState();
+    const len = useSongStore.getState().song.lengthBars;
+    if (ui.songStartBar >= len) ui.setSongStartBar(len - 1);
+  };
+  const run = (fn: () => boolean) => () => {
+    fn();
+    after();
+  };
+  return [
+    ...[1, 4, 8].map((n) => ({
+      label: `＋ Insert ${n} empty bar${plural(n)} before bar ${b + 1}`,
+      disabled: !canInsertBars(song, n),
+      tip: canInsertBars(song, n) ? 'insertBars' : 'barsFull',
+      onClick: run(() => s.insertBars(b, n)),
+    })),
+    { label: '', separator: true },
+    ...[1, 4, 8].map((n) => ({
+      label: `⧉ Duplicate ${range(b, n)}`,
+      disabled: b + n > song.lengthBars || !canInsertBars(song, n),
+      tip: canInsertBars(song, n) ? 'duplicateBars' : 'barsFull',
+      onClick: run(() => s.duplicateBars(b, n)),
+    })),
+    { label: '', separator: true },
+    ...[1, 4, 8].map((n) => ({
+      label: `🗑 Delete ${range(b, n)}`,
+      disabled: b + n > song.lengthBars,
+      tip: 'deleteBars',
+      onClick: run(() => s.deleteBars(b, n)),
+    })),
+  ];
+}
+
 function Ruler({ bars }: { bars: number }) {
   const song = useSongStore((s) => s.song);
   const ui = useUiStore();
+  const [menu, setMenu] = useState<{ x: number; y: number; bar: number } | null>(null);
   const region = getLoopRegion(song, playContextOf(ui));
   const inLoop = (b: number) => b >= region.startBar && b < region.startBar + region.lengthBars;
   const contentEnd = contentEndBar(song);
@@ -227,6 +271,11 @@ function Ruler({ bars }: { bars: number }) {
           key={b}
           className={`${styles.rc} ${(ui.playMode === 'pattern' ? inLoop(b) : false) ? styles.loop : ''}`}
           onClick={() => ui.setSongStartBar(b)}
+          onContextMenu={(e) => {
+            e.preventDefault();
+            setMenu({ x: e.clientX, y: e.clientY + 6, bar: b });
+          }}
+          aria-label={`Bar ${b + 1}`}
           {...tip('ruler')}
         >
           {b + 1}
@@ -235,6 +284,14 @@ function Ruler({ bars }: { bars: number }) {
           )}
         </div>
       ))}
+      {menu && (
+        <ContextMenu
+          x={menu.x}
+          y={menu.y}
+          items={barMenu(menu.bar)}
+          onClose={() => setMenu(null)}
+        />
+      )}
       <EndHandle bars={bars} />
       <div className={styles.lengthTools}>
         <button

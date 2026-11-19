@@ -77,6 +77,7 @@ describe('every control has a plain-English tooltip', () => {
     'credits',
     'shortcuts',
     'ideas',
+    'share',
   ] as ModalId[])('modal %s', async (m) => {
     useUiStore.setState({
       openModal: m,

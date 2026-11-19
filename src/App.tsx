@@ -7,6 +7,7 @@ import { registerUserResolver } from './storage/userSamples';
 import { useSongStore } from './store/songStore';
 import { buildLofi } from './templates/lofi';
 import { startPersistence } from './storage/session';
+import { watchSharedLinks } from './ui/sharedLink';
 
 registerDevSamples();
 registerLibraryResolver();
@@ -22,8 +23,12 @@ if (debug) {
       song: () => useSongStore.getState().song,
     };
   });
+  if (typeof window !== 'undefined') watchSharedLinks();
 } else if (typeof indexedDB !== 'undefined') {
-  void startPersistence().catch((e) => console.warn('[storage]', e));
+  // restore the last song first, so a shared song opens on top of it (and it stays saved)
+  void startPersistence()
+    .catch((e) => console.warn('[storage]', e))
+    .finally(watchSharedLinks);
 }
 
 export function App() {

@@ -1,9 +1,19 @@
 import { create } from 'zustand';
+import type { Song } from '@/model/types';
 
 export type InspectorTab = 'sound' | 'fx' | 'automate';
 export type PlayMode = 'pattern' | 'song';
 export type ModalId =
-  null | 'newSong' | 'browser' | 'sampleEditor' | 'export' | 'credits' | 'shortcuts' | 'ideas';
+  | null
+  | 'newSong'
+  | 'browser'
+  | 'sampleEditor'
+  | 'export'
+  | 'credits'
+  | 'shortcuts'
+  | 'ideas'
+  | 'share'
+  | 'openShared';
 export type ChordStamp = 'off' | 'triad' | 'seventh';
 
 export interface UiState {
@@ -19,6 +29,8 @@ export interface UiState {
   /** 0-based bar where Song mode starts playing */
   songStartBar: number;
   playing: boolean;
+  /** a song from a share link, waiting for the user to open it */
+  sharedSong: Song | null;
 
   selectTrack(id: string | null): void;
   selectPattern(trackId: string, patternId: string): void;
@@ -30,6 +42,7 @@ export interface UiState {
   setChordStamp(c: ChordStamp): void;
   setSongStartBar(bar: number): void;
   setPlaying(p: boolean): void;
+  setSharedSong(song: Song | null): void;
 }
 
 export const useUiStore = create<UiState>((set) => ({
@@ -43,6 +56,7 @@ export const useUiStore = create<UiState>((set) => ({
   chordStamp: 'off',
   songStartBar: 0,
   playing: false,
+  sharedSong: null,
 
   selectTrack: (id) => set({ selectedTrackId: id }),
   selectPattern: (trackId, patternId) =>
@@ -55,4 +69,5 @@ export const useUiStore = create<UiState>((set) => ({
   setChordStamp: (chordStamp) => set({ chordStamp }),
   setSongStartBar: (songStartBar) => set({ songStartBar: Math.max(0, Math.floor(songStartBar)) }),
   setPlaying: (playing) => set({ playing }),
+  setSharedSong: (sharedSong) => set({ sharedSong }),
 }));

@@ -6,6 +6,7 @@ import { SampleEditorModal } from './SampleEditorModal';
 import { NewSongModal } from './NewSongModal';
 import { ExportModal } from './ExportModal';
 import { IdeasModal } from './IdeasModal';
+import { OpenSharedModal, ShareModal } from './ShareModal';
 
 export function ModalHost() {
   const open = useUiStore((s) => s.openModal);
@@ -27,5 +28,9 @@ export function ModalHost() {
       return <CreditsModal onClose={close} />;
     case 'ideas':
       return <IdeasModal onClose={close} />;
+    case 'share':
+      return <ShareModal onClose={close} />;
+    case 'openShared':
+      return <OpenSharedModal onClose={close} />;
   }
 }

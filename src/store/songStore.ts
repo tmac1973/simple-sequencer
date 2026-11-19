@@ -22,6 +22,7 @@ import {
 } from '@/model/factories';
 import { clampDb } from '@/model/mixing';
 import { pruneLanes } from '@/model/automation';
+import { deleteBars, duplicateBars, insertBars } from '@/model/bars';
 import type {
   AutomationPoint,
   AutomationTarget,
@@ -89,6 +90,10 @@ export interface SongStore extends HistoryState {
   setSwing(swing: number, gestureId?: string): void;
   setKey(key: SongKey): void;
   setLength(bars: number): void;
+  /** Whole-song bar editing (0-based bars). Each returns false if it couldn't be done. */
+  insertBars(at: number, count: number): boolean;
+  duplicateBars(from: number, count: number): boolean;
+  deleteBars(from: number, count: number): boolean;
 
   addTrack(kind: TrackKind, init?: Partial<Track>): string | null;
   duplicateTrack(trackId: string): string | null;
@@ -221,6 +226,22 @@ export const useSongStore = create<SongStore>((set, get) => {
       ),
     setLength: (bars) =>
       mutate('Song length', (d) => void (d.lengthBars = clamp(Math.round(bars), 1, MAX_SONG_BARS))),
+
+    insertBars: (at, count) =>
+      mutate(
+        `Insert ${count} bar${count > 1 ? 's' : ''}`,
+        (d) => void insertBars(d as Song, at, count),
+      ),
+    duplicateBars: (from, count) =>
+      mutate(
+        `Duplicate ${count} bar${count > 1 ? 's' : ''}`,
+        (d) => void duplicateBars(d as Song, from, count),
+      ),
+    deleteBars: (from, count) =>
+      mutate(
+        `Delete ${count} bar${count > 1 ? 's' : ''}`,
+        (d) => void deleteBars(d as Song, from, count),
+      ),
 
     addTrack(kind, init) {
       if (get().song.tracks.length >= MAX_TRACKS) return null;

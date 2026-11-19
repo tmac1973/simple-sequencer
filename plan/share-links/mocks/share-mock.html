@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Share Links — UI Mock</title>
+<style>
+:root{--bg:#13141b;--panel:#1b1d27;--panel2:#232634;--panel3:#2c3042;--line:#33374a;--text:#eceef6;--muted:#9a9eb5;--dim:#6b6f86;--accent:#8b7bff;--accent2:#b3a8ff;--good:#5ee6a8;--warn:#ffb84d}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:40px}
+button{font:inherit;color:inherit;background:var(--panel3);border:1px solid var(--line);border-radius:8px;padding:6px 12px;cursor:pointer}
+button.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+.ghost{background:transparent}
+.muted{color:var(--muted)}.small{font-size:12.5px}
+.note{max-width:1000px;margin:18px auto 10px;color:var(--muted);font-size:13px;padding:0 16px}
+.note b{color:var(--warn)}
+.top{background:var(--panel);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:10px 14px}
+.logo{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,#8b7bff,#ff7ac6)}
+.play{width:34px;height:34px;border-radius:50%;background:var(--good);display:grid;place-items:center;color:#10241a;font-weight:700}
+.sp{flex:1}
+.new{outline:2px solid var(--warn);outline-offset:2px}
+.callout{color:var(--warn);font-size:12px}
+.scrim{padding:30px 16px;display:flex;justify-content:center;background:radial-gradient(#00000055,#000000aa)}
+.modal{background:var(--panel);border:1px solid var(--line);border-radius:16px;width:600px;max-width:100%;box-shadow:0 30px 80px #0008}
+.mh{display:flex;align-items:center;justify-content:space-between;padding:16px 22px;border-bottom:1px solid var(--line)}
+.mh h2{margin:0;font-size:19px}
+.mb{padding:18px 22px;display:flex;flex-direction:column;gap:14px}
+.mf{display:flex;justify-content:flex-end;gap:8px;padding:14px 22px;border-top:1px solid var(--line)}
+.link{display:flex;gap:8px}
+.link input{flex:1;min-width:0;background:var(--panel2);border:1px solid var(--line);border-radius:9px;color:var(--muted);padding:9px 12px;font:13px ui-monospace,monospace}
+.copied{background:var(--good);border-color:var(--good);color:#10241a;font-weight:600}
+.info{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--muted)}
+.info i{font-style:normal;font-size:16px}
+.warn{border:1px dashed var(--warn);border-radius:10px;padding:10px 12px;font-size:13px}
+.warn b{color:var(--warn)}
+.warn ul{margin:6px 0 4px 18px;padding:0}
+.card{display:flex;gap:14px;align-items:center;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px}
+.art{width:88px;height:56px;border-radius:8px;background:#151720;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(4,1fr);gap:2px;padding:5px}
+.art i{border-radius:2px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.tag{font-size:11.5px;padding:2px 8px;border-radius:999px;background:#ffffff10;color:var(--muted)}
+h3{max-width:1000px;margin:26px auto 0;padding:0 16px;font-size:15px}
+</style>
+</head>
+<body>
+
+<div class="note"><b>MOCK 1 ▸ Sharing.</b> A new <b>🔗 Share</b> button in the top bar, next to Export. It makes a link with the whole song inside, ready to paste anywhere.</div>
+
+<div class="top">
+  <div class="logo"></div><b>Lo-fi Beat</b>
+  <div class="play">▶</div>
+  <span class="muted small">84 BPM · C minor</span>
+  <span class="sp"></span>
+  <button>📁 Songs</button>
+  <button class="new">🔗 Share</button>
+  <span class="callout">← new</span>
+  <button class="primary">⤓ Export</button>
+</div>
+
+<div class="scrim"><div class="modal">
+  <div class="mh"><h2>Share “Lo-fi Beat”</h2><button class="ghost">✕</button></div>
+  <div class="mb">
+    <div class="link">
+      <input readonly value="https://tmac1973.github.io/simple-sequencer/#song=eNrtWE1v2zgQ_SuCzoFhSZEs-7Zou7sHt1sgxe5hURQMRVt0KFIgKTtJkf-xH0WTwnZuTU2tq51fFMeVb6QAjLJu94vT…">
+      <button class="copied">✓ Copied!</button>
+    </div>
+    <div class="info"><i>🔒</i><div>The whole song is inside the link (1.2 KB). Nothing is uploaded: anyone you send it to opens <b>their own copy</b>, and your song stays yours.</div></div>
+    <div class="warn">
+      <b>2 tracks use your own sounds,</b> which are too big to fit in a link. People who open it will hear built-in sounds instead:
+      <ul><li>My Clap → Finger Snap</li><li>Vocal take → Piano C4</li></ul>
+      <span class="muted">To share your own sounds too, use <u>Export → Song file</u> (.zip) and send the file.</span>
+    </div>
+  </div>
+  <div class="mf"><button>Done</button></div>
+</div></div>
+
+<div class="note"><b>MOCK 2 ▸ Opening a shared link.</b> When someone opens a link, the app asks first, so a link can never overwrite what they were working on.</div>
+
+<div class="scrim"><div class="modal">
+  <div class="mh"><h2>Someone shared a song with you</h2><button class="ghost">✕</button></div>
+  <div class="mb">
+    <div class="card">
+      <div class="art">
+        <i style="background:#ff6b6b"></i><i></i><i style="background:#ff6b6b"></i><i></i><i style="background:#ff6b6b"></i><i></i><i style="background:#ff6b6b"></i><i></i>
+        <i></i><i style="background:#ffb84d"></i><i></i><i style="background:#ffb84d"></i><i></i><i style="background:#ffb84d"></i><i></i><i style="background:#ffb84d"></i>
+        <i style="background:#ffe066"></i><i style="background:#ffe066"></i><i style="background:#ffe066"></i><i style="background:#ffe066"></i><i style="background:#ffe066"></i><i style="background:#ffe066"></i><i style="background:#ffe066"></i><i style="background:#ffe066"></i>
+        <i></i><i></i><i style="background:#a78bfa"></i><i style="background:#a78bfa"></i><i></i><i></i><i style="background:#a78bfa"></i><i style="background:#a78bfa"></i>
+      </div>
+      <div>
+        <b>Lo-fi Beat</b>
+        <div class="tags"><span class="tag">84 BPM</span><span class="tag">C minor</span><span class="tag">8 tracks</span><span class="tag">16 bars</span></div>
+      </div>
+    </div>
+    <div class="info"><i>💾</i><div>It opens as a new song in your <b>Songs</b> list. The song you have open now is already saved.</div></div>
+  </div>
+  <div class="mf"><button>Not now</button><button class="primary">Open song</button></div>
+</div></div>
+
+</body>
+</html>

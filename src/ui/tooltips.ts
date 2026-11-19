@@ -39,6 +39,26 @@ export const TIPS: Record<string, TipCopy> = {
     title: 'Export',
     body: 'Turn your song into a WAV or MP3 file you can share, or save a song file to back it up.',
   },
+  share: {
+    title: 'Share',
+    body: 'Get a link with your whole song inside. Anyone who opens it gets their own copy to play and change.',
+  },
+  shareLink: {
+    title: 'Your share link',
+    body: 'The whole song is packed into this link. Nothing is uploaded anywhere.',
+  },
+  shareCopy: {
+    title: 'Copy link',
+    body: 'Copy the link so you can paste it into a message or email.',
+  },
+  shareZip: {
+    title: 'Song file',
+    body: 'Open Export to save a song file (.zip) that includes your own sounds.',
+  },
+  openShared: {
+    title: 'Open shared song',
+    body: 'Open this song as a new song in your list. The song you had open stays saved.',
+  },
   tips: { title: 'Tips', body: 'Turn these hover tips on or off.' },
   shortcuts: { title: 'Keyboard shortcuts', body: 'See every shortcut. Press ? anytime.' },
   about: { title: 'About & credits', body: 'Who made the sounds and libraries in this app.' },
@@ -71,8 +91,8 @@ export const TIPS: Record<string, TipCopy> = {
 
   // timeline
   ruler: {
-    title: 'Song start',
-    body: 'Click a bar number to choose where Song mode starts playing.',
+    title: 'Bar number',
+    body: 'Click to choose where Song mode starts playing. Right-click to insert, duplicate or delete bars across the whole song.',
   },
   timelineEmpty: {
     title: 'Empty bar',
@@ -83,6 +103,22 @@ export const TIPS: Record<string, TipCopy> = {
     body: 'Click to remove it. Click an empty bar to paint.',
   },
   addBars: { title: 'Longer song', body: 'Add 4 more bars to the end of the song.' },
+  insertBars: {
+    title: 'Insert bars',
+    body: 'Make room here: everything from this bar on slides right on every track. Ctrl+Z undoes it.',
+  },
+  duplicateBars: {
+    title: 'Duplicate bars',
+    body: 'Copy these bars on every track and put the copy right after them. Great for repeating a chorus.',
+  },
+  deleteBars: {
+    title: 'Delete bars',
+    body: 'Remove these bars from every track and close the gap. Ctrl+Z puts them back.',
+  },
+  barsFull: {
+    title: 'Song is full',
+    body: 'Songs can be up to 128 bars long, and there isn’t room for that many more.',
+  },
   removeBars: { title: 'Shorter song', body: 'Remove 4 bars from the end of the song.' },
   shortenBlocked: {
     title: 'Shorter song',

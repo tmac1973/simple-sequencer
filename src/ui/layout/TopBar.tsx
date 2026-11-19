@@ -218,6 +218,9 @@ export function TopBar() {
       <button onClick={() => ui.openModalId('newSong')} {...tip('songs')}>
         📁 Songs
       </button>
+      <button onClick={() => ui.openModalId('share')} {...tip('share')}>
+        🔗 Share
+      </button>
       <button
         className="primary"
         onClick={() => {
