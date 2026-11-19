@@ -174,6 +174,66 @@ export const TIPS: Record<string, TipCopy> = {
     body: 'Drag up or down to change. Double-click to reset. Hold Shift for fine control.',
   },
   comingSoon: { title: 'Coming soon', body: 'This part of the app is on its way.' },
+  fxToggle: { title: 'On / off', body: 'Switch this effect off to hear the difference.' },
+  fxRemove: { title: 'Remove effect', body: 'Take this effect off the track. You can undo it.' },
+  'fx.reverb.size': {
+    title: 'Size',
+    body: 'How big the space sounds, from a small room to a huge hall.',
+  },
+  'fx.reverb.amount': {
+    title: 'Amount',
+    body: 'How much reverb you hear compared to the dry sound.',
+  },
+  'fx.reverb.predelay': {
+    title: 'Pre-delay',
+    body: 'A short gap before the reverb starts. Keeps vocals and drums clear.',
+  },
+  'fx.delay.time': {
+    title: 'Time',
+    body: 'How far apart the echoes are, locked to the song tempo.',
+  },
+  'fx.delay.amount': { title: 'Amount', body: 'How loud the echoes are.' },
+  'fx.delay.feedback': {
+    title: 'Repeats',
+    body: 'How many times the echo repeats before fading away.',
+  },
+  'fx.filter.cutoff': {
+    title: 'Cutoff',
+    body: 'Turn left for darker and muffled, right for bright and open.',
+  },
+  'fx.filter.resonance': {
+    title: 'Resonance',
+    body: 'Adds a whistly peak at the cutoff. Great for sweeps.',
+  },
+  'fx.distortion.drive': {
+    title: 'Drive',
+    body: 'How hard the sound is pushed. More drive means more grit.',
+  },
+  'fx.distortion.amount': { title: 'Amount', body: 'Blend between the clean and distorted sound.' },
+  'fx.compressor.squash': {
+    title: 'Squash',
+    body: 'How much loud parts are turned down so everything sits more evenly.',
+  },
+  'fx.compressor.makeup': { title: 'Boost', body: 'Turn the sound back up after squashing it.' },
+  'fx.compressor.attack': {
+    title: 'Attack',
+    body: 'How quickly squashing kicks in. Slower lets drum hits punch through.',
+  },
+  'fx.compressor.release': { title: 'Release', body: 'How quickly squashing lets go.' },
+  'fx.eq.low': { title: 'Low', body: 'Turn the bass up or down.' },
+  'fx.eq.mid': { title: 'Mid', body: 'Turn the middle (body) of the sound up or down.' },
+  'fx.eq.high': { title: 'High', body: 'Turn the treble (sparkle) up or down.' },
+  'fx.eq.lowFreq': { title: 'Low edge', body: 'Where "low" ends and "mid" begins.' },
+  'fx.eq.highFreq': { title: 'High edge', body: 'Where "mid" ends and "high" begins.' },
+  'fx.chorus.width': { title: 'Width', body: 'How wide and wobbly the doubled sound gets.' },
+  'fx.chorus.amount': { title: 'Amount', body: 'Blend between the normal and chorused sound.' },
+  'fx.chorus.rate': { title: 'Speed', body: 'How fast the shimmer moves.' },
+  'fx.bitcrush.crush': { title: 'Crush', body: 'Fewer bits = rougher, more retro sound.' },
+  'fx.bitcrush.amount': { title: 'Amount', body: 'Blend between the clean and crushed sound.' },
+  'fx.bitcrush.down': {
+    title: 'Downsample',
+    body: 'Lowers the sample rate for a gritty, old-sampler sound.',
+  },
 };
 
 export function tip(key: string): { 'data-tip': string } {

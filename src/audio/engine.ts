@@ -16,6 +16,8 @@ import { TrackGraph } from './trackGraph';
 import { triggerSample } from './voices/sampleVoice';
 import { SynthVoice } from './voices/synthVoice';
 import { toneToHz } from './voices/sampleTiming';
+import { FX_DEFS, type FxInstance } from './effects/registry';
+import type { FxSlot } from '@/model/types';
 import * as Tone from 'tone';
 import { degreeToMidi } from '@/model/scale';
 
@@ -29,6 +31,9 @@ export class GraphSet {
   readonly synths = new Map<string, SynthVoice>();
   /** per sample track: the "Tone" lowpass every hit goes through */
   readonly sampleTone = new Map<string, Tone.Filter>();
+  /** effect instances by slot id */
+  readonly fx = new Map<string, { slot: FxSlot; inst: FxInstance }>();
+  private lastFx = new Map<string, FxSlot[]>();
 
   constructor(song: Song) {
     this.master = createMaster();
@@ -83,7 +88,54 @@ export class GraphSet {
         if (v) v.apply(t.synth);
         else this.synths.set(t.id, new SynthVoice(t.synth, g.input));
       }
+      this.syncFx(t, g, song.bpm);
     }
+    // effects of deleted tracks
+    const liveSlots = new Set(song.tracks.flatMap((t) => t.fx.map((f) => f.id)));
+    for (const [id, e] of this.fx) {
+      if (!liveSlots.has(id)) {
+        e.inst.dispose();
+        this.fx.delete(id);
+      }
+    }
+    for (const id of this.lastFx.keys()) if (!ids.has(id)) this.lastFx.delete(id);
+  }
+
+  private syncFx(t: Track, g: TrackGraph, bpm: number) {
+    for (const slot of t.fx) {
+      const e = this.fx.get(slot.id);
+      if (!e) {
+        this.fx.set(slot.id, { slot, inst: FX_DEFS[slot.type].create(slot.params, bpm) });
+        continue;
+      }
+      if (e.slot !== slot) {
+        for (const [k, v] of Object.entries(slot.params))
+          if (e.slot.params[k] !== v) e.inst.set(k, v);
+        e.slot = slot;
+      }
+      e.inst.setTempo?.(bpm);
+    }
+    if (this.lastFx.get(t.id) !== t.fx) {
+      for (const old of this.lastFx.get(t.id) ?? []) {
+        if (!t.fx.some((f) => f.id === old.id)) {
+          const e = this.fx.get(old.id);
+          // let the rewire finish before disposing
+          if (e)
+            setTimeout(
+              () => e.inst.dispose(),
+              e.inst.input.context instanceof Tone.OfflineContext ? 0 : 100,
+            );
+          this.fx.delete(old.id);
+        }
+      }
+      this.lastFx.set(t.id, t.fx);
+      g.setInserts(t.fx.filter((f) => f.enabled).map((f) => this.fx.get(f.id)!.inst));
+    }
+  }
+
+  /** Resolves when async effect parts (reverb impulses, worklets) are ready. */
+  ready(): Promise<void> {
+    return Promise.all([...this.fx.values()].map((e) => e.inst.ready)).then(() => undefined);
   }
 
   releaseAll() {
@@ -96,6 +148,8 @@ export class GraphSet {
   }
 
   dispose() {
+    for (const e of this.fx.values()) e.inst.dispose();
+    this.fx.clear();
     for (const f of this.sampleTone.values()) f.dispose();
     this.sampleTone.clear();
     for (const v of this.synths.values()) v.dispose();

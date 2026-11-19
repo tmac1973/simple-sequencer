@@ -6,14 +6,22 @@ export function channelDb(db: number): number {
   return db <= MIN_VOLUME_DB ? -Infinity : db;
 }
 
+export interface InsertNode {
+  input: Tone.InputNode;
+  output: Tone.ToneAudioNode;
+}
+
 /**
  * Per-track signal chain: input → (effect inserts) → Channel (volume/pan/mute) → master.
  * Voices connect to `input`.
  */
 export class TrackGraph {
   readonly input = new Tone.Gain(1);
+  /** dips briefly while the effect chain is rewired, so changes don't click */
+  private readonly pre = new Tone.Gain(1);
   readonly channel: Tone.Channel;
-  private inserts: Tone.ToneAudioNode[] = [];
+  private inserts: InsertNode[] = [];
+  private rewireTimer: ReturnType<typeof setTimeout> | undefined;
 
   constructor(track: Track, destination: Tone.InputNode, audible: boolean) {
     this.channel = new Tone.Channel({
@@ -22,7 +30,8 @@ export class TrackGraph {
       mute: !audible,
     });
     this.channel.connect(destination);
-    this.input.connect(this.channel);
+    this.input.connect(this.pre);
+    this.pre.connect(this.channel);
   }
 
   update(track: Track, audible: boolean) {
@@ -31,26 +40,39 @@ export class TrackGraph {
     if (this.channel.mute !== !audible) this.channel.mute = !audible;
   }
 
-  /** Rewire the insert chain (input → a → b → … → channel). */
-  setInserts(nodes: Tone.ToneAudioNode[]) {
-    this.input.disconnect();
-    for (const n of this.inserts) if (!nodes.includes(n)) n.disconnect();
+  private wire(nodes: InsertNode[]) {
+    this.pre.disconnect();
+    for (const n of this.inserts) n.output.disconnect();
     this.inserts = nodes;
-    if (nodes.length === 0) {
-      this.input.connect(this.channel);
-      return;
-    }
-    let prev: Tone.ToneAudioNode = this.input;
+    let prev: Tone.ToneAudioNode = this.pre;
     for (const n of nodes) {
-      n.disconnect();
-      prev.connect(n);
-      prev = n;
+      prev.connect(n.input);
+      prev = n.output;
     }
     prev.connect(this.channel);
   }
 
+  /** Rewire the insert chain (pre → a → b → … → channel), with a 30 ms dip when live. */
+  setInserts(nodes: InsertNode[]) {
+    const same =
+      nodes.length === this.inserts.length && nodes.every((n, i) => n === this.inserts[i]);
+    if (same) return;
+    if (this.pre.context instanceof Tone.OfflineContext) {
+      this.wire(nodes);
+      return;
+    }
+    clearTimeout(this.rewireTimer);
+    this.pre.gain.rampTo(0, 0.015);
+    this.rewireTimer = setTimeout(() => {
+      this.wire(nodes);
+      this.pre.gain.rampTo(1, 0.015);
+    }, 18);
+  }
+
   dispose() {
+    clearTimeout(this.rewireTimer);
     this.input.dispose();
+    this.pre.dispose();
     this.channel.dispose();
   }
 }
