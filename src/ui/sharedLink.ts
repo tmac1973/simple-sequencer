@@ -8,7 +8,7 @@ import { toastError } from './toast';
  * bar so a reload doesn't ask again.
  */
 export function checkSharedLink() {
-  if (typeof location === 'undefined') return;
+  if (typeof window === 'undefined' || typeof location === 'undefined') return;
   const data = shareDataFromHash(location.hash);
   if (!data) return;
   history.replaceState(null, '', location.pathname + location.search);
@@ -24,6 +24,8 @@ export function checkSharedLink() {
 
 /** Check now and whenever a share link is pasted into the address bar of an open app. */
 export function watchSharedLinks() {
+  // may run after async startup, e.g. once a test environment is already gone
+  if (typeof window === 'undefined') return;
   checkSharedLink();
   window.addEventListener('hashchange', checkSharedLink);
 }
