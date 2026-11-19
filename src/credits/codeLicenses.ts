@@ -15,4 +15,10 @@ export const CODE_LICENSES: CodeLicense[] = [
   { name: 'dnd kit', license: 'MIT', url: 'https://github.com/clauderic/dnd-kit' },
   { name: 'idb', license: 'ISC', url: 'https://github.com/jakearchibald/idb' },
   { name: 'fflate', license: 'MIT', url: 'https://github.com/101arrowz/fflate' },
+  {
+    name: 'lamejs (@breezystack/lamejs)',
+    license: 'LGPL-3.0',
+    url: 'https://github.com/shijinyu/lamejs',
+    note: 'MP3 encoder; loaded unmodified as a separate file only when you export an MP3',
+  },
 ];

@@ -1,23 +1,10 @@
 import { useUiStore } from '@/store/uiStore';
-import { Modal } from '../components/controls';
 import { ShortcutsModal } from './ShortcutsModal';
 import { SoundBrowserModal } from './SoundBrowserModal';
 import { CreditsModal } from './CreditsModal';
 import { SampleEditorModal } from './SampleEditorModal';
 import { NewSongModal } from './NewSongModal';
-
-function ComingSoon({ title, onClose }: { title: string; onClose: () => void }) {
-  return (
-    <Modal
-      title={title}
-      onClose={onClose}
-      width={520}
-      footer={<button onClick={onClose}>Close</button>}
-    >
-      <p className="muted">This part of the app is on its way.</p>
-    </Modal>
-  );
-}
+import { ExportModal } from './ExportModal';
 
 export function ModalHost() {
   const open = useUiStore((s) => s.openModal);
@@ -34,7 +21,7 @@ export function ModalHost() {
     case 'sampleEditor':
       return <SampleEditorModal onClose={close} />;
     case 'export':
-      return <ComingSoon title="Export" onClose={close} />;
+      return <ExportModal onClose={close} />;
     case 'credits':
       return <CreditsModal onClose={close} />;
   }

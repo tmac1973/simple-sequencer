@@ -7,7 +7,7 @@ import { useSongStore } from '@/store/songStore';
 import { useUiStore } from '@/store/uiStore';
 import { Segmented } from '../components/controls';
 import { tip } from '../tooltips';
-import { togglePlay } from '../transport';
+import { stopPlayback, togglePlay } from '../transport';
 import { SaveStatus } from './SaveStatus';
 import styles from './TopBar.module.css';
 
@@ -218,7 +218,14 @@ export function TopBar() {
       <button onClick={() => ui.openModalId('newSong')} {...tip('songs')}>
         📁 Songs
       </button>
-      <button className="primary" onClick={() => ui.openModalId('export')} {...tip('export')}>
+      <button
+        className="primary"
+        onClick={() => {
+          stopPlayback();
+          ui.openModalId('export');
+        }}
+        {...tip('export')}
+      >
         ⤓ Export
       </button>
       <button

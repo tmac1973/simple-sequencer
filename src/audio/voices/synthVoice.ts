@@ -6,13 +6,14 @@ import { resolveSynthParams, type ResolvedSynth } from '../macros';
 
 /**
  * One synth track's instrument:
- * PolySynth(MonoSynth) → Tone filter → vibrato → "Space" reverb → track input.
+ * PolySynth(MonoSynth) → Tone filter → vibrato → "Space" room reverb → track input.
  */
 export class SynthVoice {
   readonly poly: Tone.PolySynth<Tone.MonoSynth>;
   readonly toneFilter = new Tone.Filter({ type: 'lowpass', frequency: 4000, rolloff: -12, Q: 0.5 });
   readonly vibrato = new Tone.Vibrato({ frequency: 5, depth: 0 });
-  readonly space = new Tone.Freeverb({ roomSize: 0.6, dampening: 3500, wet: 0 });
+  /** "Space": a small convolution room (one ConvolverNode, cheap to run) */
+  readonly space = new Tone.Reverb({ decay: 1.6, preDelay: 0.01, wet: 0 });
   private settings: SynthTrackSettings | null = null;
   octaveShift = 0;
 

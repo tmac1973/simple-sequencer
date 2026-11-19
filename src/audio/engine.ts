@@ -143,7 +143,10 @@ export class GraphSet {
 
   /** Resolves when async effect parts (reverb impulses, worklets) are ready. */
   ready(): Promise<void> {
-    return Promise.all([...this.fx.values()].map((e) => e.inst.ready)).then(() => undefined);
+    return Promise.all([
+      ...[...this.fx.values()].map((e) => e.inst.ready),
+      ...[...this.synths.values()].map((v) => v.space.ready),
+    ]).then(() => undefined);
   }
 
   releaseAll() {
