@@ -43,11 +43,19 @@ export function SongLibrary({ onOpened }: { onOpened: () => void }) {
   const [renaming, setRenaming] = useState<string | null>(null);
   const currentId = useSongStore((s) => s.song.id);
   const file = useRef<HTMLInputElement>(null);
+  // the list loads asynchronously: don't update it after the window has closed
+  const alive = useRef(true);
+  useEffect(
+    () => () => {
+      alive.current = false;
+    },
+    [],
+  );
   const refresh = useCallback(() => {
     flushAutosave()
       .then(listSongs)
-      .then(setSongs)
-      .catch(() => setSongs([]));
+      .then((list) => alive.current && setSongs(list))
+      .catch(() => alive.current && setSongs([]));
   }, []);
   useEffect(refresh, [refresh]);
 
