@@ -8,6 +8,9 @@
  * Requires ffmpeg on PATH. Output: public/samples/<kit>/<id>.flac + public/samples/manifest.json
  * (mono, 44.1 kHz, 16-bit FLAC; leading silence trimmed at −50 dB, peak-normalized to −1 dBFS,
  * capped at 4 s for drums / 6 s for melodic, 30 ms fade-out).
+ *
+ * An entry can give `layers` instead of a `downloadUrl`: each layer is downloaded and mixed in
+ * at `atMs` (optional `gainDb`). Used to strum real chords from single recorded notes.
  */
 import { spawn } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
@@ -75,6 +78,19 @@ async function decode(file) {
     '-',
   ]);
   return new Float32Array(buf.buffer, buf.byteOffset, buf.byteLength / 4);
+}
+
+const extOf = (url) => url.split('?')[0].split('.').pop();
+
+/** Sum decoded layers, each starting `at` samples in, with an optional gain in dB. */
+export function mixLayers(parts) {
+  const len = Math.max(...parts.map((p) => p.at + p.pcm.length));
+  const out = new Float32Array(len);
+  for (const { pcm, at, gainDb = 0 } of parts) {
+    const g = 10 ** (gainDb / 20);
+    for (let i = 0; i < pcm.length; i++) out[at + i] += pcm[i] * g;
+  }
+  return out;
 }
 
 function clean(pcm, maxSec) {
@@ -190,15 +206,33 @@ async function main() {
       console.warn(`skip ${e.id}: needs FREESOUND_TOKEN`);
       continue;
     }
-    const ext = (e.downloadUrl ?? '.ogg').split('?')[0].split('.').pop();
-    const raw = join(RAW, e.source, `${e.id}.${ext}`);
-    if (!existsSync(raw)) {
-      const url = e.freesoundId ? await freesoundUrl(e, token) : e.downloadUrl;
-      process.stdout.write(`↓ ${e.id} `);
-      await download(url, raw);
+    let source;
+    if (e.layers) {
+      const parts = [];
+      for (const [i, l] of e.layers.entries()) {
+        const raw = join(RAW, e.source, e.id, `${i}.${extOf(l.url)}`);
+        if (!existsSync(raw)) {
+          process.stdout.write(`↓ ${e.id}[${i}] `);
+          await download(l.url, raw);
+        }
+        parts.push({
+          pcm: await decode(raw),
+          at: Math.round((l.atMs / 1000) * SR),
+          gainDb: l.gainDb,
+        });
+      }
+      source = mixLayers(parts);
+    } else {
+      const raw = join(RAW, e.source, `${e.id}.${extOf(e.downloadUrl ?? '.ogg')}`);
+      if (!existsSync(raw)) {
+        const url = e.freesoundId ? await freesoundUrl(e, token) : e.downloadUrl;
+        process.stdout.write(`↓ ${e.id} `);
+        await download(url, raw);
+      }
+      source = await decode(raw);
     }
     const melodic = e.rootNote !== undefined;
-    const pcm = clean(await decode(raw), e.maxSec ?? (melodic ? 6 : 4));
+    const pcm = clean(source, e.maxSec ?? (melodic ? 6 : 4));
     const file = `${e.kit}/${e.id}.flac`;
     await encodeFlac(pcm, join(OUT, file));
     total += statSync(join(OUT, file)).size;

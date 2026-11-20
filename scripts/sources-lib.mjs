@@ -11,6 +11,8 @@ export const CATEGORIES = [
   'Melodic one-shots',
   'Guitars',
   'Strings',
+  'Brass',
+  'Woodwinds',
   'Vocal chops',
 ];
 
@@ -27,8 +29,11 @@ export function validateSources(src) {
       problems.push(`${where} has a license that isn't allowed: ${e.license}`);
     if (!/^https:\/\//.test(e.sourceUrl ?? '')) problems.push(`${where} needs an https sourceUrl`);
     if (!e.author) problems.push(`${where} needs an author`);
-    if (!e.downloadUrl && !e.freesoundId)
-      problems.push(`${where} needs a downloadUrl or freesoundId`);
+    if (!e.downloadUrl && !e.freesoundId && !e.layers)
+      problems.push(`${where} needs a downloadUrl, freesoundId or layers`);
+    for (const l of e.layers ?? [])
+      if (!/^https:\/\//.test(l.url ?? '') || !(l.atMs >= 0))
+        problems.push(`${where} has a layer without an https url and an atMs ≥ 0`);
     if (!kitIds.has(e.kit)) problems.push(`${where} uses unknown kit ${e.kit}`);
     if (!CATEGORIES.includes(e.category))
       problems.push(`${where} uses unknown category ${e.category}`);

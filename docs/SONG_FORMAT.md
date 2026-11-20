@@ -324,7 +324,7 @@ A lane moves one knob over time, either by following drawn points or by wobbling
 
 ### Sample library (`lib:` ids)
 
-148 sounds in 10 kits. Use the **id** as `sample.sampleId`. For sounds with a **root note**, set `sample.rootMidi` to it (and usually `sample.melodic: true`) so notes play in tune; for everything else use `rootMidi: 60`.
+166 sounds in 12 kits. Use the **id** as `sample.sampleId`. For sounds with a **root note**, set `sample.rootMidi` to it (and usually `sample.melodic: true`) so notes play in tune; for everything else use `rootMidi: 60`.
 
 #### Dusty Kit (`dusty`): Warm acoustic drums for lo-fi and boom-bap
 
@@ -477,8 +477,10 @@ A lane moves one knob over time, either by following drawn points or by wobbling
 | `lib:gtr-acoustic` | Acoustic Guitar | Guitars | 4.0 s | 57 | CC0-1.0 (D. Smolken) |
 | `lib:gtr-nylon` | Nylon Guitar | Guitars | 3.1 s | 57 | CC-BY-4.0 (quartertone) |
 | `lib:gtr-banjo` | Guitar Banjo | Guitars | 1.1 s | 45 | CC0-1.0 (itsclipping) |
-| `lib:gtr-power-chord` | Power Chord | Guitars | 4.0 s | 40 | CC0-1.0 (Sub-d) |
-| `lib:gtr-minor9-chord` | Minor 9 Chord | Guitars | 5.0 s | 40 | CC0-1.0 (Sub-d) |
+| `lib:gtr-power-chord` | Power Chord (E5) | Guitars | 4.0 s | 40 | CC0-1.0 (Brian Wood) |
+| `lib:gtr-major-chord` | Major Chord (E) | Guitars | 4.0 s | 40 | CC0-1.0 (Brian Wood) |
+| `lib:gtr-minor-chord` | Minor Chord (Em) | Guitars | 4.0 s | 40 | CC0-1.0 (Brian Wood) |
+| `lib:gtr-minor9-chord` | Minor 9 Chord (Em9) | Guitars | 4.0 s | 40 | CC0-1.0 (Brian Wood) |
 | `lib:gtr-slide` | Guitar Slide | Guitars | 4.3 s |  | CC0-1.0 (Suva) |
 | `lib:gtr-harmonics` | Guitar Harmonics | Guitars | 3.5 s |  | CC0-1.0 (BStateham) |
 
@@ -498,6 +500,32 @@ A lane moves one knob over time, either by following drawn points or by wobbling
 | `lib:str-bass` | Double Bass | Strings | 6.0 s | 45 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
 | `lib:str-bass-pizz` | Double Bass Pizzicato | Strings | 2.5 s | 45 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
 | `lib:str-harp` | Harp | Strings | 4.0 s | 55 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+
+#### Brass (`brass`): Trumpet, French horn, trombone and tuba you can play in tune, long or short
+
+| id | name | category | length | root note | license |
+|---|---|---|---|---|---|
+| `lib:brass-trumpet` | Trumpet | Brass | 5.0 s | 70 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:brass-trumpet-stab` | Trumpet Stab | Brass | 1.2 s | 70 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:brass-trumpet-mute` | Muted Trumpet | Brass | 5.0 s | 70 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:brass-horn` | French Horn | Brass | 5.0 s | 53 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:brass-trombone` | Trombone | Brass | 5.0 s | 53 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:brass-trombone-stab` | Trombone Stab | Brass | 0.59 s | 53 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:brass-trombone-fall` | Trombone Fall | Brass | 0.59 s |  | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:brass-tuba` | Tuba | Brass | 5.0 s | 41 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:brass-tuba-stab` | Tuba Stab | Brass | 0.82 s | 46 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+
+#### Woodwinds (`woodwinds`): Flute, oboe, clarinet and bassoon you can play in tune, long or short
+
+| id | name | category | length | root note | license |
+|---|---|---|---|---|---|
+| `lib:ww-flute` | Flute | Woodwinds | 5.0 s | 72 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:ww-flute-stac` | Flute Staccato | Woodwinds | 0.41 s | 72 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:ww-oboe` | Oboe | Woodwinds | 5.0 s | 74 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:ww-clarinet` | Clarinet | Woodwinds | 5.0 s | 62 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:ww-clarinet-stac` | Clarinet Staccato | Woodwinds | 0.57 s | 62 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:ww-bassoon` | Bassoon | Woodwinds | 5.0 s | 48 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:ww-bassoon-stac` | Bassoon Staccato | Woodwinds | 0.71 s | 48 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
 
 #### FX (`fx`): Risers, scratches and swooshes
 

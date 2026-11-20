@@ -42,6 +42,16 @@
       "description": "Violin, viola, cello, double bass and harp you can play in tune, bowed or plucked"
     },
     {
+      "id": "brass",
+      "name": "Brass",
+      "description": "Trumpet, French horn, trombone and tuba you can play in tune, long or short"
+    },
+    {
+      "id": "woodwinds",
+      "name": "Woodwinds",
+      "description": "Flute, oboe, clarinet and bassoon you can play in tune, long or short"
+    },
+    {
       "id": "fx",
       "name": "FX",
       "description": "Risers, scratches and swooshes"
@@ -1851,31 +1861,149 @@
       "kit": "guitar",
       "id": "gtr-power-chord",
       "category": "Guitars",
-      "name": "Power Chord",
-      "downloadUrl": "https://raw.githubusercontent.com/sonic-pi-net/sonic-pi/dev/etc/samples/guit_e_fifths.flac",
-      "sourceUrl": "https://freesound.org/people/Sub-d/sounds/46990/",
-      "author": "Sub-d",
-      "source": "sonic-pi",
-      "via": "Sonic Pi sample library (github.com/sonic-pi-net/sonic-pi)",
+      "name": "Power Chord (E5)",
+      "source": "karoryfer",
+      "sourceUrl": "https://github.com/sfzinstruments/karoryfer.black-and-green-guitars",
+      "author": "Brian Wood",
+      "via": "Karoryfer Samples, Black And Green Guitars (strummed from single notes)",
       "license": "CC0-1.0",
       "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
       "rootNote": 40,
-      "maxSec": 4
+      "maxSec": 4,
+      "layers": [
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_e3_mf_rr1.wav",
+          "atMs": 0
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_b3_mf_rr1.wav",
+          "atMs": 16
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_e4_mf_rr1.wav",
+          "atMs": 32
+        }
+      ]
+    },
+    {
+      "kit": "guitar",
+      "id": "gtr-major-chord",
+      "category": "Guitars",
+      "name": "Major Chord (E)",
+      "source": "karoryfer",
+      "sourceUrl": "https://github.com/sfzinstruments/karoryfer.black-and-green-guitars",
+      "author": "Brian Wood",
+      "via": "Karoryfer Samples, Black And Green Guitars (strummed from single notes)",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "rootNote": 40,
+      "maxSec": 4,
+      "layers": [
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_e3_mf_rr1.wav",
+          "atMs": 0
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_b3_mf_rr1.wav",
+          "atMs": 16
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_e4_mf_rr1.wav",
+          "atMs": 32
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_ab4_mf_rr1.wav",
+          "atMs": 48
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_b4_mf_rr1.wav",
+          "atMs": 64
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_e5_mf_rr1.wav",
+          "atMs": 80
+        }
+      ]
+    },
+    {
+      "kit": "guitar",
+      "id": "gtr-minor-chord",
+      "category": "Guitars",
+      "name": "Minor Chord (Em)",
+      "source": "karoryfer",
+      "sourceUrl": "https://github.com/sfzinstruments/karoryfer.black-and-green-guitars",
+      "author": "Brian Wood",
+      "via": "Karoryfer Samples, Black And Green Guitars (strummed from single notes)",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "rootNote": 40,
+      "maxSec": 4,
+      "layers": [
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_e3_mf_rr1.wav",
+          "atMs": 0
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_b3_mf_rr1.wav",
+          "atMs": 16
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_e4_mf_rr1.wav",
+          "atMs": 32
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_g4_mf_rr1.wav",
+          "atMs": 48
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_b4_mf_rr1.wav",
+          "atMs": 64
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_e5_mf_rr1.wav",
+          "atMs": 80
+        }
+      ]
     },
     {
       "kit": "guitar",
       "id": "gtr-minor9-chord",
       "category": "Guitars",
-      "name": "Minor 9 Chord",
-      "downloadUrl": "https://raw.githubusercontent.com/sonic-pi-net/sonic-pi/dev/etc/samples/guit_em9.flac",
-      "sourceUrl": "https://freesound.org/people/Sub-d/sounds/46992/",
-      "author": "Sub-d",
-      "source": "sonic-pi",
-      "via": "Sonic Pi sample library (github.com/sonic-pi-net/sonic-pi)",
+      "name": "Minor 9 Chord (Em9)",
+      "source": "karoryfer",
+      "sourceUrl": "https://github.com/sfzinstruments/karoryfer.black-and-green-guitars",
+      "author": "Brian Wood",
+      "via": "Karoryfer Samples, Black And Green Guitars (strummed from single notes)",
       "license": "CC0-1.0",
       "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
       "rootNote": 40,
-      "maxSec": 5
+      "maxSec": 4,
+      "layers": [
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_e3_mf_rr1.wav",
+          "atMs": 0
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_b3_mf_rr1.wav",
+          "atMs": 16
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_d4_mf_rr1.wav",
+          "atMs": 32
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_g4_mf_rr1.wav",
+          "atMs": 48
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_b4_mf_rr1.wav",
+          "atMs": 64
+        },
+        {
+          "url": "https://raw.githubusercontent.com/sfzinstruments/karoryfer.black-and-green-guitars/main/Samples/green/ord/twang_gb5_mf_rr1.wav",
+          "atMs": 80
+        }
+      ]
     },
     {
       "kit": "guitar",
@@ -2083,6 +2211,245 @@
       "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
       "rootNote": 55,
       "maxSec": 4
+    },
+    {
+      "kit": "brass",
+      "id": "brass-trumpet",
+      "category": "Brass",
+      "name": "Trumpet",
+      "downloadUrl": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/master/Brass/Trumpet/susvib/Sum_SHTrumpet_susvib_A%233_v2_rr1.wav",
+      "source": "vsco2-ce",
+      "sourceUrl": "https://github.com/sgossner/VSCO-2-CE",
+      "author": "Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)",
+      "via": "VS Chamber Orchestra 2: Community Edition",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "rootNote": 70,
+      "maxSec": 5
+    },
+    {
+      "kit": "brass",
+      "id": "brass-trumpet-stab",
+      "category": "Brass",
+      "name": "Trumpet Stab",
+      "downloadUrl": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/master/Brass/Trumpet/stac/Sum_SHTrumpet_stac_A%233_v2_rr1.wav",
+      "source": "vsco2-ce",
+      "sourceUrl": "https://github.com/sgossner/VSCO-2-CE",
+      "author": "Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)",
+      "via": "VS Chamber Orchestra 2: Community Edition",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "rootNote": 70,
+      "maxSec": 1.3
+    },
+    {
+      "kit": "brass",
+      "id": "brass-trumpet-mute",
+      "category": "Brass",
+      "name": "Muted Trumpet",
+      "downloadUrl": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/master/Brass/Trumpet/harmonM-sus/Sum_SHTrumpet_harmonM-sus_A%233_v3_rr1.wav",
+      "source": "vsco2-ce",
+      "sourceUrl": "https://github.com/sgossner/VSCO-2-CE",
+      "author": "Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)",
+      "via": "VS Chamber Orchestra 2: Community Edition",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "rootNote": 70,
+      "maxSec": 5
+    },
+    {
+      "kit": "brass",
+      "id": "brass-horn",
+      "category": "Brass",
+      "name": "French Horn",
+      "downloadUrl": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/master/Brass/F%20Horn/sus/MOHorn_sus_F2_v2_1.wav",
+      "source": "vsco2-ce",
+      "sourceUrl": "https://github.com/sgossner/VSCO-2-CE",
+      "author": "Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)",
+      "via": "VS Chamber Orchestra 2: Community Edition",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "rootNote": 53,
+      "maxSec": 5
+    },
+    {
+      "kit": "brass",
+      "id": "brass-trombone",
+      "category": "Brass",
+      "name": "Trombone",
+      "downloadUrl": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/master/Brass/Tenor%20Trombone/sus/tenortbn_sus_F2_v2_1.wav",
+      "source": "vsco2-ce",
+      "sourceUrl": "https://github.com/sgossner/VSCO-2-CE",
+      "author": "Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)",
+      "via": "VS Chamber Orchestra 2: Community Edition",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "rootNote": 53,
+      "maxSec": 5
+    },
+    {
+      "kit": "brass",
+      "id": "brass-trombone-stab",
+      "category": "Brass",
+      "name": "Trombone Stab",
+      "downloadUrl": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/master/Brass/Tenor%20Trombone/stac/tenortbn_stac_F2_v2_rr1.wav",
+      "source": "vsco2-ce",
+      "sourceUrl": "https://github.com/sgossner/VSCO-2-CE",
+      "author": "Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)",
+      "via": "VS Chamber Orchestra 2: Community Edition",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "rootNote": 53,
+      "maxSec": 1
+    },
+    {
+      "kit": "brass",
+      "id": "brass-trombone-fall",
+      "category": "Brass",
+      "name": "Trombone Fall",
+      "downloadUrl": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/master/Brass/OldTrombone/Fall/Trombone_Fall_D2_1.wav",
+      "source": "vsco2-ce",
+      "sourceUrl": "https://github.com/sgossner/VSCO-2-CE",
+      "author": "Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)",
+      "via": "VS Chamber Orchestra 2: Community Edition",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "maxSec": 1
+    },
+    {
+      "kit": "brass",
+      "id": "brass-tuba",
+      "category": "Brass",
+      "name": "Tuba",
+      "downloadUrl": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/master/Brass/Tuba/sus/Tuba3_sus_F1_v2_rr1_Mid.wav",
+      "source": "vsco2-ce",
+      "sourceUrl": "https://github.com/sgossner/VSCO-2-CE",
+      "author": "Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)",
+      "via": "VS Chamber Orchestra 2: Community Edition",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "rootNote": 41,
+      "maxSec": 5
+    },
+    {
+      "kit": "brass",
+      "id": "brass-tuba-stab",
+      "category": "Brass",
+      "name": "Tuba Stab",
+      "downloadUrl": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/master/Brass/Tuba/stac/Tuba3_stac_A%231_v2_rr1_Sum.wav",
+      "source": "vsco2-ce",
+      "sourceUrl": "https://github.com/sgossner/VSCO-2-CE",
+      "author": "Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)",
+      "via": "VS Chamber Orchestra 2: Community Edition",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "rootNote": 46,
+      "maxSec": 1
+    },
+    {
+      "kit": "woodwinds",
+      "id": "ww-flute",
+      "category": "Woodwinds",
+      "name": "Flute",
+      "downloadUrl": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/master/Woodwinds/Flute/susvib/LDFlute_susvib_C4_v1_1.wav",
+      "source": "vsco2-ce",
+      "sourceUrl": "https://github.com/sgossner/VSCO-2-CE",
+      "author": "Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)",
+      "via": "VS Chamber Orchestra 2: Community Edition",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "rootNote": 72,
+      "maxSec": 5
+    },
+    {
+      "kit": "woodwinds",
+      "id": "ww-flute-stac",
+      "category": "Woodwinds",
+      "name": "Flute Staccato",
+      "downloadUrl": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/master/Woodwinds/Flute/stac/LDFlute_stac_C4_v2_rr1.wav",
+      "source": "vsco2-ce",
+      "sourceUrl": "https://github.com/sgossner/VSCO-2-CE",
+      "author": "Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)",
+      "via": "VS Chamber Orchestra 2: Community Edition",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "rootNote": 72,
+      "maxSec": 0.7
+    },
+    {
+      "kit": "woodwinds",
+      "id": "ww-oboe",
+      "category": "Woodwinds",
+      "name": "Oboe",
+      "downloadUrl": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/master/Woodwinds/Oboe/Vib/Oboe_Vib_D4_v3_Main.wav",
+      "source": "vsco2-ce",
+      "sourceUrl": "https://github.com/sgossner/VSCO-2-CE",
+      "author": "Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)",
+      "via": "VS Chamber Orchestra 2: Community Edition",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "rootNote": 74,
+      "maxSec": 5
+    },
+    {
+      "kit": "woodwinds",
+      "id": "ww-clarinet",
+      "category": "Woodwinds",
+      "name": "Clarinet",
+      "downloadUrl": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/master/Woodwinds/Clarinet/susLong/DCClar_susLong_D3_v2_rr1_sum.wav",
+      "source": "vsco2-ce",
+      "sourceUrl": "https://github.com/sgossner/VSCO-2-CE",
+      "author": "Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)",
+      "via": "VS Chamber Orchestra 2: Community Edition",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "rootNote": 62,
+      "maxSec": 5
+    },
+    {
+      "kit": "woodwinds",
+      "id": "ww-clarinet-stac",
+      "category": "Woodwinds",
+      "name": "Clarinet Staccato",
+      "downloadUrl": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/master/Woodwinds/Clarinet/stac/DCClar_stac_D3_v2_rr1_sum.wav",
+      "source": "vsco2-ce",
+      "sourceUrl": "https://github.com/sgossner/VSCO-2-CE",
+      "author": "Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)",
+      "via": "VS Chamber Orchestra 2: Community Edition",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "rootNote": 62,
+      "maxSec": 0.6
+    },
+    {
+      "kit": "woodwinds",
+      "id": "ww-bassoon",
+      "category": "Woodwinds",
+      "name": "Bassoon",
+      "downloadUrl": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/master/Woodwinds/Bassoon/vib/PSBassoon_C2_v2_1.wav",
+      "source": "vsco2-ce",
+      "sourceUrl": "https://github.com/sgossner/VSCO-2-CE",
+      "author": "Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)",
+      "via": "VS Chamber Orchestra 2: Community Edition",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "rootNote": 48,
+      "maxSec": 5
+    },
+    {
+      "kit": "woodwinds",
+      "id": "ww-bassoon-stac",
+      "category": "Woodwinds",
+      "name": "Bassoon Staccato",
+      "downloadUrl": "https://raw.githubusercontent.com/sgossner/VSCO-2-CE/master/Woodwinds/Bassoon/stac/PSBassoon_C2_v2_rr1.wav",
+      "source": "vsco2-ce",
+      "sourceUrl": "https://github.com/sgossner/VSCO-2-CE",
+      "author": "Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)",
+      "via": "VS Chamber Orchestra 2: Community Edition",
+      "license": "CC0-1.0",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "rootNote": 48,
+      "maxSec": 0.8
     }
   ]
 }
