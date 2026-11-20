@@ -324,7 +324,7 @@ A lane moves one knob over time, either by following drawn points or by wobbling
 
 ### Sample library (`lib:` ids)
 
-136 sounds in 9 kits. Use the **id** as `sample.sampleId`. For sounds with a **root note**, set `sample.rootMidi` to it (and usually `sample.melodic: true`) so notes play in tune; for everything else use `rootMidi: 60`.
+148 sounds in 10 kits. Use the **id** as `sample.sampleId`. For sounds with a **root note**, set `sample.rootMidi` to it (and usually `sample.melodic: true`) so notes play in tune; for everything else use `rootMidi: 60`.
 
 #### Dusty Kit (`dusty`): Warm acoustic drums for lo-fi and boom-bap
 
@@ -481,6 +481,23 @@ A lane moves one knob over time, either by following drawn points or by wobbling
 | `lib:gtr-minor9-chord` | Minor 9 Chord | Guitars | 5.0 s | 40 | CC0-1.0 (Sub-d) |
 | `lib:gtr-slide` | Guitar Slide | Guitars | 4.3 s |  | CC0-1.0 (Suva) |
 | `lib:gtr-harmonics` | Guitar Harmonics | Guitars | 3.5 s |  | CC0-1.0 (BStateham) |
+
+#### Strings (`strings`): Violin, viola, cello, double bass and harp you can play in tune, bowed or plucked
+
+| id | name | category | length | root note | license |
+|---|---|---|---|---|---|
+| `lib:str-violin` | Solo Violin | Strings | 6.0 s | 64 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:str-violin-pizz` | Violin Pizzicato | Strings | 1.5 s | 64 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:str-violins` | Violin Section | Strings | 6.0 s | 62 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:str-violins-trem` | Violin Tremolo | Strings | 6.0 s | 62 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:str-violins-pizz` | Violin Section Pizzicato | Strings | 1.2 s | 62 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:str-viola` | Viola Section | Strings | 6.0 s | 55 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:str-cello` | Cello Section | Strings | 6.0 s | 57 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:str-cello-pizz` | Cello Pizzicato | Strings | 2.0 s | 57 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:str-cello-spic` | Cello Spiccato | Strings | 1.0 s | 57 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:str-bass` | Double Bass | Strings | 6.0 s | 45 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:str-bass-pizz` | Double Bass Pizzicato | Strings | 2.5 s | 45 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
+| `lib:str-harp` | Harp | Strings | 4.0 s | 55 | CC0-1.0 (Versilian Studios (Sam Gossner) / Ivy Audio (Simon Dalzell)) |
 
 #### FX (`fx`): Risers, scratches and swooshes
 

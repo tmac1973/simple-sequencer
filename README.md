@@ -20,7 +20,7 @@ tracks, patterns and a song timeline, with no account and no server.
 - **MIDI keyboards**: plug one in and play (Chrome, Edge, Firefox); notes snap to the song's key and drum pads play each drum.
 - **● Rec**: count in, loop the pattern with a click, and record what you play from either keyboard. Each pass adds notes and one undo removes the whole take.
 - **Melodic samples**: play any sound in tune in the piano roll (piano, vocal chop…).
-- **136 built-in sounds**: 4 drum kits, a percussion kit (crash, tambourine, congas, bongos, claves…), guitars (clean, hollow-body and muted electric, acoustic, nylon, banjo, chords and slides), and melodic, FX and vocal sounds. All are CC0 or CC-BY.
+- **148 built-in sounds**: 4 drum kits, a percussion kit (crash, tambourine, congas, bongos, claves…), guitars (clean, hollow-body and muted electric, acoustic, nylon, banjo, chords and slides), strings (violin, viola, cello and double bass, bowed and pizzicato, plus harp), and melodic, FX and vocal sounds. All are CC0 or CC-BY.
 - **Your own sounds**: import WAV, MP3, OGG or FLAC, or **record from your microphone**.
 - **Sample editor**: trim, reverse, tune, loop, fade and normalize. Edits never change the original file.
 - **Sidechain pump**: 💓 Pump to the kick makes a track dip each time the kick hits and swell back, the classic house "breathing" sound (any track can duck to any other).
@@ -68,7 +68,7 @@ recording needs HTTPS (or localhost).
 
 - **App code**: MIT.
 - **Built-in sounds**: listed in `samples-src/sources.json`, each with its source, author and license.
-  - Most are **CC0** (public domain): the Sonic Pi sample library (originally from freesound.org), the Versilian Community Sample Library, and Karoryfer Samples' guitar libraries.
+  - Most are **CC0** (public domain): the Sonic Pi sample library (originally from freesound.org), the Versilian Community Sample Library, VS Chamber Orchestra 2: Community Edition (Versilian Studios and Ivy Audio), and Karoryfer Samples' guitar libraries.
   - The piano is the **Salamander Grand Piano** by Alexander Holm (**CC-BY 3.0**), and the nylon guitar is by quartertone on freesound.org (**CC-BY 4.0**). Both are credited in the app.
 - **Excluded sources**: anything considered and rejected is listed with reasons in `samples-src/EXCLUDED.md`.
 - **Rebuilding the library**: run `node scripts/build-samples.mjs` (needs `ffmpeg`). Entries with a `freesoundId` also need a free Freesound API token in `FREESOUND_TOKEN`.
