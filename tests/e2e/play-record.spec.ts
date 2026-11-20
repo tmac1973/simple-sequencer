@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test';
+import { audioClockRuns } from './audioClock';
 
 async function emptySong(page: Page) {
   await page.addInitScript(() => localStorage.setItem('ss:seenHint', '1'));
@@ -25,6 +26,12 @@ test('play the computer keyboard, record a take, undo it', async ({ page }) => {
     page.getByRole('button', { name: 'Keys: notes from your computer keyboard' }),
   ).toContainText('+1');
   await page.keyboard.press('z');
+
+  // recording follows the audio clock; without one (some CI machines) stop here
+  if (!(await audioClockRuns(page))) {
+    test.info().annotations.push({ type: 'skipped part', description: 'no running audio clock' });
+    return;
+  }
 
   // record without a count-in: play three notes while the pattern loops
   await page.getByRole('button', { name: 'Recording settings' }).click();
