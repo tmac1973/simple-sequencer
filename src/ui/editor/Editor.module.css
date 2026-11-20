@@ -183,3 +183,25 @@
 .ideasBtn:hover {
   filter: brightness(1.1);
 }
+
+.pad.chancePad {
+  border: 1.5px dashed;
+  background: transparent;
+}
+.chancePct {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 10.5px;
+  font-weight: 600;
+  pointer-events: none;
+}
+.dice {
+  position: absolute;
+  top: 1px;
+  right: 2px;
+  font-size: 9px;
+  line-height: 1;
+  pointer-events: none;
+}

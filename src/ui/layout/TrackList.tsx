@@ -43,6 +43,19 @@ export function trackSubtitle(t: Track): string {
   return soundInfo(t.sample?.sampleId ?? '').name;
 }
 
+function DuckBadge({ sourceId }: { sourceId: string }) {
+  const name = useSongStore((s) => s.song.tracks.find((t) => t.id === sourceId)?.name);
+  if (!name) return null;
+  return (
+    <span
+      className={styles.duckBadge}
+      data-tip={`Ducking|This track dips each time ${name} plays.`}
+    >
+      ⤵ {name}
+    </span>
+  );
+}
+
 function TrackRow({ track, index, selected }: { track: Track; index: number; selected: boolean }) {
   useSoundNamesVersion();
   const a = useSongStore.getState();
@@ -135,7 +148,10 @@ function TrackRow({ track, index, selected }: { track: Track; index: number; sel
         ) : (
           <b>{track.name}</b>
         )}
-        <span>{trackSubtitle(track)}</span>
+        <span>
+          {track.duck?.on && <DuckBadge sourceId={track.duck.sourceId} />}
+          {trackSubtitle(track)}
+        </span>
       </div>
       <input
         type="range"

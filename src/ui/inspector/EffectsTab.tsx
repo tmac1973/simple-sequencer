@@ -154,6 +154,7 @@ function FxCard({ track, slot }: { track: Track; slot: FxSlot }) {
   );
 }
 
+import { DuckCard } from './DuckCard';
 export function EffectsTab({ track }: { track: Track }) {
   const [menu, setMenu] = useState(false);
   const a = useSongStore.getState();
@@ -169,6 +170,7 @@ export function EffectsTab({ track }: { track: Track }) {
   };
   return (
     <>
+      <DuckCard track={track} />
       {track.fx.length === 0 && (
         <p className="small muted">
           No effects yet. Add one to change how this track sounds, like reverb for space or

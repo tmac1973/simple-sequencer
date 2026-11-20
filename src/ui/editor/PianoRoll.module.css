@@ -108,8 +108,29 @@
 }
 .velLabel {
   position: absolute;
-  left: -66px;
-  top: 12px;
+  left: -70px;
+  top: 7px;
   font-size: 11px;
   color: var(--muted);
+}
+
+.keys > div.lit,
+.rrow.lit {
+  background: rgba(139, 123, 255, 0.28);
+  color: #fff;
+}
+.kbd {
+  font: 10px ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: var(--panel3, #2c3042);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 0 3px;
+  line-height: 13px;
+  color: var(--accent2, #b3a8ff);
+  font-weight: 400;
+}
+.chanceBar {
+  background: transparent;
+  border: 1.5px dashed;
+  border-bottom: none;
 }

@@ -1,4 +1,5 @@
-import { BEATS_PER_BAR, blockAt, swingOffsetBeats } from '@/model/timing';
+import { BEATS_PER_BAR, beatSeconds, blockAt, swingOffsetBeats } from '@/model/timing';
+import { hashStr, humanizeHit, plays } from '@/model/groove';
 import type { Pattern, Song, Track } from '@/model/types';
 
 /** The parts of UI state that change what plays. */
@@ -6,6 +7,8 @@ export interface PlayContext {
   playMode: 'pattern' | 'song';
   selectedTrackId: string | null;
   selectedPatternId: Record<string, string>;
+  /** Song mode only: loop these bars instead of the whole song */
+  songLoop?: LoopRegion | null;
 }
 
 export interface LoopRegion {
@@ -33,7 +36,8 @@ export function selectedPattern(track: Track, ctx: PlayContext): Pattern {
  * the timeline (bar 0 if it isn't placed) and lasts the pattern's length. Song mode loops the song.
  */
 export function getLoopRegion(song: Song, ctx: PlayContext): LoopRegion {
-  if (ctx.playMode === 'song') return { startBar: 0, lengthBars: song.lengthBars };
+  if (ctx.playMode === 'song')
+    return songLoopOf(song, ctx) ?? { startBar: 0, lengthBars: song.lengthBars };
   const track = song.tracks.find((t) => t.id === ctx.selectedTrackId) ?? song.tracks[0];
   if (!track) return { startBar: 0, lengthBars: 1 };
   const p = selectedPattern(track, ctx);
@@ -43,20 +47,51 @@ export function getLoopRegion(song: Song, ctx: PlayContext): LoopRegion {
   return { startBar: first ?? 0, lengthBars: p.lengthBars };
 }
 
-/** Map the transport's beat counter (0, 1, 2… since play) to an absolute song beat. */
+/** The Song-mode loop, kept inside the song (null when there's no loop). */
+export function songLoopOf(song: Song, ctx: PlayContext): LoopRegion | null {
+  const l = ctx.songLoop;
+  if (!l || l.startBar >= song.lengthBars) return null;
+  return { startBar: l.startBar, lengthBars: Math.min(l.lengthBars, song.lengthBars - l.startBar) };
+}
+
+export interface PlayStep {
+  /** absolute song beat */
+  beat: number;
+  /** how many times playback has wrapped around (0 = first time through) */
+  pass: number;
+}
+
+/** Map the transport's beat counter (0, 1, 2… since play) to a song beat and loop pass. */
+export function playStepFor(
+  song: Song,
+  ctx: PlayContext,
+  counter: number,
+  fromBar: number,
+): PlayStep {
+  if (ctx.playMode === 'song') {
+    const loop = songLoopOf(song, ctx);
+    const r = loop ?? { startBar: 0, lengthBars: song.lengthBars };
+    const s0 = r.startBar * BEATS_PER_BAR;
+    const n = r.lengthBars * BEATS_PER_BAR;
+    const from = Math.min(fromBar, song.lengthBars - 1);
+    // start at ▼ if it's inside the loop, else at the loop's start
+    const into =
+      from >= r.startBar && from < r.startBar + r.lengthBars ? from * BEATS_PER_BAR - s0 : 0;
+    const k = into + counter;
+    return { beat: s0 + (k % n), pass: Math.floor(k / n) };
+  }
+  const r = getLoopRegion(song, ctx);
+  const n = r.lengthBars * BEATS_PER_BAR;
+  return { beat: r.startBar * BEATS_PER_BAR + (counter % n), pass: Math.floor(counter / n) };
+}
+
 export function songBeatFor(
   song: Song,
   ctx: PlayContext,
   counter: number,
   fromBar: number,
 ): number {
-  if (ctx.playMode === 'song') {
-    const total = song.lengthBars * BEATS_PER_BAR;
-    const start = Math.min(fromBar, song.lengthBars - 1) * BEATS_PER_BAR;
-    return (start + counter) % total;
-  }
-  const r = getLoopRegion(song, ctx);
-  return r.startBar * BEATS_PER_BAR + (counter % (r.lengthBars * BEATS_PER_BAR));
+  return playStepFor(song, ctx, counter, fromBar).beat;
 }
 
 export function isAudible(track: Track, anySolo: boolean): boolean {
@@ -72,7 +107,9 @@ export function computeBeatEvents(
   song: Song,
   ctx: PlayContext,
   songBeat: number,
+  pass = 0,
 ): ScheduledEvent[] {
+  const beatSec = beatSeconds(song.bpm);
   const bar = Math.floor(songBeat / BEATS_PER_BAR);
   const beatInBar = songBeat % BEATS_PER_BAR;
   const anySolo = song.tracks.some((t) => t.solo);
@@ -99,16 +136,27 @@ export function computeBeatEvents(
     const perBeat = spb / BEATS_PER_BAR;
     const base = patternBar * spb + beatInBar * perBeat;
     const stepBeats = 1 / perBeat;
+    const seed = hashStr(track.id);
+    const human = track.humanize ?? 0;
+    /** chance + humanize for one hit; null = it doesn't play this time */
+    const groove = (step: number, velocity: number, chance: number | undefined) => {
+      const k = { seed, bar, step, pass };
+      if (!plays(chance, k)) return null;
+      const h = humanizeHit(human, k, step % perBeat === 0);
+      return { dtBeats: h.dt / beatSec, velocity: Math.min(1, velocity * h.vel) };
+    };
 
     if (usesNotes(track)) {
       for (const n of pattern.notes) {
         const i = n.start - base;
         if (i < 0 || i >= perBeat) continue;
+        const g = groove(n.start, n.velocity, n.chance);
+        if (!g) continue;
         events.push({
           trackId: track.id,
           kind: 'note',
-          offsetBeats: i * stepBeats + swingOffsetBeats(n.start, spb, song.swing),
-          velocity: n.velocity,
+          offsetBeats: i * stepBeats + swingOffsetBeats(n.start, spb, song.swing) + g.dtBeats,
+          velocity: g.velocity,
           degree: n.degree,
           lengthBeats: n.length * stepBeats,
         });
@@ -117,11 +165,13 @@ export function computeBeatEvents(
       for (const s of pattern.steps) {
         const i = s.index - base;
         if (i < 0 || i >= perBeat) continue;
+        const g = groove(s.index, s.velocity, s.chance);
+        if (!g) continue;
         events.push({
           trackId: track.id,
           kind: 'hit',
-          offsetBeats: i * stepBeats + swingOffsetBeats(s.index, spb, song.swing),
-          velocity: s.velocity,
+          offsetBeats: i * stepBeats + swingOffsetBeats(s.index, spb, song.swing) + g.dtBeats,
+          velocity: g.velocity,
           lengthBeats: stepBeats,
         });
       }

@@ -54,8 +54,22 @@ export interface Track {
   blocks: Block[];
   fx: FxSlot[];
   automation: AutomationLane[];
+  /** 0–1: nudge timing and loudness a little, like a person playing (missing = 0) */
+  humanize?: number;
+  /** sidechain pump: dip this track's volume each time another track hits */
+  duck?: DuckSettings;
   sample?: SampleTrackSettings;
   synth?: SynthTrackSettings;
+}
+
+/** Ducking ("sidechain pump"): this track gets quieter whenever `sourceId` plays. */
+export interface DuckSettings {
+  sourceId: Id;
+  on: boolean;
+  /** 0–1: how far the volume dips (1 = silent at the hit) */
+  amount: number;
+  /** index into DUCK_RELEASES (1/16 … 1/2 note) */
+  release: number;
 }
 
 export interface SampleEdit {
@@ -130,6 +144,8 @@ export interface Step {
   index: number;
   /** 0.1–1 */
   velocity: number;
+  /** 0.1–1: how often it plays (missing = always) */
+  chance?: number;
 }
 
 export interface Note {
@@ -140,6 +156,8 @@ export interface Note {
   /** scale degree; 0 = key root in octave 3 */
   degree: number;
   velocity: number;
+  /** 0.1–1: how often it plays (missing = always) */
+  chance?: number;
 }
 
 export interface Pattern {

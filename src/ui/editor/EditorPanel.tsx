@@ -11,6 +11,7 @@ import { PianoRoll } from './PianoRoll';
 import { StepEditor } from './StepPads';
 import styles from './Editor.module.css';
 
+import { DragSetsSwitch, PlayControls } from './PlayControls';
 export function EditorPanel() {
   const { track, pattern } = useSelection();
   const drumView = useUiStore((s) => s.drumView);
@@ -128,6 +129,8 @@ export function EditorPanel() {
           💡 Ideas
         </button>
         <div className="spacer" />
+        {isDrum && !showDrums && <DragSetsSwitch />}
+        <PlayControls track={track} pattern={pattern} />
         {notes && (
           <div className={styles.inline} {...tip('chordStamp')}>
             Chord stamp

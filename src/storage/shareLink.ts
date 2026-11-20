@@ -77,14 +77,31 @@ function editDiff(e: SampleEdit): Partial<SampleEdit> {
   return out as Partial<SampleEdit>;
 }
 
-function packTrack(t: Track): Packed {
-  const patterns = t.patterns.map((p) => [
-    p.name,
-    p.lengthBars,
-    p.stepsPerBar,
-    p.steps.flatMap((s) => [s.index, r2(s.velocity)]),
-    p.notes.flatMap((n) => [n.start, n.length, n.degree, r2(n.velocity)]),
-  ]);
+/** [position in the list, chance] pairs for the steps/notes that don't always play. */
+function packChances(xs: { chance?: number }[]): number[] {
+  return xs.flatMap((x, i) => (x.chance !== undefined && x.chance < 1 ? [i, r2(x.chance)] : []));
+}
+function unpackChances(xs: { chance?: number }[], c: number[] | undefined) {
+  for (let i = 0; c && i + 1 < c.length; i += 2) {
+    const x = xs[c[i]!];
+    if (x) x.chance = c[i + 1]!;
+  }
+}
+
+function packTrack(t: Track, _i: number, all: Track[]): Packed {
+  const patterns = t.patterns.map((p) => {
+    const q: Packed = [
+      p.name,
+      p.lengthBars,
+      p.stepsPerBar,
+      p.steps.flatMap((s) => [s.index, r2(s.velocity)]),
+      p.notes.flatMap((n) => [n.start, n.length, n.degree, r2(n.velocity)]),
+    ];
+    const sc = packChances(p.steps);
+    const nc = packChances(p.notes);
+    if (sc.length || nc.length) q.push(sc, nc);
+    return q;
+  });
   const blocks = t.blocks.flatMap((b) => [
     t.patterns.findIndex((p) => p.id === b.patternId),
     b.startBar,
@@ -136,11 +153,29 @@ function packTrack(t: Track): Packed {
     fx,
     lanes,
     sound,
+    // groove extras (newer links only): humanize and ducking
+    ...(t.humanize || t.duck
+      ? [
+          {
+            ...(t.humanize ? { h: r3(t.humanize) } : {}),
+            ...(t.duck
+              ? {
+                  d: [
+                    all.findIndex((x) => x.id === t.duck!.sourceId),
+                    t.duck.on ? 1 : 0,
+                    r3(t.duck.amount),
+                    t.duck.release,
+                  ],
+                }
+              : {}),
+          },
+        ]
+      : []),
   ];
 }
 
 function unpackTrack(p: Packed): Track {
-  const [name, color, synth, volumeDb, pan, flags, pats, blocks, fxs, lanes, sound] = p as [
+  const [name, color, synth, volumeDb, pan, flags, pats, blocks, fxs, lanes, sound, extra] = p as [
     string,
     string,
     number,
@@ -152,14 +187,17 @@ function unpackTrack(p: Packed): Track {
     Packed[],
     Packed[],
     Packed,
+    { h?: number; d?: number[] } | undefined,
   ];
   const patterns: Pattern[] = pats.map((q) => {
-    const [pname, lengthBars, stepsPerBar, steps, notes] = q as [
+    const [pname, lengthBars, stepsPerBar, steps, notes, stepChances, noteChances] = q as [
       string,
       Pattern['lengthBars'],
       Pattern['stepsPerBar'],
       number[],
       number[],
+      number[] | undefined,
+      number[] | undefined,
     ];
     const s: Pattern['steps'] = [];
     for (let i = 0; i + 1 < steps.length; i += 2)
@@ -172,6 +210,8 @@ function unpackTrack(p: Packed): Track {
         degree: notes[i + 2]!,
         velocity: notes[i + 3]!,
       });
+    unpackChances(s, stepChances);
+    unpackChances(n, noteChances);
     return { id: newId(), name: pname, lengthBars, stepsPerBar, steps: s, notes: n };
   });
   const bl: Track['blocks'] = [];
@@ -215,6 +255,12 @@ function unpackTrack(p: Packed): Track {
     fx,
     automation,
   };
+  if (extra?.h) t.humanize = extra.h;
+  if (extra?.d) {
+    const [src, on, amount, release] = extra.d as [number, number, number, number];
+    // the source is a track position until all tracks exist (see resolveDuckSources)
+    t.duck = { sourceId: `#${src}`, on: !!on, amount, release };
+  }
   if (synth) {
     const [presetId, m, advanced] = sound as [string, number[], Partial<SynthAdvanced>];
     t.synth = {
@@ -239,6 +285,16 @@ function unpackTrack(p: Packed): Track {
     };
   }
   return t;
+}
+
+function resolveDuckSources(tracks: Track[]): Track[] {
+  for (const t of tracks)
+    if (t.duck) {
+      const src = tracks[Number(t.duck.sourceId.slice(1))];
+      if (src) t.duck.sourceId = src.id;
+      else delete t.duck;
+    }
+  return tracks;
 }
 
 /** A built-in stand-in for one of the user's own sounds. */
@@ -327,7 +383,7 @@ export function decodeShare(data: string): Song {
       swing,
       key: { root, scale },
       lengthBars,
-      tracks: (tracks ?? []).map(unpackTrack),
+      tracks: resolveDuckSources((tracks ?? []).map(unpackTrack)),
       createdAt: now,
       updatedAt: now,
     });

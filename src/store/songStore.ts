@@ -24,11 +24,14 @@ import { clampDb } from '@/model/mixing';
 import { pruneLanes, targetKey, targetStatic, valueAt } from '@/model/automation';
 import { DEFAULT_LFO, LFO_RATES } from '@/model/lfo';
 import { deleteBars, duplicateBars, insertBars } from '@/model/bars';
+import { defaultDuck, defaultDuckSource, DUCK_RELEASES } from '@/model/groove';
+import { dropMissingDuckSources } from '@/model/schema';
 import type {
   AutomationLane,
   AutomationPoint,
   LfoSettings,
   AutomationTarget,
+  DuckSettings,
   FxType,
   Note,
   Pattern,
@@ -36,6 +39,7 @@ import type {
   SampleTrackSettings,
   Song,
   SongKey,
+  Step,
   StepsPerBar,
   SynthTrackSettings,
   Track,
@@ -145,6 +149,20 @@ export interface SongStore extends HistoryState {
     gestureId?: string,
   ): void;
   removeNote(trackId: string, patternId: string, noteIndex: number): void;
+  /** How often a step plays (0.1–1). */
+  setStepChance(trackId: string, patternId: string, index: number, c: number, g?: string): void;
+  /** How often a note plays (0.1–1). */
+  setNoteChance(trackId: string, patternId: string, noteIndex: number, c: number, g?: string): void;
+  /** Add what was played during a recording take (all calls with one gestureId = one undo). */
+  recordHits(
+    trackId: string,
+    patternId: string,
+    hits: { steps?: Step[]; notes?: Note[] },
+    gestureId: string,
+  ): void;
+  setHumanize(trackId: string, v: number, gestureId?: string): void;
+  /** Change (or with null, remove) a track's ducking. */
+  setDuck(trackId: string, patch: Partial<DuckSettings> | null, gestureId?: string): void;
   clearPattern(trackId: string, patternId: string): void;
 
   paintBlock(trackId: string, patternId: string, bar: number, gestureId?: string): void;
@@ -273,7 +291,11 @@ export const useSongStore = create<SongStore>((set, get) => {
       return copy.id;
     },
     removeTrack: (id) =>
-      mutate('Delete track', (d) => void (d.tracks = d.tracks.filter((t) => t.id !== id))),
+      mutate('Delete track', (d) => {
+        d.tracks = d.tracks.filter((t) => t.id !== id);
+        // tracks that ducked to it stop ducking
+        dropMissingDuckSources(d.tracks as Track[]);
+      }),
     moveTrack: (id, to) =>
       mutate('Move track', (d) => {
         const i = d.tracks.findIndex((t) => t.id === id);
@@ -413,6 +435,99 @@ export const useSongStore = create<SongStore>((set, get) => {
         (d) => {
           const n = pattern(d, trackId, patternId)?.notes[i];
           if (n) n.velocity = clamp(v, 0.1, 1);
+        },
+        g,
+      ),
+    setStepChance: (trackId, patternId, index, c, g) =>
+      mutate(
+        'Step chance',
+        (d) => {
+          const s = pattern(d, trackId, patternId)?.steps.find((x) => x.index === index);
+          if (!s) return;
+          if (c >= 0.995) delete s.chance;
+          else s.chance = clamp(c, 0.1, 1);
+        },
+        g,
+      ),
+    setNoteChance: (trackId, patternId, i, c, g) =>
+      mutate(
+        'Note chance',
+        (d) => {
+          const n = pattern(d, trackId, patternId)?.notes[i];
+          if (!n) return;
+          if (c >= 0.995) delete n.chance;
+          else n.chance = clamp(c, 0.1, 1);
+        },
+        g,
+      ),
+    recordHits: (trackId, patternId, hits, g) =>
+      mutate(
+        'Record',
+        (d) => {
+          const p = pattern(d, trackId, patternId);
+          if (!p) return;
+          const total = p.lengthBars * p.stepsPerBar;
+          for (const h of hits.steps ?? []) {
+            const index = Math.round(h.index);
+            if (index < 0 || index >= total) continue;
+            const v = clamp(h.velocity, 0.1, 1);
+            const ex = p.steps.find((x) => x.index === index);
+            if (ex) ex.velocity = Math.max(ex.velocity, v);
+            else p.steps.push({ index, velocity: v });
+          }
+          p.steps.sort((a, b) => a.index - b.index);
+          for (const n of hits.notes ?? []) {
+            const start = Math.round(n.start);
+            if (start < 0 || start >= total) continue;
+            const length = clamp(Math.round(n.length), 1, total - start);
+            const ex = p.notes.find((x) => x.start === start && x.degree === n.degree);
+            if (ex) {
+              ex.length = Math.max(ex.length, length);
+              ex.velocity = Math.max(ex.velocity, clamp(n.velocity, 0.1, 1));
+            } else
+              p.notes.push({
+                start,
+                length,
+                degree: Math.round(n.degree),
+                velocity: clamp(n.velocity, 0.1, 1),
+              });
+          }
+        },
+        g,
+      ),
+    setHumanize: (trackId, v, g) =>
+      mutate(
+        'Humanize',
+        (d) => {
+          const t = track(d, trackId);
+          if (!t) return;
+          if (v <= 0.001) delete t.humanize;
+          else t.humanize = clamp(v, 0, 1);
+        },
+        g,
+      ),
+    setDuck: (trackId, patch, g) =>
+      mutate(
+        patch ? 'Duck' : 'Remove duck',
+        (d) => {
+          const t = track(d, trackId);
+          if (!t) return;
+          if (!patch) {
+            delete t.duck;
+            return;
+          }
+          const sourceId =
+            patch.sourceId ??
+            t.duck?.sourceId ??
+            defaultDuckSource(d.tracks as Track[], trackId)?.id;
+          if (!sourceId || sourceId === trackId) return;
+          t.duck = {
+            ...(t.duck ?? defaultDuck(sourceId)),
+            ...patch,
+            sourceId,
+          };
+          t.duck.amount = clamp(t.duck.amount, 0, 1);
+          t.duck.release = clamp(Math.round(t.duck.release), 0, DUCK_RELEASES.length - 1);
         },
         g,
       ),

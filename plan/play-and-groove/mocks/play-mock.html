@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Play & Groove — UI Mock</title>
+<style>
+:root{--bg:#13141b;--panel:#1b1d27;--panel2:#232634;--panel3:#2c3042;--line:#33374a;--text:#eceef6;--muted:#9a9eb5;--dim:#6b6f86;--accent:#8b7bff;--accent2:#b3a8ff;--good:#5ee6a8;--warn:#ffb84d;--rec:#ff5c7a;--kick:#ff6b6b;--hat:#ffd166;--pad:#a78bfa;--bass:#4cc9f0}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:0 0 60px}
+button,select{font:inherit;color:inherit;background:var(--panel3);border:1px solid var(--line);border-radius:8px;padding:5px 10px;cursor:pointer}
+.ghost{background:transparent}.muted{color:var(--muted)}.small{font-size:12.5px}
+h2{font-size:15px;margin:34px auto 8px;max-width:1180px;padding:0 16px;color:var(--accent2)}
+.note{max-width:1180px;margin:0 auto 10px;color:var(--muted);font-size:13px;padding:0 16px}
+.note b{color:var(--warn)}
+.frame{max-width:1180px;margin:0 auto;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--panel)}
+.seg{display:inline-flex;background:var(--panel3);border:1px solid var(--line);border-radius:8px;overflow:hidden;vertical-align:middle}
+.seg button{border:none;border-radius:0;background:transparent;padding:4px 10px;font-size:12.5px}
+.seg button.on{background:var(--accent);color:#fff}
+.callout{font-size:11.5px;color:var(--warn)}
+/* top bar */
+.top{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--line)}
+.play{width:38px;height:38px;border-radius:50%;background:var(--good);color:#10121a;border:none;font-size:16px}
+.loopBtn.on{background:#8b7bff33;border-color:var(--accent);color:var(--accent2)}
+/* timeline */
+.tl{display:grid;grid-template-columns:200px 1fr}
+.tl .h{background:var(--panel);border-bottom:1px solid var(--line);font-size:11px;color:var(--dim);padding:6px 10px;display:flex;align-items:flex-end}
+.rulerWrap{position:relative;border-bottom:1px solid var(--line);background:var(--panel);height:52px}
+.loopbar{position:absolute;top:4px;height:16px;left:calc(4/12*100%);width:calc(4/12*100%);background:#8b7bff55;border:1px solid var(--accent);border-radius:5px;display:flex;align-items:center;justify-content:space-between;font-size:10.5px;color:#fff;padding:0 2px}
+.loopbar i{width:6px;height:12px;background:var(--accent2);border-radius:2px;cursor:ew-resize}
+.loopbar span{flex:1;text-align:center}
+.nums{position:absolute;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(12,1fr)}
+.nums span{font-size:11px;color:var(--dim);padding:5px 6px;border-left:1px solid var(--line)}
+.nums span.in{background:#8b7bff1f;color:var(--accent2)}
+.trk{padding:8px 10px;border-bottom:1px solid var(--line);display:flex;gap:8px;align-items:center;height:46px}
+.sw{width:10px;height:26px;border-radius:3px}
+.badge{font-size:11px;padding:1px 7px;border-radius:999px;background:#8b7bff33;color:var(--accent2);white-space:nowrap}
+.row{border-bottom:1px solid var(--line);display:grid;grid-template-columns:repeat(12,1fr);gap:2px;padding:7px 0;position:relative;height:46px}
+.row i{border-radius:5px}
+.shade{position:absolute;top:0;bottom:0;left:calc(4/12*100%);width:calc(4/12*100%);background:#8b7bff10;border-left:1px dashed var(--accent);border-right:1px dashed var(--accent);pointer-events:none}
+.menu{position:absolute;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:5px;font-size:12.5px;box-shadow:0 8px 30px #0008;min-width:200px;z-index:2}
+.menu div{padding:5px 10px;border-radius:6px}.menu div:hover{background:var(--panel3)}
+.menu hr{border:none;border-top:1px solid var(--line);margin:4px 0}
+/* editor */
+.ehead{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid var(--line);flex-wrap:wrap;position:relative}
+.chip{font-size:12px;padding:3px 10px;border-radius:999px;background:var(--panel3);border:1px solid var(--line)}
+.chip.on{background:var(--bass);color:#10121a;border-color:transparent}
+.keysBtn.on{border-color:var(--accent);background:#8b7bff33}
+.recBtn{border-color:#ff5c7a88;color:var(--rec)}
+.recBtn.on{background:var(--rec);color:#fff}
+.spacer{flex:1}
+.hint{font-size:12px;color:var(--muted);padding:6px 12px;border-bottom:1px solid var(--line);background:#181a23}
+.hint kbd,.pop kbd{font:11px ui-monospace,monospace;background:var(--panel3);border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:0 4px}
+.roll{display:grid;grid-template-columns:86px 1fr;position:relative}
+.keys div{height:24px;border-bottom:1px solid #262938;font-size:11px;display:flex;align-items:center;justify-content:space-between;padding:0 6px;color:var(--muted)}
+.keys div.root{color:var(--text)}
+.keys div.lit{background:#4cc9f033;color:#fff}
+.keys kbd{font:10.5px ui-monospace,monospace;background:var(--panel3);border:1px solid var(--line);border-radius:3px;padding:0 3px;color:var(--accent2)}
+.grid{position:relative;background:repeating-linear-gradient(90deg,transparent 0 calc(100%/16 - 1px),#262938 calc(100%/16 - 1px) calc(100%/16))}
+.grid .ln{height:24px;border-bottom:1px solid #262938}
+.grid .ln.lit{background:#4cc9f014}
+.n{position:absolute;height:20px;border-radius:4px;background:var(--bass);border:1px solid #10121a}
+.n.new{background:transparent;border:2px solid var(--bass);box-shadow:0 0 0 2px #4cc9f033}
+.phead{position:absolute;top:0;bottom:0;width:2px;background:var(--rec)}
+.vel{display:grid;grid-template-columns:86px 1fr;border-top:1px solid var(--line);height:54px}
+.vel .lab{font-size:11px;color:var(--dim);padding:6px}
+.vel .bars{position:relative}
+.vel .bars i{position:absolute;bottom:4px;width:8px;border-radius:2px;background:var(--bass)}
+.vel .bars i.ch{background:transparent;border:1.5px dashed var(--bass)}
+.pop{position:absolute;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:12px 14px;box-shadow:0 10px 40px #000a;font-size:12.5px;z-index:3;width:290px}
+.pop h4{margin:0 0 8px;font-size:13px}
+.pop .r{display:flex;align-items:center;gap:8px;margin:7px 0}
+.pop .r label{width:80px;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:var(--good);margin-right:4px}
+.tog{width:34px;height:19px;border-radius:999px;background:var(--accent);position:relative;display:inline-block}
+.tog::after{content:"";position:absolute;right:2px;top:2px;width:15px;height:15px;border-radius:50%;background:#fff}
+.tog.off{background:var(--panel3)}.tog.off::after{left:2px;right:auto}
+.count{position:absolute;left:100px;top:100px;background:var(--rec);color:#fff;border-radius:10px;padding:6px 12px;font-size:12.5px;z-index:2}
+/* steps */
+.pads{display:grid;grid-template-columns:repeat(16,1fr);gap:5px;padding:14px 12px}
+.pad{height:58px;border-radius:7px;background:var(--panel3);position:relative;overflow:hidden;border:1px solid var(--line)}
+.pad.on .fill{position:absolute;left:0;right:0;bottom:0;background:var(--hat)}
+.pad .dice{position:absolute;top:3px;right:4px;font-size:10px}
+.pad.ch{border:1.5px dashed var(--hat);background:#ffd16614}
+.pad.ch b{position:absolute;inset:0;display:grid;place-items:center;font-size:11px;color:var(--hat)}
+.pad.ch .lvl{position:absolute;left:0;right:0;bottom:0;background:#ffd16633}
+/* inspector */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;max-width:1180px;margin:0 auto;padding:0 16px}
+.insp{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:-12px -14px 12px;padding:0 10px}
+.tabs span{padding:10px 12px;color:var(--muted);font-size:13px}
+.tabs span.on{color:var(--text);box-shadow:inset 0 -2px var(--accent)}
+.sect{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim);margin:6px 0 8px}
+.card{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:10px}
+.card .hd{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.knob{width:46px;height:46px;border-radius:50%;background:conic-gradient(var(--accent) 0 var(--v),#33374a var(--v) 75%,transparent 75%);transform:rotate(-135deg);display:grid;place-items:center;margin:0 auto 3px}
+.knob::after{content:"";width:34px;height:34px;border-radius:50%;background:var(--panel2)}
+.knobs{display:flex;gap:18px;margin-top:6px}
+.knobs>div{text-align:center;font-size:11.5px;color:var(--muted)}
+.knobs b{display:block;color:var(--text);font-weight:500}
+.quick{border-color:#ff6b6b88}
+.duckviz{height:46px;margin-top:8px;background:#171922;border-radius:8px;border:1px solid var(--line)}
+.fx{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);margin-bottom:6px;font-size:13px}
+</style>
+</head>
+<body>
+
+<h2>1 · Loop a section (Song mode)</h2>
+<div class="note"><b>Drag along the ruler</b> across 2 or more bars to loop them. Drag the handles to resize and the bar to move it. <b>🔁 Loop</b> turns it on and off without forgetting where it is. A plain click on a bar number still sets ▼ (where playback starts). Right-click a bar for "Loop these 4/8 bars".</div>
+<div class="frame" style="overflow:visible">
+  <div class="top">
+    <button class="play">▶</button>
+    <span class="seg"><button>Pattern</button><button class="on">Song</button></span>
+    <button class="loopBtn on" title="Loop on">🔁 Loop · bars 5–8</button>
+    <span class="muted small">Tempo 120 · C minor</span>
+    <span class="spacer"></span>
+    <span class="callout">loop button only appears in Song mode</span>
+  </div>
+  <div class="tl" style="position:relative">
+    <div class="h">TRACKS</div>
+    <div class="rulerWrap">
+      <div class="loopbar"><i></i><span>🔁 bars 5–8 · ✕</span><i></i></div>
+      <div class="nums"><span>1</span><span>2</span><span>3</span><span>4</span><span class="in">5</span><span class="in">6</span><span class="in">7</span><span class="in">8</span><span>9</span><span>10</span><span>11</span><span>12</span></div>
+    </div>
+    <div class="trk"><span class="sw" style="background:var(--kick)"></span><div><b>Kick</b><div class="small muted">Dusty Kick</div></div></div>
+    <div class="row"><div class="shade"></div><i style="grid-column:1/13;background:var(--kick)"></i></div>
+    <div class="trk"><span class="sw" style="background:var(--pad)"></span><div><b>Pad</b> <span class="badge">⤵ Kick</span><div class="small muted">Synth · Soft Pad</div></div></div>
+    <div class="row"><div class="shade"></div><i style="grid-column:5/13;background:var(--pad)"></i></div>
+    <div class="menu" style="left:560px;top:40px">
+      <div>⤓ Insert 4 bars before bar 9</div><div>⧉ Duplicate 4 bars</div><div>🗑 Delete 4 bars</div><hr>
+      <div>🔁 Loop these 4 bars</div><div>🔁 Loop these 8 bars</div>
+    </div>
+  </div>
+</div>
+<div class="note" style="margin-top:8px">Export gets a choice: <b>Whole song</b> (default) / <b>Just the loop</b>. The loop isn't saved in song files or share links; it's a working tool.</div>
+
+<h2>2–4 · Play from your keyboard, MIDI and ● Rec</h2>
+<div class="note">On a synth track the letter keys play the piano roll <b>in key</b>: <b>A–;</b> = the next ten scale notes, <b>Q–P</b> = an octave up, <b>Z/X</b> = octave down/up. The keys are shown next to the note names. <b>🎛 MIDI</b> plugs in a real keyboard (Chrome, Edge, Firefox), and notes outside the key snap to the nearest note in it. <b>● Rec</b> counts in one bar, then loops the pattern with a click and adds what you play (shown as outlined notes). One undo removes the whole take.</div>
+<div class="frame" style="position:relative">
+  <div class="ehead">
+    <b>▮ Bass · Piano roll</b>
+    <span class="chip on">A</span><span class="chip">＋</span>
+    <span class="seg"><button class="on">1 bar</button><button>2</button><button>3</button><button>4</button></span>
+    <span class="seg"><button class="on">16ths</button><button>Triplets</button></span>
+    <button class="small">💡 Ideas</button>
+    <span class="spacer"></span>
+    <button class="keysBtn on small" title="Play with your computer keyboard">🎹 Keys</button>
+    <button class="small">🎛 MIDI <span class="dot"></span></button>
+    <button class="recBtn on small">● Rec</button>
+    <span class="small muted">Chord stamp</span><span class="seg"><button class="on">Off</button><button>Triad</button><button>7th</button></span>
+    <button class="ghost small">Clear</button>
+  </div>
+  <div class="count">● Recording · pass 2 · Space or ● to stop</div>
+  <div class="roll">
+    <div class="keys">
+      <div>A♭4 <kbd>R</kbd></div><div>G4 <kbd>E</kbd></div><div>F4 <kbd>W</kbd></div><div>E♭4 <kbd>Q</kbd></div><div>D4 <kbd>;</kbd></div><div class="root">C4 <kbd>L</kbd></div><div>B♭3 <kbd>K</kbd></div><div class="lit">A♭3 <kbd>J</kbd></div><div>G3 <kbd>H</kbd></div><div>F3 <kbd>G</kbd></div><div>E♭3 <kbd>F</kbd></div><div>D3 <kbd>S</kbd></div><div class="root">C3 <kbd>A</kbd></div>
+    </div>
+    <div class="grid">
+      <div class="ln"></div><div class="ln"></div><div class="ln"></div><div class="ln"></div><div class="ln"></div><div class="ln"></div><div class="ln"></div><div class="ln lit"></div><div class="ln"></div><div class="ln"></div><div class="ln"></div><div class="ln"></div><div class="ln"></div>
+      <div class="n" style="top:290px;left:0;width:calc(100%/16*2 - 2px)"></div>
+      <div class="n" style="top:290px;left:calc(100%/16*4);width:calc(100%/16*2 - 2px)"></div>
+      <div class="n" style="top:218px;left:calc(100%/16*8);width:calc(100%/16*3 - 2px)"></div>
+      <div class="n new" style="top:170px;left:calc(100%/16*11);width:calc(100%/16*2 - 2px)"></div>
+      <div class="n new" style="top:194px;left:calc(100%/16*13);width:calc(100%/16*1 - 2px)"></div>
+      <div class="phead" style="left:calc(100%/16*13.6)"></div>
+    </div>
+  </div>
+  <div class="vel">
+    <div class="lab">Loudness<br><span class="seg" style="margin-top:3px"><button class="on" style="padding:1px 5px;font-size:10.5px">Loud</button><button style="padding:1px 5px;font-size:10.5px">Chance</button></span></div>
+    <div class="bars"><i style="left:1%;height:34px"></i><i style="left:26%;height:26px"></i><i style="left:51%;height:38px"></i><i style="left:69%;height:30px"></i><i style="left:82%;height:22px"></i></div>
+  </div>
+
+  <div class="pop" style="right:150px;top:46px">
+    <h4>🎛 MIDI keyboard</h4>
+    <div class="r"><label>MIDI input</label><span class="tog"></span></div>
+    <div class="r"><label>Device</label><select style="flex:1"><option>All devices</option><option>Arturia KeyStep</option></select></div>
+    <div class="small"><span class="dot"></span>Connected: Arturia KeyStep</div>
+    <div class="small muted" style="margin-top:6px">Notes outside the key play the nearest note in it. Works in Chrome, Edge and Firefox (not Safari).</div>
+  </div>
+  <div class="pop" style="right:8px;top:300px;width:250px">
+    <h4>● Record</h4>
+    <div class="r"><label>Snap to grid</label><span class="tog"></span></div>
+    <div class="r"><label>Count-in</label><span class="seg"><button>Off</button><button class="on">1 bar</button></span></div>
+    <div class="r"><label>Click volume</label><input type="range" value="60" style="flex:1"></div>
+  </div>
+</div>
+<div class="note" style="margin-top:8px">First time on a note track, a hint appears under the header: <i>Tip: play notes with <kbd>A</kbd>–<kbd>L</kbd> on your keyboard · <kbd>Z</kbd>/<kbd>X</kbd> change octave · turn off with 🎹 Keys</i>. On drum tracks the same keys hit the drum, and in "Show all drums" A S D F… play kick, snare, hats… in order.</div>
+
+<h2>6 · Chance and humanize</h2>
+<div class="note"><b>Loudness / Chance</b> switch on the step grid. In Chance mode, dragging a step sets how often it plays (dotted outline + %). Back in Loudness mode, steps that don't always play show a 🎲. <b>Humanize</b> (Sound tab) nudges each hit's timing and loudness a little. Each loop pass varies, but exports match the first pass exactly.</div>
+<div class="frame">
+  <div class="ehead">
+    <b>▮ Hi-hat · Steps</b>
+    <span class="chip">A</span><span class="chip">＋</span>
+    <span class="spacer"></span>
+    <span class="small muted">Drag sets</span><span class="seg"><button>Loudness</button><button class="on">🎲 Chance</button></span>
+    <button class="keysBtn on small">🎹 Keys</button><button class="recBtn small">● Rec</button>
+  </div>
+  <div class="pads" id="pads"></div>
+</div>
+
+<h2>5 · Sidechain pump (Effects tab) &amp; Humanize (Sound tab)</h2>
+<div class="cols">
+  <div class="insp">
+    <div class="tabs"><span>Sound</span><span class="on">Effects</span><span>Automate</span></div>
+    <div class="card">
+      <div class="hd"><b>⤵ Duck (pump)</b><span class="spacer"></span><span class="tog"></span></div>
+      <div class="small" style="display:flex;align-items:center;gap:6px">Duck when <select><option>Kick</option><option>Snare</option><option>Bass</option></select> plays</div>
+      <div class="knobs">
+        <div><div class="knob" style="--v:52%"></div>Amount<b>70%</b></div>
+        <div><div class="knob" style="--v:37%"></div>Release<b>1/4 note</b></div>
+      </div>
+      <svg class="duckviz" viewBox="0 0 400 46" preserveAspectRatio="none" width="100%"><path d="M0 8 L2 36 C30 30 60 12 100 8 L102 36 C130 30 160 12 200 8 L202 36 C230 30 260 12 300 8 L302 36 C330 30 360 12 400 8" stroke="#a78bfa" fill="none" stroke-width="2" vector-effect="non-scaling-stroke"/><g fill="#ff6b6b"><rect x="0" y="40" width="4" height="6"/><rect x="100" y="40" width="4" height="6"/><rect x="200" y="40" width="4" height="6"/><rect x="300" y="40" width="4" height="6"/></g></svg>
+      <div class="small muted" style="margin-top:4px">This track gets quieter each time the Kick hits, then swells back: the "breathing" sound of house music.</div>
+    </div>
+    <div class="sect">Effects</div>
+    <div class="fx">⋮⋮ <b>Reverb</b><span class="spacer"></span><span class="tog"></span></div>
+    <div class="fx">⋮⋮ <b>Chorus</b><span class="spacer"></span><span class="tog off"></span></div>
+    <div class="sect" style="margin-top:12px">Add</div>
+    <button class="quick small">💓 Pump to the kick</button> <button class="small">＋ Reverb</button> <button class="small">＋ Delay</button> <span class="small muted">…</span>
+  </div>
+  <div class="insp">
+    <div class="tabs"><span class="on">Sound</span><span>Effects</span><span>Automate</span></div>
+    <div class="sect">Hi-hat · Closed Hat</div>
+    <div class="knobs">
+      <div><div class="knob" style="--v:40%"></div>Pitch<b>0</b></div>
+      <div><div class="knob" style="--v:30%"></div>Decay<b>40%</b></div>
+      <div><div class="knob" style="--v:60%"></div>Tone<b>80%</b></div>
+      <div><div class="knob" style="--v:37%"></div>Pan<b>C</b></div>
+      <div style="outline:1px dashed var(--warn);outline-offset:4px;border-radius:8px"><div class="knob" style="--v:26%"></div>Humanize<b>35%</b></div>
+    </div>
+    <div class="small muted" style="margin-top:10px">Humanize: each hit lands a tiny bit early or late and a little louder or softer, like a real drummer. 0% = exactly on the grid.</div>
+    <div class="callout" style="margin-top:6px">new knob on every track (synths too)</div>
+  </div>
+</div>
+
+<script>
+// hi-hat pads in Chance mode: steps with a chance show dotted + %
+const steps = {0:100,2:60,4:100,6:35,8:100,10:60,12:100,14:80,15:25};
+const pads = document.getElementById('pads');
+for (let i = 0; i < 16; i++) {
+  const d = document.createElement('div');
+  const c = steps[i];
+  if (c === undefined) d.className = 'pad';
+  else { d.className = 'pad ch'; d.innerHTML = `<div class="lvl" style="height:${c}%"></div><b>${c}%</b>`; }
+  pads.appendChild(d);
+}
+</script>
+</body>
+</html>

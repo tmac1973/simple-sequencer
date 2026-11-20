@@ -8,7 +8,7 @@ import {
   BeatClock,
   computeBeatEvents,
   isAudible,
-  songBeatFor,
+  playStepFor,
   type PlayContext,
   type ScheduledEvent,
 } from './scheduler';
@@ -23,6 +23,7 @@ import { degreeToMidi } from '@/model/scale';
 import { automatedSet, resetAutomation, scheduleAutomation } from './automation';
 import { valueAt, targetKey } from '@/model/automation';
 import { isLfoLane, lfoValue } from '@/model/lfo';
+import { DUCK_RELEASES } from '@/model/groove';
 import type { AutomationTarget } from '@/model/types';
 
 /**
@@ -212,13 +213,27 @@ export function scheduleBeat(
   songBeat: number,
   time: number,
   jump = false,
+  pass = 0,
 ) {
   const beatSec = beatSeconds(song.bpm);
-  for (const ev of computeBeatEvents(song, ctx, songBeat)) {
+  const ducked = song.tracks.filter((t) => t.duck?.on);
+  for (const ev of computeBeatEvents(song, ctx, songBeat, pass)) {
     const track = song.tracks.find((t) => t.id === ev.trackId);
-    if (track) dispatchEvent(graphs, track, ev, time + ev.offsetBeats * beatSec, beatSec, song);
+    if (!track) continue;
+    const at = Math.max(0, time + ev.offsetBeats * beatSec);
+    dispatchEvent(graphs, track, ev, at, beatSec, song);
+    for (const t of ducked)
+      if (t.duck!.sourceId === track.id) duckAt(graphs, t, ev.velocity, at, beatSec);
   }
   scheduleAutomation(graphs, song, songBeat, time, beatSec, jump);
+}
+
+/** One sidechain dip on `track`, for a hit of the track it ducks to. Softer hits dip less. */
+function duckAt(graphs: GraphSet, track: Track, velocity: number, at: number, beatSec: number) {
+  const d = track.duck!;
+  const depth = d.amount * Math.min(1, 0.25 + velocity);
+  const release = (DUCK_RELEASES[d.release] ?? 1) * beatSec;
+  graphs.tracks.get(track.id)?.dip(at, depth, release / 4);
 }
 
 export function warmSamples(song: Song) {
@@ -229,6 +244,10 @@ interface QueuedBeat {
   time: number;
   songBeat: number;
   beatSec: number;
+}
+
+export interface LiveHandle {
+  stop(time: number): void;
 }
 
 export interface PlayPosition {
@@ -276,8 +295,21 @@ class Engine {
 
   private playToken = 0;
 
-  async play(fromBar = 0) {
+  /** beats of count-in clicks before the music (recording) */
+  private countIn = 0;
+  /** a metronome click on every beat (recording only; never in exports) */
+  private click: { volume: number } | null = null;
+  private clickSynth: Tone.Synth | null = null;
+
+  /** True while the count-in is still clicking. */
+  get countingIn() {
+    return this.clock.running && this.queue.length === 0 && this.countIn > 0;
+  }
+
+  async play(fromBar = 0, opts: { countInBeats?: number; click?: { volume: number } } = {}) {
     if (!this.song) return;
+    this.countIn = opts.countInBeats ?? 0;
+    this.click = opts.click ?? null;
     this.stopSongPreview();
     const token = ++this.playToken;
     await ensureAudioStarted();
@@ -299,6 +331,7 @@ class Engine {
     const g = this.graphs;
     if (g) {
       g.releaseAll();
+      for (const t of g.tracks.values()) t.resetDuck(audioNow());
       g.automated = new Set();
       if (this.song) resetAutomation(g, this.song, audioNow());
     }
@@ -314,6 +347,52 @@ class Engine {
     if (!lane) return null;
     if (isLfoLane(lane)) return lfoValue(t, lane, pos.beat);
     return valueAt(lane, pos.beat / BEATS_PER_BAR);
+  }
+
+  /**
+   * Start a live note on a track (computer keyboard or MIDI). Notes on synths and melodic
+   * samples hold until `liveOff`; drum hits just play. Returns a handle for `liveOff`.
+   */
+  liveOn(trackId: string, degree: number | undefined, velocity: number): LiveHandle | null {
+    const song = this.song;
+    const graphs = this.ensureGraphs();
+    const track = song?.tracks.find((t) => t.id === trackId);
+    if (!song || !graphs || !track) return null;
+    const at = audioNow() + 0.005;
+    if (track.kind === 'synth') {
+      const v = graphs.synths.get(track.id);
+      if (!v || degree === undefined) return null;
+      const freq = v.attack(degreeToMidi(degree, song.key), at, velocity);
+      return { stop: (t) => v.release(freq, t) };
+    }
+    if (!track.sample) return null;
+    const buf = SampleRegistry.getLoaded(track.sample.sampleId);
+    if (!buf) {
+      SampleRegistry.warm(track.sample.sampleId);
+      return null;
+    }
+    const sIn = graphs.sampleInput(track.id) ?? graphs.tracks.get(track.id)?.input;
+    if (!sIn) return null;
+    if (track.sample.melodic && degree !== undefined) {
+      const midi = degreeToMidi(degree, song.key);
+      const rate = 2 ** ((midi - track.sample.rootMidi) / 12);
+      const h = triggerSample(sIn, buf, at, velocity, track.sample, rate, 30);
+      return h ? { stop: (t) => h.stop(t) } : null;
+    }
+    triggerSample(
+      sIn,
+      buf,
+      at,
+      velocity,
+      track.sample,
+      1,
+      track.sample.edit.loop ? 0.25 : undefined,
+    );
+    return { stop: () => {} };
+  }
+
+  liveOff(h: LiveHandle) {
+    h.stop(audioNow() + 0.005);
   }
 
   /** Play one note on a track right now (piano-roll audition). */
@@ -409,7 +488,15 @@ class Engine {
         () => audioNow(),
         () => beatSeconds(song.bpm),
         (counter, time) =>
-          scheduleBeat(graphs, song, ctx, counter % total, time, counter % total === 0),
+          scheduleBeat(
+            graphs,
+            song,
+            ctx,
+            counter % total,
+            time,
+            counter % total === 0,
+            Math.floor(counter / total),
+          ),
       );
       this.songPreview = { graphs, clock };
       clock.start(audioNow() + 0.06);
@@ -430,14 +517,30 @@ class Engine {
     setTimeout(() => p.graphs.dispose(), 250);
   }
 
-  private onBeat(counter: number, time: number) {
+  private tick(time: number, accent: boolean) {
+    if (!this.click) return;
+    this.clickSynth ??= new Tone.Synth({
+      oscillator: { type: 'square' },
+      envelope: { attack: 0.001, decay: 0.03, sustain: 0, release: 0.01 },
+    }).toDestination();
+    this.clickSynth.volume.value = Tone.gainToDb(Math.max(0.001, this.click.volume)) - 14;
+    this.clickSynth.triggerAttackRelease(accent ? 1760 : 1175, 0.03, time);
+  }
+
+  private onBeat(beatCounter: number, time: number) {
     const song = this.song;
     const graphs = this.graphs;
     if (!song || !graphs) return;
-    const songBeat = songBeatFor(song, this.ctx, counter, this.fromBar);
+    if (beatCounter < this.countIn) {
+      this.tick(time, beatCounter % BEATS_PER_BAR === 0);
+      return;
+    }
+    const counter = beatCounter - this.countIn;
+    const { beat: songBeat, pass } = playStepFor(song, this.ctx, counter, this.fromBar);
+    this.tick(time, songBeat % BEATS_PER_BAR === 0);
     const jump = this.lastBeat === null || songBeat !== this.lastBeat + 1;
     this.lastBeat = songBeat;
-    scheduleBeat(graphs, song, this.ctx, songBeat, time, jump);
+    scheduleBeat(graphs, song, this.ctx, songBeat, time, jump, pass);
     this.queue.push({ time, songBeat, beatSec: beatSeconds(song.bpm) });
     if (this.queue.length > 64) this.queue.splice(0, this.queue.length - 64);
   }

@@ -15,10 +15,16 @@ tracks, patterns and a song timeline, with no account and no server.
 - **Synth tracks** have 20 presets (from acid bass and supersaw to strings, organ and chiptune) and 4 friendly knobs (Tone, Punch, Space, Length), plus an Advanced drawer. Notes go in a **scale-locked piano roll**, so a note can't sound wrong, and a **chord stamp** places whole chords in one click.
 - **Patterns** (A, B, C…, 1–4 bars, 16ths or triplets) are painted onto a **song timeline**.
 - **Song arranging**: right-click a bar number to insert, duplicate or delete 1, 4 or 8 bars anywhere in the song, and everything after it moves along.
+- **Loop a section**: drag along the bar numbers to loop just those bars in Song mode while you work on them; 🔁 Loop turns it on and off, and export can render just the loop.
+- **Play from your keyboard**: the letter keys play the selected track, always in key (A–L, Q–P an octave up, Z/X to change octave), or finger-drum every drum track at once.
+- **MIDI keyboards**: plug one in and play (Chrome, Edge, Firefox); notes snap to the song's key and drum pads play each drum.
+- **● Rec**: count in, loop the pattern with a click, and record what you play from either keyboard. Each pass adds notes and one undo removes the whole take.
 - **Melodic samples**: play any sound in tune in the piano roll (piano, vocal chop…).
 - **124 built-in sounds**: 4 drum kits, a percussion kit (crash, tambourine, congas, bongos, claves…), and melodic, FX and vocal sounds. All are CC0 or CC-BY.
 - **Your own sounds**: import WAV, MP3, OGG or FLAC, or **record from your microphone**.
 - **Sample editor**: trim, reverse, tune, loop, fade and normalize. Edits never change the original file.
+- **Sidechain pump**: 💓 Pump to the kick makes a track dip each time the kick hits and swell back, the classic house "breathing" sound (any track can duck to any other).
+- **Chance and humanize**: give a step or note a chance of playing so loops vary each time round, and humanize a track so its timing and loudness feel played, not programmed. Exports match what you hear.
 - **Effects**: 8 curated effects per track (Reverb, Delay, Filter, Distortion, Compressor, EQ, Chorus, Bitcrush), each reorderable by drag. An always-on limiter stops the song from distorting.
 - **Automation lanes**: draw how a knob moves over the song.
 - **Wobble (LFO) lanes**: switch any lane to Wobble and the knob moves up and down by itself, in time with the song. Pick from 6 shapes and speeds from a 1/16 note to 8 bars, or use a one-click quick wobble (wobble bass, tremolo, auto-pan, slow sweep). The wobble's amount and speed can be automated too.

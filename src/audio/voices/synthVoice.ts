@@ -66,6 +66,17 @@ export class SynthVoice {
     this.poly.triggerAttackRelease(freq, Math.max(0.02, durationSec), time, velocity);
   }
 
+  /** Start a held note (live playing); returns what `release` needs. */
+  attack(midi: number, time: number, velocity: number): number {
+    const freq = midiToFreq(midi + this.octaveShift * 12);
+    this.poly.triggerAttack(freq, time, velocity);
+    return freq;
+  }
+
+  release(freq: number, time: number) {
+    this.poly.triggerRelease(freq, time);
+  }
+
   releaseAll() {
     this.poly.releaseAll();
   }

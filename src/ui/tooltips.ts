@@ -92,7 +92,71 @@ export const TIPS: Record<string, TipCopy> = {
   // timeline
   ruler: {
     title: 'Bar number',
-    body: 'Click to choose where Song mode starts playing. Right-click to insert, duplicate or delete bars across the whole song.',
+    body: 'Click to choose where Song mode starts playing. Drag across bars to loop them. Right-click to insert, duplicate or delete bars across the whole song.',
+  },
+  keys: {
+    title: 'Play with your keyboard',
+    body: 'When on, the letter keys play the selected track, always in key: A–L (and ;) play the scale from the root, Q–P an octave up, Z/X change octave. On drum tracks any of them hits the drum; in "Show all drums" A S D F… play each drum.',
+  },
+  midi: {
+    title: 'MIDI keyboard',
+    body: 'Play the selected track from a MIDI keyboard or pad controller plugged into your computer. Notes snap to the song’s key. Works in Chrome, Edge and Firefox.',
+  },
+  rec: {
+    title: 'Record',
+    body: 'Counts in one bar, then loops this pattern with a click while you play (on your computer keyboard or a MIDI keyboard). What you play is added to the pattern. Press again, ■ or Space to stop. One undo removes the whole take.',
+  },
+  recSettings: {
+    title: 'Recording settings',
+    body: 'How recorded notes snap into place, the count-in, and the click volume.',
+  },
+  dragSets: {
+    title: 'What dragging changes',
+    body: 'Loudness: drag a step up or down to make it louder or softer. 🎲 Chance: drag to set how often it plays, from always (100%) down to now and then (10%). Steps that don’t always play show a 🎲.',
+  },
+  stepChance: {
+    title: 'Step chance',
+    body: 'How often this step plays. Drag up for more often, down for less. Each time the loop comes round it rolls the dice again, so the beat varies. Click to turn the step off.',
+  },
+  noteChance: {
+    title: 'Note chance',
+    body: 'How often each note plays. Drag a bar up or down. Notes that don’t always play get a dashed outline.',
+  },
+  pump: {
+    title: 'Pump to the kick',
+    body: 'Makes this track dip in volume each time the kick hits, then swell back: the "breathing" sound of house and dance music. Change how much and how fast below.',
+  },
+  duckAdd: {
+    title: 'Duck to another track',
+    body: 'Make this track dip in volume each time another track plays (often called sidechain).',
+  },
+  duckSource: {
+    title: 'Duck when…',
+    body: 'Which track makes this one dip. Usually the kick drum.',
+  },
+  duckAmount: {
+    title: 'Duck amount',
+    body: 'How far the volume dips at each hit. 100% = silent for a moment.',
+  },
+  duckRelease: {
+    title: 'Duck release',
+    body: 'How quickly the volume comes back after each hit, in time with the tempo. Longer = a deeper, slower pump.',
+  },
+  humanize: {
+    title: 'Humanize',
+    body: 'Each hit lands a tiny bit early or late and a little louder or softer, like a real player. 0% = exactly on the grid. Hits on the beat move less, so the groove stays tight.',
+  },
+  loop: {
+    title: 'Loop a section',
+    body: 'Repeat just part of the song while you work on it. Drag along the bar numbers to choose the bars, then this button turns the loop on and off.',
+  },
+  loopStrip: {
+    title: 'Loop',
+    body: 'These bars repeat in Song mode. Drag the middle to move the loop, drag an end to make it longer or shorter, ✕ to remove it.',
+  },
+  loopBars: {
+    title: 'Loop these bars',
+    body: 'Repeat these bars in Song mode, so you can work on one section.',
   },
   timelineEmpty: {
     title: 'Empty bar',

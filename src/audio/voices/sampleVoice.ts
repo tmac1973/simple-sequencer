@@ -44,12 +44,12 @@ export function triggerSample(
   settings: SampleTrackSettings,
   rateMultiplier = 1,
   holdSec?: number,
-) {
+): { stop(time: number): void } | undefined {
   const e = settings.edit;
   const rate = 2 ** (e.tuneSemitones / 12) * rateMultiplier;
   const buf = e.reverse ? reversedOf(buffer) : buffer;
   const t = computeHitTiming(e, buffer.duration, rate, holdSec);
-  if (t.playDur <= 0.001) return;
+  if (t.playDur <= 0.001) return undefined;
   const src = new Tone.ToneBufferSource({
     url: new Tone.ToneAudioBuffer(buf),
     playbackRate: rate,
@@ -76,4 +76,14 @@ export function triggerSample(
   }
   src.start(time, t.offset);
   src.stop(end + 0.005);
+  return {
+    /** let go early (a live note released): a quick fade, then stop */
+    stop(at: number) {
+      if (at >= end) return;
+      gain.gain.cancelScheduledValues(at);
+      gain.gain.setValueAtTime(level, at);
+      gain.gain.linearRampToValueAtTime(0, at + 0.04);
+      src.stop(at + 0.05);
+    },
+  };
 }

@@ -1,5 +1,6 @@
 import { MAX_SONG_BARS } from './constants';
 import { SCALES } from './scale';
+import { DUCK_RELEASES } from './groove';
 import type {
   AutomationLane,
   AutomationTarget,
@@ -79,16 +80,23 @@ function oneOf<T extends string | number>(v: unknown, opts: readonly T[], path: 
 
 function step(v: unknown, p: string): Step {
   const o = obj(v, p);
-  return { index: num(o.index, `${p}.index`, 0), velocity: num(o.velocity, `${p}.velocity`, 0, 1) };
+  const s: Step = {
+    index: num(o.index, `${p}.index`, 0),
+    velocity: num(o.velocity, `${p}.velocity`, 0, 1),
+  };
+  if (o.chance !== undefined) s.chance = num(o.chance, `${p}.chance`, 0, 1);
+  return s;
 }
 function note(v: unknown, p: string): Note {
   const o = obj(v, p);
-  return {
+  const n: Note = {
     start: num(o.start, `${p}.start`, 0),
     length: num(o.length, `${p}.length`, 1),
     degree: num(o.degree, `${p}.degree`, -64, 64),
     velocity: num(o.velocity, `${p}.velocity`, 0, 1),
   };
+  if (o.chance !== undefined) n.chance = num(o.chance, `${p}.chance`, 0, 1);
+  return n;
 }
 function patternOf(v: unknown, p: string): Pattern {
   const o = obj(v, p);
@@ -209,6 +217,16 @@ function trackOf(v: unknown, p: string): Track {
     fx,
     automation,
   };
+  if (o.humanize !== undefined) t.humanize = num(o.humanize, `${p}.humanize`, 0, 1);
+  if (o.duck !== undefined) {
+    const d = obj(o.duck, `${p}.duck`);
+    t.duck = {
+      sourceId: str(d.sourceId, `${p}.duck.sourceId`),
+      on: bool(d.on, `${p}.duck.on`),
+      amount: num(d.amount, `${p}.duck.amount`, 0, 1),
+      release: num(d.release, `${p}.duck.release`, 0, DUCK_RELEASES.length - 1),
+    };
+  }
   if (kind === 'sample') {
     const s = obj(o.sample, `${p}.sample`);
     const e = obj(s.edit, `${p}.sample.edit`);
@@ -270,7 +288,9 @@ export function validateSong(raw: unknown): Song {
       scale: oneOf(key.scale, Object.keys(SCALES) as Song['key']['scale'][], 'key.scale'),
     },
     lengthBars: num(o.lengthBars, 'lengthBars', 1, MAX_SONG_BARS),
-    tracks: arr(o.tracks, 'tracks').map((t, i) => trackOf(t, `tracks[${i}]`)),
+    tracks: dropMissingDuckSources(
+      arr(o.tracks, 'tracks').map((t, i) => trackOf(t, `tracks[${i}]`)),
+    ),
     createdAt: num(o.createdAt, 'createdAt'),
     updatedAt: num(o.updatedAt, 'updatedAt'),
   };
@@ -287,4 +307,12 @@ export function migrateSong(raw: unknown): unknown {
     );
   }
   return o;
+}
+
+/** A track can't duck to a track that isn't there (or to itself). */
+export function dropMissingDuckSources(tracks: Track[]): Track[] {
+  const ids = new Set(tracks.map((t) => t.id));
+  for (const t of tracks)
+    if (t.duck && (!ids.has(t.duck.sourceId) || t.duck.sourceId === t.id)) delete t.duck;
+  return tracks;
 }

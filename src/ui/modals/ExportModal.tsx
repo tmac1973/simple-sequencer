@@ -18,7 +18,7 @@ export function ExportModal({ onClose }: { onClose: () => void }) {
   const ui = useUiStore();
   const { stage, progress, message } = useExport();
   const [format, setFormat] = useState<ExportFormat>('mp3');
-  const [range, setRange] = useState<'song' | 'loop'>('song');
+  const [range, setRange] = useState<'song' | 'loop' | 'songLoop'>('song');
   const [repeats, setRepeats] = useState<1 | 2 | 4 | 8>(4);
   const [kbps, setKbps] = useState<128 | 192 | 320>(192);
   const [bits, setBits] = useState<16 | 24>(16);
@@ -30,7 +30,12 @@ export function ExportModal({ onClose }: { onClose: () => void }) {
   const start = () =>
     void runExport(song, playContextOf(ui), {
       format,
-      range: range === 'song' ? 'song' : { loopRepeats: repeats },
+      range:
+        range === 'song'
+          ? 'song'
+          : range === 'songLoop' && ui.songLoop
+            ? { loopRepeats: repeats, songLoop: ui.songLoop }
+            : { loopRepeats: repeats },
       mp3Kbps: kbps,
       wavBits: bits,
     });
@@ -138,8 +143,22 @@ export function ExportModal({ onClose }: { onClose: () => void }) {
             Bars {region.startBar + 1}–{region.startBar + region.lengthBars}
           </span>
         </button>
+        {ui.songLoop && (
+          <button
+            role="radio"
+            aria-checked={range === 'songLoop'}
+            className={`${styles.opt} ${range === 'songLoop' ? styles.on : ''}`}
+            onClick={() => setRange('songLoop')}
+          >
+            <b>🔁 Just the song loop</b>
+            <span>
+              Bars {ui.songLoop.startBar + 1}–{ui.songLoop.startBar + ui.songLoop.lengthBars}, every
+              track
+            </span>
+          </button>
+        )}
       </div>
-      {range === 'loop' && (
+      {range !== 'song' && (
         <div
           className="small"
           style={{ marginTop: 10, display: 'flex', gap: 8, alignItems: 'center' }}

@@ -9,12 +9,14 @@ import { buildLofi } from './templates/lofi';
 import { startPersistence } from './storage/session';
 import { configureAudioContext } from './audio/context';
 import { watchSharedLinks } from './ui/sharedLink';
+import { restoreMidi } from './ui/midi';
 
 configureAudioContext();
 registerDevSamples();
 registerLibraryResolver();
 registerUserResolver();
 loadManifest().catch((e) => console.warn('[library]', e));
+void restoreMidi();
 useSongStore.getState().loadSong(buildLofi());
 const debug = typeof location !== 'undefined' && new URLSearchParams(location.search).has('debug');
 if (debug) {

@@ -2,12 +2,16 @@ import * as Tone from 'tone';
 import { GraphSet, scheduleBeat } from '@/audio/engine';
 import { DELAY_BEATS, choiceIndex } from '@/audio/effects/registry';
 import { automatedSet } from '@/audio/automation';
-import { getLoopRegion, type PlayContext } from '@/audio/scheduler';
+import { getLoopRegion, type LoopRegion, type PlayContext } from '@/audio/scheduler';
 import { SampleRegistry } from '@/audio/sampleRegistry';
 import { BEATS_PER_BAR, beatSeconds } from '@/model/timing';
 import type { Song } from '@/model/types';
 
-export type RenderRange = 'song' | { loopRepeats: 1 | 2 | 4 | 8 };
+/**
+ * The whole song, or a loop repeated: the selected pattern's loop, or with `songLoop` the
+ * bars looped in Song mode (every track playing its blocks).
+ */
+export type RenderRange = 'song' | { loopRepeats: 1 | 2 | 4 | 8; songLoop?: LoopRegion };
 
 export const MAX_TAIL = 10;
 
@@ -34,6 +38,8 @@ export interface RenderPlan {
   beats: number[];
   /** beats where playback "jumps" (start or loop restart) */
   jumps: Set<number>;
+  /** loop pass of each beat (chance and humanize vary per pass, as in live playback) */
+  passes: number[];
   ctx: PlayContext;
   musicSeconds: number;
   totalSeconds: number;
@@ -44,23 +50,29 @@ export function planRender(song: Song, ctx: PlayContext, range: RenderRange): Re
   let beats: number[];
   const jumps = new Set<number>([0]);
   let playCtx: PlayContext;
+  let passes: number[];
   if (range === 'song') {
-    playCtx = { ...ctx, playMode: 'song' };
+    playCtx = { ...ctx, playMode: 'song', songLoop: null };
     beats = Array.from({ length: song.lengthBars * BEATS_PER_BAR }, (_, i) => i);
+    passes = beats.map(() => 0);
   } else {
-    playCtx = { ...ctx, playMode: 'pattern' };
+    playCtx = range.songLoop
+      ? { ...ctx, playMode: 'song', songLoop: range.songLoop }
+      : { ...ctx, playMode: 'pattern' };
     const r = getLoopRegion(song, playCtx);
     const n = r.lengthBars * BEATS_PER_BAR;
     beats = Array.from(
       { length: n * range.loopRepeats },
       (_, i) => r.startBar * BEATS_PER_BAR + (i % n),
     );
+    passes = beats.map((_, i) => Math.floor(i / n));
     for (let k = 1; k < range.loopRepeats; k++) jumps.add(k * n);
   }
   const musicSeconds = beats.length * beatSec;
   return {
     beats,
     jumps,
+    passes,
     ctx: playCtx,
     musicSeconds,
     totalSeconds: musicSeconds + tailSeconds(song),
@@ -94,7 +106,7 @@ export async function renderSong(
       g.automated = automatedSet(song);
       await g.ready();
       plan.beats.forEach((b, i) =>
-        scheduleBeat(g, song, plan.ctx, b, i * beatSec, plan.jumps.has(i)),
+        scheduleBeat(g, song, plan.ctx, b, i * beatSec, plan.jumps.has(i), plan.passes[i]),
       );
     },
     plan.totalSeconds,

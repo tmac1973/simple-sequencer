@@ -8,12 +8,14 @@ import { TooltipLayer } from '../components/TooltipLayer';
 import { ToastHost } from '../components/ToastHost';
 import { ModalHost } from '../modals/ModalHost';
 import { useShortcuts } from '../shortcuts';
+import { useKeyboardPiano } from '../keyboardPiano';
 import { useSelectionGuard } from '../hooks/selection';
 import { useWindowDrop } from '../dragDrop';
 import { FirstRunHint } from '../FirstRunHint';
 
 export function AppShell() {
   useShortcuts();
+  useKeyboardPiano();
   useSelectionGuard();
   useWindowDrop();
   return (

@@ -229,48 +229,191 @@ function barMenu(b: number): MenuItem[] {
     const len = useSongStore.getState().song.lengthBars;
     if (ui.songStartBar >= len) ui.setSongStartBar(len - 1);
   };
-  const run = (fn: () => boolean) => () => {
-    fn();
+  /** run a bar edit; if it worked, keep the loop on the same music */
+  const run = (fn: () => boolean, at: number, count: number) => () => {
+    if (fn()) useUiStore.getState().shiftSongLoop(at, count);
     after();
+  };
+  const loop = (n: number) => () => {
+    const ui = useUiStore.getState();
+    ui.setSongLoop({ startBar: b, lengthBars: n });
+    ui.setPlayMode('song');
   };
   return [
     ...[1, 4, 8].map((n) => ({
       label: `＋ Insert ${n} empty bar${plural(n)} before bar ${b + 1}`,
       disabled: !canInsertBars(song, n),
       tip: canInsertBars(song, n) ? 'insertBars' : 'barsFull',
-      onClick: run(() => s.insertBars(b, n)),
+      onClick: run(() => s.insertBars(b, n), b, n),
     })),
     { label: '', separator: true },
     ...[1, 4, 8].map((n) => ({
       label: `⧉ Duplicate ${range(b, n)}`,
       disabled: b + n > song.lengthBars || !canInsertBars(song, n),
       tip: canInsertBars(song, n) ? 'duplicateBars' : 'barsFull',
-      onClick: run(() => s.duplicateBars(b, n)),
+      onClick: run(() => s.duplicateBars(b, n), b + n, n),
     })),
     { label: '', separator: true },
     ...[1, 4, 8].map((n) => ({
       label: `🗑 Delete ${range(b, n)}`,
       disabled: b + n > song.lengthBars,
       tip: 'deleteBars',
-      onClick: run(() => s.deleteBars(b, n)),
+      onClick: run(() => s.deleteBars(b, n), b, -n),
+    })),
+    { label: '', separator: true },
+    ...[4, 8].map((n) => ({
+      label: `🔁 Loop ${range(b, n)}`,
+      disabled: b + n > song.lengthBars,
+      tip: 'loopBars',
+      onClick: loop(n),
     })),
   ];
+}
+
+/** Which bar the pointer is over, from the ruler's left edge. */
+function barAtX(ruler: HTMLElement | null, clientX: number, bars: number) {
+  const left = ruler?.getBoundingClientRect().left ?? 0;
+  return Math.max(0, Math.min(bars - 1, Math.floor((clientX - left) / BAR_W)));
+}
+
+/** The Song-mode loop: drag the middle to move it, the ends to resize; ✕ removes it. */
+function LoopStrip({
+  bars,
+  ruler,
+}: {
+  bars: number;
+  ruler: React.RefObject<HTMLDivElement | null>;
+}) {
+  const loop = useUiStore((s) => s.songLoop);
+  const on = useUiStore((s) => s.loopOn);
+  const playMode = useUiStore((s) => s.playMode);
+  const drag = useRef<{ mode: 'move' | 'l' | 'r'; grab: number } | null>(null);
+  if (!loop || playMode !== 'song') return null;
+  const end = loop.startBar + loop.lengthBars;
+  const down = (e: React.PointerEvent, mode: 'move' | 'l' | 'r') => {
+    if (e.button !== 0) return;
+    e.stopPropagation();
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    drag.current = { mode, grab: barAtX(ruler.current, e.clientX, bars) - loop.startBar };
+  };
+  const move = (e: React.PointerEvent) => {
+    const d = drag.current;
+    const l = useUiStore.getState().songLoop;
+    if (!d || !l) return;
+    const b = barAtX(ruler.current, e.clientX, bars);
+    const lEnd = l.startBar + l.lengthBars;
+    const start =
+      d.mode === 'move'
+        ? Math.max(0, Math.min(bars - l.lengthBars, b - d.grab))
+        : d.mode === 'l'
+          ? Math.min(b, lEnd - 1)
+          : l.startBar;
+    const next = {
+      startBar: start,
+      lengthBars:
+        d.mode === 'move'
+          ? l.lengthBars
+          : d.mode === 'l'
+            ? lEnd - start
+            : Math.max(1, b + 1 - l.startBar),
+    };
+    if (next.startBar !== l.startBar || next.lengthBars !== l.lengthBars)
+      useUiStore.getState().setSongLoop(next);
+  };
+  const up = () => (drag.current = null);
+  return (
+    <div
+      className={`${styles.loopStrip} ${on ? '' : styles.loopOff}`}
+      style={{ left: loop.startBar * BAR_W + 1, width: loop.lengthBars * BAR_W - 2 }}
+      aria-label={`Loop bars ${loop.startBar + 1}–${end}`}
+      onPointerDown={(e) => down(e, 'move')}
+      onPointerMove={move}
+      onPointerUp={up}
+      onClick={(e) => e.stopPropagation()}
+      {...tip('loopStrip')}
+    >
+      <i
+        className={styles.loopHandle}
+        aria-label="Loop start"
+        onPointerDown={(e) => down(e, 'l')}
+        onPointerMove={move}
+        onPointerUp={up}
+      />
+      <span>🔁 {loop.lengthBars > 1 ? `${loop.startBar + 1}–${end}` : loop.startBar + 1}</span>
+      <button
+        className={styles.loopClose}
+        aria-label="Remove loop"
+        onPointerDown={(e) => e.stopPropagation()}
+        onClick={(e) => {
+          e.stopPropagation();
+          useUiStore.getState().setSongLoop(null);
+        }}
+      >
+        ✕
+      </button>
+      <i
+        className={styles.loopHandle}
+        aria-label="Loop end"
+        onPointerDown={(e) => down(e, 'r')}
+        onPointerMove={move}
+        onPointerUp={up}
+      />
+    </div>
+  );
 }
 
 function Ruler({ bars }: { bars: number }) {
   const song = useSongStore((s) => s.song);
   const ui = useUiStore();
   const [menu, setMenu] = useState<{ x: number; y: number; bar: number } | null>(null);
+  const ref = useRef<HTMLDivElement>(null);
+  /** a press on a bar number: a click sets ▼, a drag across bars sets a loop */
+  const press = useRef<{ from: number; to: number } | null>(null);
+  const [sweep, setSweep] = useState<{ from: number; to: number } | null>(null);
   const region = getLoopRegion(song, playContextOf(ui));
-  const inLoop = (b: number) => b >= region.startBar && b < region.startBar + region.lengthBars;
+  const showLoop = ui.playMode === 'pattern' || (ui.loopOn && !!ui.songLoop);
+  const inLoop = (b: number) =>
+    sweep
+      ? b >= Math.min(sweep.from, sweep.to) && b <= Math.max(sweep.from, sweep.to)
+      : showLoop && b >= region.startBar && b < region.startBar + region.lengthBars;
   const contentEnd = contentEndBar(song);
   return (
-    <div className={styles.ruler} style={{ width: bars * BAR_W + RULER_EXTRA }}>
+    <div
+      ref={ref}
+      className={styles.ruler}
+      style={{ width: bars * BAR_W + RULER_EXTRA }}
+      onPointerMove={(e) => {
+        const p = press.current;
+        if (!p) return;
+        const to = barAtX(ref.current, e.clientX, bars);
+        if (to === p.to) return;
+        p.to = to;
+        setSweep(p.to !== p.from ? { ...p } : null);
+      }}
+      onPointerUp={() => {
+        const p = press.current;
+        press.current = null;
+        setSweep(null);
+        if (!p) return;
+        if (p.to === p.from) {
+          ui.setSongStartBar(p.from);
+          return;
+        }
+        const startBar = Math.min(p.from, p.to);
+        ui.setSongLoop({ startBar, lengthBars: Math.abs(p.to - p.from) + 1 });
+        ui.setPlayMode('song');
+      }}
+    >
+      <LoopStrip bars={bars} ruler={ref} />
       {Array.from({ length: bars }, (_, b) => (
         <div
           key={b}
-          className={`${styles.rc} ${(ui.playMode === 'pattern' ? inLoop(b) : false) ? styles.loop : ''}`}
-          onClick={() => ui.setSongStartBar(b)}
+          className={`${styles.rc} ${inLoop(b) ? styles.loop : ''}`}
+          onPointerDown={(e) => {
+            if (e.button !== 0) return;
+            ref.current?.setPointerCapture(e.pointerId);
+            press.current = { from: b, to: b };
+          }}
           onContextMenu={(e) => {
             e.preventDefault();
             setMenu({ x: e.clientX, y: e.clientY + 6, bar: b });

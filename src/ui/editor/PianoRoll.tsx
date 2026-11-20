@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { newId } from '@/model/factories';
 import { degreeToMidi, midiName, scaleLength } from '@/model/scale';
 import type { Note, Pattern, Track } from '@/model/types';
@@ -7,6 +7,9 @@ import { getPreset } from '@/audio/synthPresets';
 import { useSongStore } from '@/store/songStore';
 import { useUiStore } from '@/store/uiStore';
 import { tip } from '../tooltips';
+import { keyLabels, useKeysOctave } from '../keyboardPiano';
+import { useLiveHeld } from '../livePlay';
+import { Segmented } from '../components/controls';
 import { chordDegrees } from './chordStamp';
 import { useCurrentStep } from './StepPads';
 import styles from './PianoRoll.module.css';
@@ -26,7 +29,9 @@ type Drag =
       moved: boolean;
     }
   | { kind: 'resize'; index: number; g: string; startX: number; note: Note }
-  | { kind: 'vel'; index: number; g: string; startY: number; v: number };
+  | { kind: 'vel'; index: number; g: string; startY: number; v: number; chance: boolean };
+
+const NO_HELD: number[] = [];
 
 export function PianoRoll({ track, pattern }: { track: Track; pattern: Pattern }) {
   const key = useSongStore((s) => s.song.key);
@@ -47,6 +52,26 @@ export function PianoRoll({ track, pattern }: { track: Track; pattern: Pattern }
   const now = useCurrentStep(track, pattern);
   const shift =
     track.kind === 'synth' ? getPreset(track.synth?.presetId ?? '').octaveShift * 12 : 0;
+  const keysOn = useUiStore((s) => s.keysOn);
+  const dragSets = useUiStore((s) => s.dragSets);
+  const octave = useKeysOctave((s) => s.octave);
+  const labels = keysOn ? keyLabels(octave, n) : null;
+  const held = useLiveHeld((s) => s.held[track.id] ?? NO_HELD);
+  const lit = new Set(held);
+  // keep what's being played in view
+  useEffect(
+    () =>
+      useLiveHeld.subscribe((st) => {
+        const ds = st.held[track.id];
+        if (!ds) return;
+        setLow((lo) => {
+          const out = ds.find((d) => d < lo || d > lo + 2 * n);
+          if (out === undefined) return lo;
+          return Math.max(MIN_LOW, Math.min(MAX_LOW, Math.floor(out / n) * n - (out < lo ? n : 0)));
+        });
+      }),
+    [track.id, n],
+  );
 
   const pos = (e: { clientX: number; clientY: number }) => {
     const r = grid.current!.getBoundingClientRect();
@@ -89,6 +114,8 @@ export function PianoRoll({ track, pattern }: { track: Track; pattern: Pattern }
     } else if (d.kind === 'resize') {
       const ds = Math.round((e.clientX - d.startX) / stepW);
       a.resizeNote(track.id, pattern.id, d.index, d.note.length + ds, d.g);
+    } else if (d.chance) {
+      a.setNoteChance(track.id, pattern.id, d.index, d.v + (d.startY - e.clientY) / 40, d.g);
     } else {
       a.setNoteVelocity(track.id, pattern.id, d.index, d.v + (d.startY - e.clientY) / 40, d.g);
     }
@@ -120,9 +147,18 @@ export function PianoRoll({ track, pattern }: { track: Track; pattern: Pattern }
               const deg = high - i;
               const isRoot = ((deg % n) + n) % n === 0;
               return (
-                <div key={deg} className={isRoot ? styles.root : ''}>
+                <div
+                  key={deg}
+                  className={`${isRoot ? styles.root : ''} ${lit.has(deg) ? styles.lit : ''}`}
+                >
                   <span>{midiName(degreeToMidi(deg, key) + shift, key)}</span>
-                  {isRoot && <span>●</span>}
+                  {labels?.has(deg) ? (
+                    <kbd className={styles.kbd} aria-hidden>
+                      {labels.get(deg)}
+                    </kbd>
+                  ) : (
+                    isRoot && <span>●</span>
+                  )}
                 </div>
               );
             })}
@@ -141,7 +177,7 @@ export function PianoRoll({ track, pattern }: { track: Track; pattern: Pattern }
               return (
                 <div
                   key={deg}
-                  className={`${styles.rrow} ${((deg % n) + n) % n === 0 ? styles.root : ''}`}
+                  className={`${styles.rrow} ${((deg % n) + n) % n === 0 ? styles.root : ''} ${lit.has(deg) ? styles.lit : ''}`}
                   style={{ pointerEvents: 'none' }}
                 />
               );
@@ -174,6 +210,8 @@ export function PianoRoll({ track, pattern }: { track: Track; pattern: Pattern }
                   height: RH - 2,
                   background: track.color,
                   opacity: 0.55 + note.velocity * 0.45,
+                  outline: note.chance !== undefined ? '1.5px dashed #fff8' : undefined,
+                  outlineOffset: -2,
                 }}
                 onPointerDown={(e) => {
                   e.stopPropagation();
@@ -227,32 +265,57 @@ export function PianoRoll({ track, pattern }: { track: Track; pattern: Pattern }
           </button>
         </div>
       </div>
-      <div className={styles.vel} style={{ marginRight: 38 }} {...tip('noteVelocity')}>
-        <span className={styles.velLabel}>Loudness</span>
-        {pattern.notes.map((note, index) => (
-          <div
-            key={index}
-            className={styles.velBar}
-            aria-label={`Loudness of note ${index + 1}`}
-            style={{
-              left: `calc(${(note.start / total) * 100}% + 2px)`,
-              height: `${note.velocity * 100}%`,
-              background: track.color,
-            }}
-            onPointerDown={(e) => {
-              capture(e);
-              drag.current = {
-                kind: 'vel',
-                index,
-                g: newId(),
-                startY: e.clientY,
-                v: note.velocity,
-              };
-            }}
-            onPointerMove={onMove}
-            onPointerUp={onUp}
+      <div
+        className={styles.vel}
+        style={{ marginRight: 38 }}
+        {...tip(dragSets === 'chance' ? 'noteChance' : 'noteVelocity')}
+      >
+        <span className={styles.velLabel}>
+          <Segmented
+            label="Note bars set"
+            tipKey="dragSets"
+            value={dragSets}
+            onChange={(v) => useUiStore.getState().setDragSets(v)}
+            options={[
+              { value: 'loudness', label: 'Loud' },
+              { value: 'chance', label: '🎲' },
+            ]}
           />
-        ))}
+        </span>
+        {pattern.notes.map((note, index) => {
+          const chance = dragSets === 'chance';
+          const v = chance ? (note.chance ?? 1) : note.velocity;
+          return (
+            <div
+              key={index}
+              className={`${styles.velBar} ${chance ? styles.chanceBar : ''}`}
+              aria-label={
+                chance
+                  ? `Chance of note ${index + 1}: ${Math.round(v * 100)}%`
+                  : `Loudness of note ${index + 1}`
+              }
+              style={{
+                left: `calc(${(note.start / total) * 100}% + 2px)`,
+                height: `${v * 100}%`,
+                background: chance ? undefined : track.color,
+                borderColor: chance ? track.color : undefined,
+              }}
+              onPointerDown={(e) => {
+                capture(e);
+                drag.current = {
+                  kind: 'vel',
+                  index,
+                  g: newId(),
+                  startY: e.clientY,
+                  v,
+                  chance,
+                };
+              }}
+              onPointerMove={onMove}
+              onPointerUp={onUp}
+            />
+          );
+        })}
       </div>
       <div
         className="small muted"
@@ -270,6 +333,11 @@ export function PianoRoll({ track, pattern }: { track: Track; pattern: Pattern }
         <span>
           Turn on <b>Chord stamp</b> to place whole chords
         </span>
+        {keysOn && (
+          <span>
+            <kbd>A</kbd>–<kbd>L</kbd> play notes · <kbd>Z</kbd>/<kbd>X</kbd> octave
+          </span>
+        )}
       </div>
     </div>
   );

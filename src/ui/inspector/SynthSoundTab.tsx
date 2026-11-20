@@ -147,6 +147,15 @@ export function SynthSoundTab({ track }: { track: Track }) {
           format={(v) => fmtPan(knobToPan(v))}
           onChange={(v, g) => a.setPan(track.id, knobToPan(v), g)}
         />
+        <Knob
+          label="Humanize"
+          tipKey="humanize"
+          color={track.color}
+          value={track.humanize ?? 0}
+          defaultValue={0}
+          format={(v) => (v < 0.01 ? 'Off' : `${Math.round(v * 100)}%`)}
+          onChange={(v, g) => a.setHumanize(track.id, v, g)}
+        />
       </div>
       <button
         className={styles.adv}

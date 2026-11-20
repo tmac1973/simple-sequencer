@@ -29,7 +29,10 @@ test('lanes stay lined up with their labels when the track list scrolls by itsel
   await page.addInitScript(() => localStorage.setItem('ss:seenHint', '1'));
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto('/');
-  await page.getByRole('row', { name: /^Track Bass/ }).first().click();
+  await page
+    .getByRole('row', { name: /^Track Bass/ })
+    .first()
+    .click();
   await page.getByRole('tab', { name: 'Automate' }).click();
   for (const knob of ['Volume', 'Pan', 'Tone', 'Space'])
     await page.getByRole('button', { name: `＋ ${knob}`, exact: true }).click();

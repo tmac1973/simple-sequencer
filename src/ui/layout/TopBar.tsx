@@ -142,6 +142,36 @@ function Swing() {
   );
 }
 
+/** Song mode: loop a section. With no loop yet, loops 4 bars from ▼. */
+function LoopButton() {
+  const loop = useUiStore((s) => s.songLoop);
+  const on = useUiStore((s) => s.loopOn);
+  const len = useSongStore((s) => s.song.lengthBars);
+  const ui = useUiStore.getState();
+  const label = loop
+    ? loop.lengthBars > 1
+      ? `bars ${loop.startBar + 1}–${loop.startBar + loop.lengthBars}`
+      : `bar ${loop.startBar + 1}`
+    : '';
+  return (
+    <button
+      className={`${styles.loopBtn} ${on ? styles.loopOn : ''}`}
+      aria-pressed={on}
+      aria-label={on ? `Loop on, ${label}` : 'Loop'}
+      onClick={() => {
+        if (loop) ui.setLoopOn(!on);
+        else {
+          const start = Math.min(ui.songStartBar, Math.max(0, len - 1));
+          ui.setSongLoop({ startBar: start, lengthBars: Math.min(4, len - start) });
+        }
+      }}
+      {...tip('loop')}
+    >
+      🔁 Loop{on && <span className={styles.loopRange}> · {label}</span>}
+    </button>
+  );
+}
+
 export function TopBar() {
   const name = useSongStore((s) => s.song.name);
   const setName = useSongStore((s) => s.setName);
@@ -191,6 +221,7 @@ export function TopBar() {
             { value: 'song', label: 'Song' },
           ]}
         />
+        {playMode === 'song' && <LoopButton />}
       </div>
       <Tempo />
       <KeyPicker />

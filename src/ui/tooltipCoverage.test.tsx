@@ -85,6 +85,23 @@ describe('every control has a plain-English tooltip', () => {
     expect(missing(document)).toEqual([]);
   });
 
+  it('pump card, chance mode, MIDI and recording settings', async () => {
+    const song = useSongStore.getState().song;
+    const synth = song.tracks.find((t) => t.kind === 'synth')!;
+    useSongStore.getState().setDuck(synth.id, { on: true });
+    useUiStore.setState({ inspectorTab: 'fx', selectedTrackId: synth.id, dragSets: 'chance' });
+    render(<AppShell />);
+    await act(async () => {});
+    expect(document.querySelector('[aria-label="Duck (pump)"]')).not.toBeNull();
+    for (const label of ['MIDI keyboard', 'Recording settings']) {
+      await act(async () => {
+        (document.querySelector(`[aria-label="${label}"]`) as HTMLElement).click();
+      });
+    }
+    expect(document.querySelector('[aria-label="MIDI keyboard settings"]')).not.toBeNull();
+    expect(missing(document)).toEqual([]);
+  });
+
   it.each([
     'newSong',
     'browser',
