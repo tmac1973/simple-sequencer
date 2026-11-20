@@ -9,16 +9,20 @@ tracks, patterns and a song timeline, with no account and no server.
 
 ## What you can do
 
-- **Start playing straight away** with four ready-made templates: Lo-fi Beat, House, Hip-hop and Empty.
+- **Start playing straight away** with five ready-made templates: Lo-fi Beat, House, Hip-hop, Trip-hop and Empty.
+- **💡 Ideas**: a library of 106 ready-made grooves, fills, percussion, basslines, chords and melodies. Preview one, then drop it into your song. It fits your key and picks matching sounds.
 - **Drum and sample tracks** use a step grid. Drag up or down on a step to make it louder or softer. "Show all drums" shows the whole kit at once.
-- **Synth tracks** have 10 presets and 4 friendly knobs (Tone, Punch, Space, Length), plus an Advanced drawer. Notes go in a **scale-locked piano roll**, so a note can't sound wrong, and a **chord stamp** places whole chords in one click.
+- **Synth tracks** have 20 presets (from acid bass and supersaw to strings, organ and chiptune) and 4 friendly knobs (Tone, Punch, Space, Length), plus an Advanced drawer. Notes go in a **scale-locked piano roll**, so a note can't sound wrong, and a **chord stamp** places whole chords in one click.
 - **Patterns** (A, B, C…, 1–4 bars, 16ths or triplets) are painted onto a **song timeline**.
+- **Song arranging**: right-click a bar number to insert, duplicate or delete 1, 4 or 8 bars anywhere in the song, and everything after it moves along.
 - **Melodic samples**: play any sound in tune in the piano roll (piano, vocal chop…).
-- **85 built-in sounds** in 4 drum kits, plus melodic, FX and vocal sounds. All are CC0 or CC-BY.
+- **124 built-in sounds**: 4 drum kits, a percussion kit (crash, tambourine, congas, bongos, claves…), and melodic, FX and vocal sounds. All are CC0 or CC-BY.
 - **Your own sounds**: import WAV, MP3, OGG or FLAC, or **record from your microphone**.
 - **Sample editor**: trim, reverse, tune, loop, fade and normalize. Edits never change the original file.
 - **Effects**: 8 curated effects per track (Reverb, Delay, Filter, Distortion, Compressor, EQ, Chorus, Bitcrush), each reorderable by drag. An always-on limiter stops the song from distorting.
 - **Automation lanes**: draw how a knob moves over the song.
+- **Wobble (LFO) lanes**: switch any lane to Wobble and the knob moves up and down by itself, in time with the song. Pick from 6 shapes and speeds from a 1/16 note to 8 bars, or use a one-click quick wobble (wobble bass, tremolo, auto-pan, slow sweep). The wobble's amount and speed can be automated too.
+- **Share links**: 🔗 Share turns your song into a link. Whoever opens it gets the song in their browser, with no account or server. Sounds you recorded or imported are swapped for similar built-in ones.
 - **Saving and export**: autosave in your browser, a song library, `.json`/`.zip` song files, and **WAV/MP3 export**.
 - **Help as you go**: undo/redo, keyboard shortcuts (press `?`), and a plain-English tooltip on every control.
 
@@ -43,6 +47,8 @@ npm run e2e:perf   # stress-song performance check (run alone; timing-sensitive)
 The manual listening checklist is in [`docs/QA-CHECKLIST.md`](docs/QA-CHECKLIST.md).
 
 ## Deploy (GitHub Pages)
+
+The live app at https://tmac1973.github.io/simple-sequencer/ is deployed this way.
 
 1. Create a GitHub repository and push `main`.
 2. In the repository settings, go to **Pages** and set **Source: GitHub Actions**.
