@@ -130,12 +130,78 @@ describe('docs/SONG_FORMAT.md', () => {
   it('example song files are valid and only use built-in sounds and presets', () => {
     const ids = new Set([...manifest.samples.map((s) => s.id), ...Object.keys(DEV_SAMPLES)]);
     const presets = new Set(PRESETS.map((p) => p.id));
-    for (const f of ['docs/examples/example-song.json']) {
+    for (const f of ['docs/examples/example-song.json', 'docs/examples/showcase-song.json']) {
       const song = validateSong(JSON.parse(readFileSync(resolve(root, f), 'utf8')));
       for (const t of song.tracks) {
         if (t.sample) expect(ids.has(t.sample.sampleId), `${f}: ${t.sample.sampleId}`).toBe(true);
         if (t.synth) expect(presets.has(t.synth.presetId), `${f}: ${t.synth.presetId}`).toBe(true);
       }
     }
+  });
+});
+
+describe('docs/examples/showcase-song.json', () => {
+  const song = JSON.parse(readFileSync(resolve(root, 'docs/examples/showcase-song.json'), 'utf8'));
+  const tracks = song.tracks;
+  const patterns = tracks.flatMap((t) => t.patterns);
+  const lanes = tracks.flatMap((t) => t.automation);
+  const samples = tracks.filter((t) => t.sample).map((t) => t.sample);
+  const synths = tracks.filter((t) => t.synth).map((t) => t.synth);
+
+  it('uses every effect type', () => {
+    expect(new Set(tracks.flatMap((t) => t.fx.map((f) => f.type)))).toEqual(new Set(FX_ORDER));
+  });
+
+  it('uses every automation target and both lane modes', () => {
+    const kinds = new Set(
+      lanes.map((l) => [l.target.kind, l.target.param ?? l.target.macro ?? ''].join(':')),
+    );
+    for (const k of [
+      'track:volume',
+      'track:pan',
+      'synthMacro:tone',
+      'synthMacro:space',
+      'sampleTone:',
+      'fx:cutoff',
+      'lfo:amount',
+      'lfo:speed',
+    ])
+      expect(kinds, k).toContain(k);
+    expect(lanes.some((l) => l.mode === 'lfo' && l.lfo)).toBe(true);
+    expect(lanes.some((l) => !l.visible)).toBe(true);
+    // a vertical jump: two points on the same bar
+    expect(lanes.some((l) => l.points.some((p, i) => i > 0 && p.bar === l.points[i - 1].bar))).toBe(
+      true,
+    );
+  });
+
+  it('uses every track, pattern, step and note option', () => {
+    expect(song.swing).toBeGreaterThan(0);
+    expect(new Set(tracks.map((t) => t.kind))).toEqual(new Set(['sample', 'synth']));
+    expect(tracks.some((t) => t.mute)).toBe(true);
+    expect(tracks.some((t) => t.pan !== 0 && t.volumeDb !== 0)).toBe(true);
+    expect(tracks.some((t) => t.humanize > 0)).toBe(true);
+    expect(tracks.some((t) => t.duck?.on)).toBe(true);
+    expect(tracks.some((t) => t.patterns.length > 1)).toBe(true);
+    expect(new Set(patterns.map((p) => p.stepsPerBar))).toEqual(new Set([16, 24]));
+    expect(new Set(patterns.map((p) => p.lengthBars)).size).toBeGreaterThanOrEqual(3);
+    expect(patterns.some((p) => p.steps.some((s) => s.chance !== undefined))).toBe(true);
+    expect(patterns.some((p) => p.notes.some((n) => n.chance !== undefined))).toBe(true);
+    expect(patterns.some((p) => p.notes.some((n) => n.degree < 0))).toBe(true);
+  });
+
+  it('uses every sample and synth setting', () => {
+    expect(new Set(samples.map((s) => s.melodic))).toEqual(new Set([true, false]));
+    expect(samples.some((s) => s.tone < 1)).toBe(true);
+    for (const k of ['reverse', 'loop', 'normalize'])
+      expect(
+        samples.some((s) => s.edit[k]),
+        k,
+      ).toBe(true);
+    for (const k of ['loopStart', 'tuneSemitones', 'fadeOut'])
+      expect(samples.some((s) => s.edit[k] !== 0), k).toBe(true);
+    expect(samples.some((s) => s.edit.end < 1)).toBe(true);
+    expect(synths.some((s) => Object.keys(s.advanced).length > 0)).toBe(true);
+    expect(tracks.some((t) => t.fx.some((f) => !f.enabled))).toBe(true);
   });
 });

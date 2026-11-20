@@ -1,0 +1,2023 @@
+{
+  "format": "simple-sequencer-song",
+  "version": 1,
+  "id": "format-showcase",
+  "name": "Format Showcase",
+  "bpm": 92,
+  "swing": 0.15,
+  "key": {
+    "root": 2,
+    "scale": "dorian"
+  },
+  "lengthBars": 16,
+  "tracks": [
+    {
+      "id": "kick",
+      "name": "Kick",
+      "color": "#ff6b6b",
+      "kind": "sample",
+      "volumeDb": -3,
+      "pan": 0,
+      "mute": false,
+      "solo": false,
+      "patterns": [
+        {
+          "id": "kick-A",
+          "name": "A",
+          "lengthBars": 1,
+          "stepsPerBar": 16,
+          "steps": [
+            {
+              "index": 0,
+              "velocity": 1
+            },
+            {
+              "index": 7,
+              "velocity": 0.7,
+              "chance": 0.6
+            },
+            {
+              "index": 10,
+              "velocity": 0.95
+            }
+          ],
+          "notes": []
+        },
+        {
+          "id": "kick-B",
+          "name": "B",
+          "lengthBars": 1,
+          "stepsPerBar": 16,
+          "steps": [
+            {
+              "index": 0,
+              "velocity": 1
+            },
+            {
+              "index": 7,
+              "velocity": 0.7
+            },
+            {
+              "index": 10,
+              "velocity": 0.95
+            },
+            {
+              "index": 13,
+              "velocity": 0.6
+            },
+            {
+              "index": 15,
+              "velocity": 0.8
+            }
+          ],
+          "notes": []
+        }
+      ],
+      "blocks": [
+        {
+          "id": "kick-A-at4",
+          "patternId": "kick-A",
+          "startBar": 4
+        },
+        {
+          "id": "kick-A-at5",
+          "patternId": "kick-A",
+          "startBar": 5
+        },
+        {
+          "id": "kick-A-at6",
+          "patternId": "kick-A",
+          "startBar": 6
+        },
+        {
+          "id": "kick-A-at8",
+          "patternId": "kick-A",
+          "startBar": 8
+        },
+        {
+          "id": "kick-A-at9",
+          "patternId": "kick-A",
+          "startBar": 9
+        },
+        {
+          "id": "kick-A-at10",
+          "patternId": "kick-A",
+          "startBar": 10
+        },
+        {
+          "id": "kick-A-at14",
+          "patternId": "kick-A",
+          "startBar": 14
+        },
+        {
+          "id": "kick-B-at7",
+          "patternId": "kick-B",
+          "startBar": 7
+        },
+        {
+          "id": "kick-B-at11",
+          "patternId": "kick-B",
+          "startBar": 11
+        },
+        {
+          "id": "kick-B-at15",
+          "patternId": "kick-B",
+          "startBar": 15
+        }
+      ],
+      "fx": [],
+      "automation": [],
+      "sample": {
+        "melodic": false,
+        "rootMidi": 60,
+        "tone": 1,
+        "sampleId": "lib:dusty-kick",
+        "edit": {
+          "start": 0,
+          "end": 0.8,
+          "reverse": false,
+          "loop": false,
+          "loopStart": 0,
+          "tuneSemitones": 0,
+          "fadeOut": 0,
+          "normalize": true
+        }
+      }
+    },
+    {
+      "id": "snare",
+      "name": "Snare",
+      "color": "#ffb84d",
+      "kind": "sample",
+      "volumeDb": -2,
+      "pan": 0,
+      "mute": false,
+      "solo": false,
+      "patterns": [
+        {
+          "id": "snare-A",
+          "name": "A",
+          "lengthBars": 1,
+          "stepsPerBar": 16,
+          "steps": [
+            {
+              "index": 4,
+              "velocity": 0.95
+            },
+            {
+              "index": 12,
+              "velocity": 0.95
+            },
+            {
+              "index": 15,
+              "velocity": 0.3,
+              "chance": 0.4
+            }
+          ],
+          "notes": []
+        },
+        {
+          "id": "snare-B",
+          "name": "B",
+          "lengthBars": 1,
+          "stepsPerBar": 16,
+          "steps": [
+            {
+              "index": 4,
+              "velocity": 0.95
+            },
+            {
+              "index": 12,
+              "velocity": 0.95
+            },
+            {
+              "index": 13,
+              "velocity": 0.4
+            },
+            {
+              "index": 14,
+              "velocity": 0.6
+            },
+            {
+              "index": 15,
+              "velocity": 0.8
+            }
+          ],
+          "notes": []
+        }
+      ],
+      "blocks": [
+        {
+          "id": "snare-A-at4",
+          "patternId": "snare-A",
+          "startBar": 4
+        },
+        {
+          "id": "snare-A-at5",
+          "patternId": "snare-A",
+          "startBar": 5
+        },
+        {
+          "id": "snare-A-at6",
+          "patternId": "snare-A",
+          "startBar": 6
+        },
+        {
+          "id": "snare-A-at8",
+          "patternId": "snare-A",
+          "startBar": 8
+        },
+        {
+          "id": "snare-A-at9",
+          "patternId": "snare-A",
+          "startBar": 9
+        },
+        {
+          "id": "snare-A-at10",
+          "patternId": "snare-A",
+          "startBar": 10
+        },
+        {
+          "id": "snare-A-at14",
+          "patternId": "snare-A",
+          "startBar": 14
+        },
+        {
+          "id": "snare-B-at7",
+          "patternId": "snare-B",
+          "startBar": 7
+        },
+        {
+          "id": "snare-B-at11",
+          "patternId": "snare-B",
+          "startBar": 11
+        },
+        {
+          "id": "snare-B-at15",
+          "patternId": "snare-B",
+          "startBar": 15
+        }
+      ],
+      "fx": [
+        {
+          "id": "snare-comp",
+          "type": "compressor",
+          "enabled": true,
+          "params": {
+            "squash": 0.6,
+            "makeup": 0.35,
+            "attack": 0.3,
+            "release": 0.35
+          }
+        }
+      ],
+      "automation": [],
+      "humanize": 0.3,
+      "sample": {
+        "melodic": false,
+        "rootMidi": 60,
+        "tone": 0.8,
+        "sampleId": "lib:dusty-snare",
+        "edit": {
+          "start": 0,
+          "end": 1,
+          "reverse": false,
+          "loop": false,
+          "loopStart": 0,
+          "tuneSemitones": -2,
+          "fadeOut": 0.3,
+          "normalize": false
+        }
+      }
+    },
+    {
+      "id": "hats",
+      "name": "Hi-hat",
+      "color": "#ffe066",
+      "kind": "sample",
+      "volumeDb": -6,
+      "pan": 0,
+      "mute": false,
+      "solo": false,
+      "patterns": [
+        {
+          "id": "hats-A",
+          "name": "A",
+          "lengthBars": 1,
+          "stepsPerBar": 16,
+          "steps": [
+            {
+              "index": 0,
+              "velocity": 0.8
+            },
+            {
+              "index": 1,
+              "velocity": 0.45
+            },
+            {
+              "index": 2,
+              "velocity": 0.8
+            },
+            {
+              "index": 3,
+              "velocity": 0.45
+            },
+            {
+              "index": 4,
+              "velocity": 0.8
+            },
+            {
+              "index": 5,
+              "velocity": 0.45
+            },
+            {
+              "index": 6,
+              "velocity": 0.8
+            },
+            {
+              "index": 7,
+              "velocity": 0.4,
+              "chance": 0.6
+            },
+            {
+              "index": 8,
+              "velocity": 0.8
+            },
+            {
+              "index": 9,
+              "velocity": 0.45
+            },
+            {
+              "index": 10,
+              "velocity": 0.8
+            },
+            {
+              "index": 11,
+              "velocity": 0.45
+            },
+            {
+              "index": 12,
+              "velocity": 0.8
+            },
+            {
+              "index": 13,
+              "velocity": 0.45
+            },
+            {
+              "index": 14,
+              "velocity": 0.5,
+              "chance": 0.5
+            },
+            {
+              "index": 15,
+              "velocity": 0.45
+            }
+          ],
+          "notes": []
+        }
+      ],
+      "blocks": [
+        {
+          "id": "hats-A-at4",
+          "patternId": "hats-A",
+          "startBar": 4
+        },
+        {
+          "id": "hats-A-at5",
+          "patternId": "hats-A",
+          "startBar": 5
+        },
+        {
+          "id": "hats-A-at6",
+          "patternId": "hats-A",
+          "startBar": 6
+        },
+        {
+          "id": "hats-A-at7",
+          "patternId": "hats-A",
+          "startBar": 7
+        },
+        {
+          "id": "hats-A-at8",
+          "patternId": "hats-A",
+          "startBar": 8
+        },
+        {
+          "id": "hats-A-at9",
+          "patternId": "hats-A",
+          "startBar": 9
+        },
+        {
+          "id": "hats-A-at10",
+          "patternId": "hats-A",
+          "startBar": 10
+        },
+        {
+          "id": "hats-A-at11",
+          "patternId": "hats-A",
+          "startBar": 11
+        },
+        {
+          "id": "hats-A-at14",
+          "patternId": "hats-A",
+          "startBar": 14
+        },
+        {
+          "id": "hats-A-at15",
+          "patternId": "hats-A",
+          "startBar": 15
+        }
+      ],
+      "fx": [],
+      "automation": [
+        {
+          "id": "hats-pan",
+          "target": {
+            "kind": "track",
+            "param": "pan"
+          },
+          "visible": true,
+          "points": [],
+          "mode": "lfo",
+          "lfo": {
+            "shape": "sine",
+            "rate": 5,
+            "depth": 0.5,
+            "center": 0.5
+          }
+        },
+        {
+          "id": "hats-pan-speed",
+          "target": {
+            "kind": "lfo",
+            "laneId": "hats-pan",
+            "param": "speed"
+          },
+          "visible": false,
+          "points": [
+            {
+              "bar": 0,
+              "value": 0.71
+            },
+            {
+              "bar": 8,
+              "value": 0.71
+            },
+            {
+              "bar": 8,
+              "value": 0.57
+            }
+          ]
+        }
+      ],
+      "humanize": 0.5,
+      "sample": {
+        "melodic": false,
+        "rootMidi": 60,
+        "tone": 1,
+        "sampleId": "lib:dusty-hat",
+        "edit": {
+          "start": 0,
+          "end": 0.6,
+          "reverse": false,
+          "loop": false,
+          "loopStart": 0,
+          "tuneSemitones": 0,
+          "fadeOut": 0,
+          "normalize": false
+        }
+      }
+    },
+    {
+      "id": "shaker",
+      "name": "Shaker",
+      "color": "#5ee6a8",
+      "kind": "sample",
+      "volumeDb": -10,
+      "pan": 0.35,
+      "mute": false,
+      "solo": false,
+      "patterns": [
+        {
+          "id": "shaker-A",
+          "name": "A",
+          "lengthBars": 2,
+          "stepsPerBar": 24,
+          "steps": [
+            {
+              "index": 0,
+              "velocity": 0.7
+            },
+            {
+              "index": 2,
+              "velocity": 0.4,
+              "chance": 0.85
+            },
+            {
+              "index": 4,
+              "velocity": 0.4,
+              "chance": 0.85
+            },
+            {
+              "index": 6,
+              "velocity": 0.7
+            },
+            {
+              "index": 8,
+              "velocity": 0.4,
+              "chance": 0.85
+            },
+            {
+              "index": 10,
+              "velocity": 0.4,
+              "chance": 0.85
+            },
+            {
+              "index": 12,
+              "velocity": 0.7
+            },
+            {
+              "index": 14,
+              "velocity": 0.4,
+              "chance": 0.85
+            },
+            {
+              "index": 16,
+              "velocity": 0.4,
+              "chance": 0.85
+            },
+            {
+              "index": 18,
+              "velocity": 0.7
+            },
+            {
+              "index": 20,
+              "velocity": 0.4,
+              "chance": 0.85
+            },
+            {
+              "index": 22,
+              "velocity": 0.4,
+              "chance": 0.85
+            },
+            {
+              "index": 24,
+              "velocity": 0.7
+            },
+            {
+              "index": 26,
+              "velocity": 0.4,
+              "chance": 0.85
+            },
+            {
+              "index": 28,
+              "velocity": 0.4,
+              "chance": 0.85
+            },
+            {
+              "index": 30,
+              "velocity": 0.7
+            },
+            {
+              "index": 32,
+              "velocity": 0.4,
+              "chance": 0.85
+            },
+            {
+              "index": 34,
+              "velocity": 0.4,
+              "chance": 0.85
+            },
+            {
+              "index": 36,
+              "velocity": 0.7
+            },
+            {
+              "index": 38,
+              "velocity": 0.4,
+              "chance": 0.85
+            },
+            {
+              "index": 40,
+              "velocity": 0.4,
+              "chance": 0.85
+            },
+            {
+              "index": 42,
+              "velocity": 0.7
+            },
+            {
+              "index": 44,
+              "velocity": 0.4,
+              "chance": 0.85
+            },
+            {
+              "index": 46,
+              "velocity": 0.4,
+              "chance": 0.85
+            }
+          ],
+          "notes": []
+        }
+      ],
+      "blocks": [
+        {
+          "id": "shaker-A-at8",
+          "patternId": "shaker-A",
+          "startBar": 8
+        },
+        {
+          "id": "shaker-A-at10",
+          "patternId": "shaker-A",
+          "startBar": 10
+        }
+      ],
+      "fx": [],
+      "automation": [],
+      "humanize": 0.6,
+      "sample": {
+        "melodic": false,
+        "rootMidi": 60,
+        "tone": 1,
+        "sampleId": "lib:club-perc-shaker",
+        "edit": {
+          "start": 0,
+          "end": 1,
+          "reverse": false,
+          "loop": false,
+          "loopStart": 0,
+          "tuneSemitones": 0,
+          "fadeOut": 0,
+          "normalize": false
+        }
+      }
+    },
+    {
+      "id": "bass",
+      "name": "Bass",
+      "color": "#4dc9ff",
+      "kind": "synth",
+      "volumeDb": -4,
+      "pan": 0,
+      "mute": false,
+      "solo": false,
+      "patterns": [
+        {
+          "id": "bass-A",
+          "name": "A",
+          "lengthBars": 4,
+          "stepsPerBar": 16,
+          "steps": [],
+          "notes": [
+            {
+              "start": 0,
+              "length": 3,
+              "degree": 0,
+              "velocity": 0.9
+            },
+            {
+              "start": 6,
+              "length": 2,
+              "degree": 0,
+              "velocity": 0.75
+            },
+            {
+              "start": 10,
+              "length": 2,
+              "degree": 7,
+              "velocity": 0.7
+            },
+            {
+              "start": 14,
+              "length": 1,
+              "degree": 2,
+              "velocity": 0.55,
+              "chance": 0.7
+            },
+            {
+              "start": 16,
+              "length": 3,
+              "degree": 3,
+              "velocity": 0.9
+            },
+            {
+              "start": 22,
+              "length": 2,
+              "degree": 3,
+              "velocity": 0.75
+            },
+            {
+              "start": 26,
+              "length": 2,
+              "degree": 10,
+              "velocity": 0.7
+            },
+            {
+              "start": 30,
+              "length": 1,
+              "degree": 5,
+              "velocity": 0.55,
+              "chance": 0.7
+            },
+            {
+              "start": 32,
+              "length": 3,
+              "degree": 6,
+              "velocity": 0.9
+            },
+            {
+              "start": 38,
+              "length": 2,
+              "degree": 6,
+              "velocity": 0.75
+            },
+            {
+              "start": 42,
+              "length": 2,
+              "degree": 13,
+              "velocity": 0.7
+            },
+            {
+              "start": 46,
+              "length": 1,
+              "degree": 8,
+              "velocity": 0.55,
+              "chance": 0.7
+            },
+            {
+              "start": 48,
+              "length": 3,
+              "degree": 4,
+              "velocity": 0.9
+            },
+            {
+              "start": 54,
+              "length": 2,
+              "degree": 4,
+              "velocity": 0.75
+            },
+            {
+              "start": 58,
+              "length": 2,
+              "degree": 11,
+              "velocity": 0.7
+            },
+            {
+              "start": 62,
+              "length": 1,
+              "degree": 6,
+              "velocity": 0.55,
+              "chance": 0.7
+            }
+          ]
+        },
+        {
+          "id": "bass-B",
+          "name": "B",
+          "lengthBars": 2,
+          "stepsPerBar": 16,
+          "steps": [],
+          "notes": [
+            {
+              "start": 0,
+              "length": 3,
+              "degree": 6,
+              "velocity": 0.9
+            },
+            {
+              "start": 6,
+              "length": 2,
+              "degree": 6,
+              "velocity": 0.75
+            },
+            {
+              "start": 10,
+              "length": 4,
+              "degree": 5,
+              "velocity": 0.7
+            },
+            {
+              "start": 16,
+              "length": 6,
+              "degree": 4,
+              "velocity": 0.9
+            },
+            {
+              "start": 24,
+              "length": 8,
+              "degree": 0,
+              "velocity": 0.85
+            }
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "bass-A-at4",
+          "patternId": "bass-A",
+          "startBar": 4
+        },
+        {
+          "id": "bass-A-at8",
+          "patternId": "bass-A",
+          "startBar": 8
+        },
+        {
+          "id": "bass-B-at14",
+          "patternId": "bass-B",
+          "startBar": 14
+        }
+      ],
+      "fx": [
+        {
+          "id": "bass-eq",
+          "type": "eq",
+          "enabled": true,
+          "params": {
+            "low": 0.65,
+            "mid": 0.45,
+            "high": 0.4,
+            "lowFreq": 0.35,
+            "highFreq": 0.5
+          }
+        }
+      ],
+      "automation": [],
+      "duck": {
+        "sourceId": "kick",
+        "on": true,
+        "amount": 0.5,
+        "release": 1
+      },
+      "synth": {
+        "presetId": "warm-bass",
+        "macros": {
+          "tone": 0.4,
+          "punch": 0.65,
+          "space": 0,
+          "length": 0.35
+        },
+        "advanced": {
+          "glide": 0.04,
+          "filterQ": 3
+        }
+      }
+    },
+    {
+      "id": "keys",
+      "name": "Rhodes",
+      "color": "#a78bfa",
+      "kind": "synth",
+      "volumeDb": -4,
+      "pan": -0.15,
+      "mute": false,
+      "solo": false,
+      "patterns": [
+        {
+          "id": "keys-A",
+          "name": "A",
+          "lengthBars": 4,
+          "stepsPerBar": 16,
+          "steps": [],
+          "notes": [
+            {
+              "start": 0,
+              "length": 6,
+              "degree": 0,
+              "velocity": 0.75
+            },
+            {
+              "start": 0,
+              "length": 6,
+              "degree": 2,
+              "velocity": 0.75
+            },
+            {
+              "start": 0,
+              "length": 6,
+              "degree": 4,
+              "velocity": 0.75
+            },
+            {
+              "start": 0,
+              "length": 6,
+              "degree": 6,
+              "velocity": 0.75
+            },
+            {
+              "start": 7,
+              "length": 3,
+              "degree": 0,
+              "velocity": 0.5,
+              "chance": 0.8
+            },
+            {
+              "start": 7,
+              "length": 3,
+              "degree": 2,
+              "velocity": 0.5,
+              "chance": 0.8
+            },
+            {
+              "start": 7,
+              "length": 3,
+              "degree": 4,
+              "velocity": 0.5,
+              "chance": 0.8
+            },
+            {
+              "start": 7,
+              "length": 3,
+              "degree": 6,
+              "velocity": 0.5,
+              "chance": 0.8
+            },
+            {
+              "start": 10,
+              "length": 6,
+              "degree": 0,
+              "velocity": 0.65
+            },
+            {
+              "start": 10,
+              "length": 6,
+              "degree": 2,
+              "velocity": 0.65
+            },
+            {
+              "start": 10,
+              "length": 6,
+              "degree": 4,
+              "velocity": 0.65
+            },
+            {
+              "start": 10,
+              "length": 6,
+              "degree": 6,
+              "velocity": 0.65
+            },
+            {
+              "start": 16,
+              "length": 6,
+              "degree": 3,
+              "velocity": 0.75
+            },
+            {
+              "start": 16,
+              "length": 6,
+              "degree": 5,
+              "velocity": 0.75
+            },
+            {
+              "start": 16,
+              "length": 6,
+              "degree": 7,
+              "velocity": 0.75
+            },
+            {
+              "start": 16,
+              "length": 6,
+              "degree": 9,
+              "velocity": 0.75
+            },
+            {
+              "start": 23,
+              "length": 3,
+              "degree": 3,
+              "velocity": 0.5,
+              "chance": 0.8
+            },
+            {
+              "start": 23,
+              "length": 3,
+              "degree": 5,
+              "velocity": 0.5,
+              "chance": 0.8
+            },
+            {
+              "start": 23,
+              "length": 3,
+              "degree": 7,
+              "velocity": 0.5,
+              "chance": 0.8
+            },
+            {
+              "start": 23,
+              "length": 3,
+              "degree": 9,
+              "velocity": 0.5,
+              "chance": 0.8
+            },
+            {
+              "start": 26,
+              "length": 6,
+              "degree": 3,
+              "velocity": 0.65
+            },
+            {
+              "start": 26,
+              "length": 6,
+              "degree": 5,
+              "velocity": 0.65
+            },
+            {
+              "start": 26,
+              "length": 6,
+              "degree": 7,
+              "velocity": 0.65
+            },
+            {
+              "start": 26,
+              "length": 6,
+              "degree": 9,
+              "velocity": 0.65
+            },
+            {
+              "start": 32,
+              "length": 6,
+              "degree": -1,
+              "velocity": 0.75
+            },
+            {
+              "start": 32,
+              "length": 6,
+              "degree": 1,
+              "velocity": 0.75
+            },
+            {
+              "start": 32,
+              "length": 6,
+              "degree": 3,
+              "velocity": 0.75
+            },
+            {
+              "start": 32,
+              "length": 6,
+              "degree": 6,
+              "velocity": 0.75
+            },
+            {
+              "start": 39,
+              "length": 3,
+              "degree": -1,
+              "velocity": 0.5,
+              "chance": 0.8
+            },
+            {
+              "start": 39,
+              "length": 3,
+              "degree": 1,
+              "velocity": 0.5,
+              "chance": 0.8
+            },
+            {
+              "start": 39,
+              "length": 3,
+              "degree": 3,
+              "velocity": 0.5,
+              "chance": 0.8
+            },
+            {
+              "start": 39,
+              "length": 3,
+              "degree": 6,
+              "velocity": 0.5,
+              "chance": 0.8
+            },
+            {
+              "start": 42,
+              "length": 6,
+              "degree": -1,
+              "velocity": 0.65
+            },
+            {
+              "start": 42,
+              "length": 6,
+              "degree": 1,
+              "velocity": 0.65
+            },
+            {
+              "start": 42,
+              "length": 6,
+              "degree": 3,
+              "velocity": 0.65
+            },
+            {
+              "start": 42,
+              "length": 6,
+              "degree": 6,
+              "velocity": 0.65
+            },
+            {
+              "start": 48,
+              "length": 6,
+              "degree": -3,
+              "velocity": 0.75
+            },
+            {
+              "start": 48,
+              "length": 6,
+              "degree": -1,
+              "velocity": 0.75
+            },
+            {
+              "start": 48,
+              "length": 6,
+              "degree": 1,
+              "velocity": 0.75
+            },
+            {
+              "start": 48,
+              "length": 6,
+              "degree": 4,
+              "velocity": 0.75
+            },
+            {
+              "start": 55,
+              "length": 3,
+              "degree": -3,
+              "velocity": 0.5,
+              "chance": 0.8
+            },
+            {
+              "start": 55,
+              "length": 3,
+              "degree": -1,
+              "velocity": 0.5,
+              "chance": 0.8
+            },
+            {
+              "start": 55,
+              "length": 3,
+              "degree": 1,
+              "velocity": 0.5,
+              "chance": 0.8
+            },
+            {
+              "start": 55,
+              "length": 3,
+              "degree": 4,
+              "velocity": 0.5,
+              "chance": 0.8
+            },
+            {
+              "start": 58,
+              "length": 6,
+              "degree": -3,
+              "velocity": 0.65
+            },
+            {
+              "start": 58,
+              "length": 6,
+              "degree": -1,
+              "velocity": 0.65
+            },
+            {
+              "start": 58,
+              "length": 6,
+              "degree": 1,
+              "velocity": 0.65
+            },
+            {
+              "start": 58,
+              "length": 6,
+              "degree": 4,
+              "velocity": 0.65
+            }
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "keys-A-at0",
+          "patternId": "keys-A",
+          "startBar": 0
+        },
+        {
+          "id": "keys-A-at4",
+          "patternId": "keys-A",
+          "startBar": 4
+        },
+        {
+          "id": "keys-A-at8",
+          "patternId": "keys-A",
+          "startBar": 8
+        },
+        {
+          "id": "keys-A-at12",
+          "patternId": "keys-A",
+          "startBar": 12
+        }
+      ],
+      "fx": [
+        {
+          "id": "keys-chorus",
+          "type": "chorus",
+          "enabled": true,
+          "params": {
+            "width": 0.6,
+            "amount": 0.4,
+            "rate": 0.25
+          }
+        },
+        {
+          "id": "keys-filter",
+          "type": "filter",
+          "enabled": true,
+          "params": {
+            "cutoff": 0.7,
+            "resonance": 0.25,
+            "type": 0
+          }
+        },
+        {
+          "id": "keys-crush",
+          "type": "bitcrush",
+          "enabled": false,
+          "params": {
+            "crush": 0.6,
+            "amount": 0.5,
+            "down": 0.2
+          }
+        }
+      ],
+      "automation": [
+        {
+          "id": "keys-tone",
+          "target": {
+            "kind": "synthMacro",
+            "macro": "tone"
+          },
+          "visible": true,
+          "points": [
+            {
+              "bar": 0,
+              "value": 0.3
+            },
+            {
+              "bar": 4,
+              "value": 0.6
+            },
+            {
+              "bar": 12,
+              "value": 0.6
+            },
+            {
+              "bar": 12,
+              "value": 0.35
+            },
+            {
+              "bar": 14,
+              "value": 0.6
+            }
+          ]
+        },
+        {
+          "id": "keys-cutoff",
+          "target": {
+            "kind": "fx",
+            "fxId": "keys-filter",
+            "param": "cutoff"
+          },
+          "visible": true,
+          "points": [
+            {
+              "bar": 0,
+              "value": 0.7
+            }
+          ],
+          "mode": "lfo",
+          "lfo": {
+            "shape": "triangle",
+            "rate": 6,
+            "depth": 0.3,
+            "center": 0.7
+          }
+        },
+        {
+          "id": "keys-cutoff-amount",
+          "target": {
+            "kind": "lfo",
+            "laneId": "keys-cutoff",
+            "param": "amount"
+          },
+          "visible": false,
+          "points": [
+            {
+              "bar": 0,
+              "value": 0
+            },
+            {
+              "bar": 8,
+              "value": 1
+            }
+          ]
+        }
+      ],
+      "duck": {
+        "sourceId": "kick",
+        "on": true,
+        "amount": 0.35,
+        "release": 2
+      },
+      "synth": {
+        "presetId": "electric-piano",
+        "macros": {
+          "tone": 0.5,
+          "punch": 0.4,
+          "space": 0.3,
+          "length": 0.6
+        },
+        "advanced": {}
+      }
+    },
+    {
+      "id": "pad",
+      "name": "Pad",
+      "color": "#ff7ac6",
+      "kind": "synth",
+      "volumeDb": -9,
+      "pan": 0,
+      "mute": false,
+      "solo": false,
+      "patterns": [
+        {
+          "id": "pad-A",
+          "name": "A",
+          "lengthBars": 4,
+          "stepsPerBar": 16,
+          "steps": [],
+          "notes": [
+            {
+              "start": 0,
+              "length": 16,
+              "degree": 7,
+              "velocity": 0.6
+            },
+            {
+              "start": 0,
+              "length": 16,
+              "degree": 9,
+              "velocity": 0.6
+            },
+            {
+              "start": 0,
+              "length": 16,
+              "degree": 11,
+              "velocity": 0.6
+            },
+            {
+              "start": 0,
+              "length": 16,
+              "degree": 13,
+              "velocity": 0.6
+            },
+            {
+              "start": 16,
+              "length": 16,
+              "degree": 10,
+              "velocity": 0.6
+            },
+            {
+              "start": 16,
+              "length": 16,
+              "degree": 12,
+              "velocity": 0.6
+            },
+            {
+              "start": 16,
+              "length": 16,
+              "degree": 14,
+              "velocity": 0.6
+            },
+            {
+              "start": 16,
+              "length": 16,
+              "degree": 16,
+              "velocity": 0.6
+            },
+            {
+              "start": 32,
+              "length": 16,
+              "degree": 6,
+              "velocity": 0.6
+            },
+            {
+              "start": 32,
+              "length": 16,
+              "degree": 8,
+              "velocity": 0.6
+            },
+            {
+              "start": 32,
+              "length": 16,
+              "degree": 10,
+              "velocity": 0.6
+            },
+            {
+              "start": 32,
+              "length": 16,
+              "degree": 13,
+              "velocity": 0.6
+            },
+            {
+              "start": 48,
+              "length": 16,
+              "degree": 4,
+              "velocity": 0.6
+            },
+            {
+              "start": 48,
+              "length": 16,
+              "degree": 6,
+              "velocity": 0.6
+            },
+            {
+              "start": 48,
+              "length": 16,
+              "degree": 8,
+              "velocity": 0.6
+            },
+            {
+              "start": 48,
+              "length": 16,
+              "degree": 11,
+              "velocity": 0.6
+            }
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "pad-A-at0",
+          "patternId": "pad-A",
+          "startBar": 0
+        },
+        {
+          "id": "pad-A-at12",
+          "patternId": "pad-A",
+          "startBar": 12
+        }
+      ],
+      "fx": [
+        {
+          "id": "pad-reverb",
+          "type": "reverb",
+          "enabled": true,
+          "params": {
+            "size": 0.75,
+            "amount": 0.45,
+            "predelay": 0.2
+          }
+        }
+      ],
+      "automation": [
+        {
+          "id": "pad-volume",
+          "target": {
+            "kind": "track",
+            "param": "volume"
+          },
+          "visible": true,
+          "points": [
+            {
+              "bar": 0,
+              "value": 0.1
+            },
+            {
+              "bar": 3,
+              "value": 0.42
+            }
+          ]
+        },
+        {
+          "id": "pad-space",
+          "target": {
+            "kind": "synthMacro",
+            "macro": "space"
+          },
+          "visible": false,
+          "points": [
+            {
+              "bar": 0,
+              "value": 0.5
+            },
+            {
+              "bar": 12,
+              "value": 0.5
+            },
+            {
+              "bar": 13,
+              "value": 0.85
+            }
+          ]
+        }
+      ],
+      "duck": {
+        "sourceId": "kick",
+        "on": true,
+        "amount": 0.7,
+        "release": 2
+      },
+      "synth": {
+        "presetId": "soft-pad",
+        "macros": {
+          "tone": 0.45,
+          "punch": 0.2,
+          "space": 0.5,
+          "length": 0.8
+        },
+        "advanced": {
+          "attack": 1.2,
+          "release": 2.5
+        }
+      }
+    },
+    {
+      "id": "vinyl",
+      "name": "Vinyl",
+      "color": "#7ee0ff",
+      "kind": "sample",
+      "volumeDb": -20,
+      "pan": -0.1,
+      "mute": false,
+      "solo": false,
+      "patterns": [
+        {
+          "id": "vinyl-A",
+          "name": "A",
+          "lengthBars": 4,
+          "stepsPerBar": 16,
+          "steps": [],
+          "notes": [
+            {
+              "start": 0,
+              "length": 64,
+              "degree": 0,
+              "velocity": 0.7
+            }
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "vinyl-A-at0",
+          "patternId": "vinyl-A",
+          "startBar": 0
+        },
+        {
+          "id": "vinyl-A-at4",
+          "patternId": "vinyl-A",
+          "startBar": 4
+        },
+        {
+          "id": "vinyl-A-at8",
+          "patternId": "vinyl-A",
+          "startBar": 8
+        },
+        {
+          "id": "vinyl-A-at12",
+          "patternId": "vinyl-A",
+          "startBar": 12
+        }
+      ],
+      "fx": [
+        {
+          "id": "vinyl-crush",
+          "type": "bitcrush",
+          "enabled": true,
+          "params": {
+            "crush": 0.35,
+            "amount": 0.3,
+            "down": 0.15
+          }
+        }
+      ],
+      "automation": [],
+      "sample": {
+        "melodic": true,
+        "rootMidi": 50,
+        "tone": 0.55,
+        "sampleId": "lib:fx-hiss",
+        "edit": {
+          "start": 0,
+          "end": 1,
+          "reverse": false,
+          "loop": true,
+          "loopStart": 0.3,
+          "tuneSemitones": 0,
+          "fadeOut": 0,
+          "normalize": true
+        }
+      }
+    },
+    {
+      "id": "riser",
+      "name": "Reverse Crash",
+      "color": "#c3f06b",
+      "kind": "sample",
+      "volumeDb": -5,
+      "pan": 0,
+      "mute": false,
+      "solo": false,
+      "patterns": [
+        {
+          "id": "riser-A",
+          "name": "A",
+          "lengthBars": 1,
+          "stepsPerBar": 16,
+          "steps": [
+            {
+              "index": 6,
+              "velocity": 0.9
+            }
+          ],
+          "notes": []
+        }
+      ],
+      "blocks": [
+        {
+          "id": "riser-A-at3",
+          "patternId": "riser-A",
+          "startBar": 3
+        },
+        {
+          "id": "riser-A-at13",
+          "patternId": "riser-A",
+          "startBar": 13
+        }
+      ],
+      "fx": [
+        {
+          "id": "riser-delay",
+          "type": "delay",
+          "enabled": true,
+          "params": {
+            "time": 0.6,
+            "amount": 0.25,
+            "feedback": 0.35,
+            "pingpong": 1
+          }
+        }
+      ],
+      "automation": [],
+      "sample": {
+        "melodic": false,
+        "rootMidi": 60,
+        "tone": 1,
+        "sampleId": "lib:dusty-crash",
+        "edit": {
+          "start": 0,
+          "end": 1,
+          "reverse": true,
+          "loop": false,
+          "loopStart": 0,
+          "tuneSemitones": 0,
+          "fadeOut": 0,
+          "normalize": false
+        }
+      }
+    },
+    {
+      "id": "guitar",
+      "name": "Guitar",
+      "color": "#ff9e6b",
+      "kind": "sample",
+      "volumeDb": -3,
+      "pan": 0.15,
+      "mute": false,
+      "solo": false,
+      "patterns": [
+        {
+          "id": "guitar-A",
+          "name": "A",
+          "lengthBars": 2,
+          "stepsPerBar": 16,
+          "steps": [],
+          "notes": [
+            {
+              "start": 0,
+              "length": 3,
+              "degree": 4,
+              "velocity": 0.8
+            },
+            {
+              "start": 3,
+              "length": 1,
+              "degree": 6,
+              "velocity": 0.6
+            },
+            {
+              "start": 4,
+              "length": 2,
+              "degree": 7,
+              "velocity": 0.8
+            },
+            {
+              "start": 6,
+              "length": 2,
+              "degree": 6,
+              "velocity": 0.7
+            },
+            {
+              "start": 8,
+              "length": 4,
+              "degree": 4,
+              "velocity": 0.8
+            },
+            {
+              "start": 14,
+              "length": 2,
+              "degree": 2,
+              "velocity": 0.6,
+              "chance": 0.6
+            },
+            {
+              "start": 16,
+              "length": 2,
+              "degree": 3,
+              "velocity": 0.8
+            },
+            {
+              "start": 18,
+              "length": 2,
+              "degree": 4,
+              "velocity": 0.7
+            },
+            {
+              "start": 20,
+              "length": 4,
+              "degree": 5,
+              "velocity": 0.8
+            },
+            {
+              "start": 26,
+              "length": 2,
+              "degree": 4,
+              "velocity": 0.7
+            },
+            {
+              "start": 28,
+              "length": 4,
+              "degree": 3,
+              "velocity": 0.8
+            }
+          ]
+        },
+        {
+          "id": "guitar-B",
+          "name": "B",
+          "lengthBars": 2,
+          "stepsPerBar": 16,
+          "steps": [],
+          "notes": [
+            {
+              "start": 0,
+              "length": 2,
+              "degree": 6,
+              "velocity": 0.8
+            },
+            {
+              "start": 2,
+              "length": 2,
+              "degree": 4,
+              "velocity": 0.7
+            },
+            {
+              "start": 4,
+              "length": 4,
+              "degree": 2,
+              "velocity": 0.8
+            },
+            {
+              "start": 10,
+              "length": 2,
+              "degree": 1,
+              "velocity": 0.6
+            },
+            {
+              "start": 12,
+              "length": 4,
+              "degree": 0,
+              "velocity": 0.8
+            },
+            {
+              "start": 16,
+              "length": 4,
+              "degree": 4,
+              "velocity": 0.8
+            },
+            {
+              "start": 22,
+              "length": 2,
+              "degree": 2,
+              "velocity": 0.7
+            },
+            {
+              "start": 24,
+              "length": 8,
+              "degree": 0,
+              "velocity": 0.85
+            }
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "guitar-A-at8",
+          "patternId": "guitar-A",
+          "startBar": 8
+        },
+        {
+          "id": "guitar-A-at10",
+          "patternId": "guitar-A",
+          "startBar": 10
+        },
+        {
+          "id": "guitar-B-at14",
+          "patternId": "guitar-B",
+          "startBar": 14
+        }
+      ],
+      "fx": [
+        {
+          "id": "guitar-drive",
+          "type": "distortion",
+          "enabled": true,
+          "params": {
+            "drive": 0.25,
+            "amount": 0.3,
+            "oversample": 0.5
+          }
+        },
+        {
+          "id": "guitar-delay",
+          "type": "delay",
+          "enabled": true,
+          "params": {
+            "time": 0.4,
+            "amount": 0.3,
+            "feedback": 0.4,
+            "pingpong": 0
+          }
+        }
+      ],
+      "automation": [
+        {
+          "id": "guitar-tone",
+          "target": {
+            "kind": "sampleTone"
+          },
+          "visible": true,
+          "points": [
+            {
+              "bar": 8,
+              "value": 0.55
+            },
+            {
+              "bar": 12,
+              "value": 0.9
+            }
+          ]
+        }
+      ],
+      "humanize": 0.2,
+      "sample": {
+        "melodic": true,
+        "rootMidi": 57,
+        "tone": 0.8,
+        "sampleId": "lib:gtr-mellow",
+        "edit": {
+          "start": 0,
+          "end": 1,
+          "reverse": false,
+          "loop": false,
+          "loopStart": 0,
+          "tuneSemitones": 0,
+          "fadeOut": 0.2,
+          "normalize": false
+        }
+      }
+    },
+    {
+      "id": "vibes",
+      "name": "Vibes (muted)",
+      "color": "#b9a6ff",
+      "kind": "sample",
+      "volumeDb": -6,
+      "pan": 0.3,
+      "mute": true,
+      "solo": false,
+      "patterns": [
+        {
+          "id": "vibes-A",
+          "name": "A",
+          "lengthBars": 2,
+          "stepsPerBar": 24,
+          "steps": [],
+          "notes": [
+            {
+              "start": 0,
+              "length": 4,
+              "degree": 7,
+              "velocity": 0.6
+            },
+            {
+              "start": 4,
+              "length": 4,
+              "degree": 9,
+              "velocity": 0.6
+            },
+            {
+              "start": 8,
+              "length": 4,
+              "degree": 11,
+              "velocity": 0.6
+            },
+            {
+              "start": 12,
+              "length": 4,
+              "degree": 13,
+              "velocity": 0.6
+            },
+            {
+              "start": 16,
+              "length": 4,
+              "degree": 11,
+              "velocity": 0.6
+            },
+            {
+              "start": 20,
+              "length": 4,
+              "degree": 9,
+              "velocity": 0.6
+            },
+            {
+              "start": 24,
+              "length": 4,
+              "degree": 8,
+              "velocity": 0.6
+            },
+            {
+              "start": 28,
+              "length": 4,
+              "degree": 10,
+              "velocity": 0.6
+            },
+            {
+              "start": 32,
+              "length": 4,
+              "degree": 12,
+              "velocity": 0.6
+            },
+            {
+              "start": 36,
+              "length": 4,
+              "degree": 14,
+              "velocity": 0.6
+            },
+            {
+              "start": 40,
+              "length": 4,
+              "degree": 12,
+              "velocity": 0.6
+            },
+            {
+              "start": 44,
+              "length": 4,
+              "degree": 10,
+              "velocity": 0.6
+            }
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "vibes-A-at12",
+          "patternId": "vibes-A",
+          "startBar": 12
+        }
+      ],
+      "fx": [],
+      "automation": [],
+      "sample": {
+        "melodic": true,
+        "rootMidi": 60,
+        "tone": 1,
+        "sampleId": "lib:vibes",
+        "edit": {
+          "start": 0,
+          "end": 1,
+          "reverse": false,
+          "loop": false,
+          "loopStart": 0,
+          "tuneSemitones": 0,
+          "fadeOut": 0,
+          "normalize": false
+        }
+      }
+    }
+  ],
+  "createdAt": 1795132800000,
+  "updatedAt": 1795132800000
+}

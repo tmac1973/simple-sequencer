@@ -14,7 +14,8 @@
     "test:watch": "vitest",
     "e2e": "playwright test",
     "e2e:local": "E2E_BROWSERS=chromium,firefox playwright test",
-    "e2e:perf": "PERF=1 E2E_BROWSERS=chromium playwright test perf --workers=1"
+    "e2e:perf": "PERF=1 E2E_BROWSERS=chromium playwright test perf --workers=1",
+    "validate-song": "node scripts/validate-song.mjs"
   },
   "license": "MIT",
   "dependencies": {

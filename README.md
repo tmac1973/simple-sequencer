@@ -30,7 +30,7 @@ tracks, patterns and a song timeline, with no account and no server.
 - **Wobble (LFO) lanes**: switch any lane to Wobble and the knob moves up and down by itself, in time with the song. Pick from 6 shapes and speeds from a 1/16 note to 8 bars, or use a one-click quick wobble (wobble bass, tremolo, auto-pan, slow sweep). The wobble's amount and speed can be automated too.
 - **Share links**: 🔗 Share turns your song into a link. Whoever opens it gets the song in their browser, with no account or server. Sounds you recorded or imported are swapped for similar built-in ones.
 - **Saving and export**: autosave in your browser, a song library, `.json`/`.zip` song files, and **WAV/MP3 export**.
-- **Make songs with code**: the song file format, plus every built-in sound, synth preset and effect, is documented in [docs/SONG_FORMAT.md](docs/SONG_FORMAT.md). There's a runnable example in [docs/examples/make-song.mjs](docs/examples/make-song.mjs).
+- **Make songs with code**: the song file format, plus every built-in sound, synth preset and effect, is documented in [docs/SONG_FORMAT.md](docs/SONG_FORMAT.md). There are runnable examples in [docs/examples/](docs/examples/), including a showcase song that uses every option, and `npm run validate-song -- file.json` checks a song file before you load it.
 - **Help as you go**: undo/redo, keyboard shortcuts (press `?`), and a plain-English tooltip on every control.
 
 ## Run it

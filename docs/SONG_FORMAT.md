@@ -7,6 +7,12 @@ This page describes the song files Simple Sequencer saves and opens, so you can 
   ```bash
   node docs/examples/make-song.mjs > my-song.json
   ```
+- **Every option in one song:** [`examples/showcase-song.json`](examples/showcase-song.json) is a 16-bar lo-fi tune in D dorian that uses every setting in this format at least once, including all eight effects, every kind of automation lane, triplet patterns, chance, humanize, the pump, reversed and looping samples, and a muted track. It's built by [`examples/make-showcase.mjs`](examples/make-showcase.mjs), which explains each part in comments. A test checks that it keeps covering every option.
+- **Check a file before loading it:**
+  ```bash
+  npm run validate-song -- my-song.json
+  ```
+  The validator runs the app's own reader, so a pass means the app will open the file. It also warns about things the app quietly drops or ignores: unknown sounds or presets, blocks pointing to missing patterns, steps outside the pattern, unsorted automation points, a melodic sample whose `rootMidi` doesn't match its recording, and more. Add `--strict` to fail on warnings too, which is useful in a script. It reads `.zip` files and checks the sounds inside them. It needs this repository with `npm install` done.
 - **The easiest way to learn the format** is to make something in the app, then use **Export → Save song file** and read the JSON.
 - **Source of truth:** [`src/model/types.ts`](../src/model/types.ts) defines the types and [`src/model/schema.ts`](../src/model/schema.ts) validates them. The [sound, preset and effect lists](#built-in-sounds-presets-and-effects) at the end are generated from the app's own data, and a test fails if they go out of date.
 
@@ -300,6 +306,8 @@ A lane moves one knob over time, either by following drawn points or by wobbling
 - An `lfo` target must point at a lane on the same track. Lanes pointing at a missing effect or lane are dropped on import.
 
 ## Checklist for generated songs
+
+`npm run validate-song` checks all of these for you.
 
 - **Top level:** `format` and `version` are exactly `"simple-sequencer-song"` and `1`. `createdAt` and `updatedAt` are numbers.
 - **Ids:** every id is unique where it needs to be: tracks in the song; patterns, blocks, fx and lanes in their track.
