@@ -22,3 +22,28 @@ test('automate a filter cutoff and see the knob follow it', async ({ page }) => 
   await page.waitForTimeout(800);
   await page.keyboard.press('Space');
 });
+
+test('lanes stay lined up with their labels when the track list scrolls by itself', async ({
+  page,
+}) => {
+  await page.addInitScript(() => localStorage.setItem('ss:seenHint', '1'));
+  await page.setViewportSize({ width: 1280, height: 800 });
+  await page.goto('/');
+  await page.getByRole('row', { name: /^Track Bass/ }).first().click();
+  await page.getByRole('tab', { name: 'Automate' }).click();
+  for (const knob of ['Volume', 'Pan', 'Tone', 'Space'])
+    await page.getByRole('button', { name: `＋ ${knob}`, exact: true }).click();
+
+  // focusing a clipped button makes the browser scroll the track list on its own
+  await page.getByRole('button', { name: '＋ Synth' }).focus();
+  const list = page.getByRole('complementary', { name: 'Tracks' });
+  const label = list.getByText('Space', { exact: true }).first();
+  const lane = page.getByLabel(/Bass Space automation$/).first();
+  await expect
+    .poll(async () => {
+      const a = (await label.boundingBox())!;
+      const b = (await lane.boundingBox())!;
+      return Math.abs(a.y + a.height / 2 - (b.y + b.height / 2));
+    })
+    .toBeLessThan(2);
+});

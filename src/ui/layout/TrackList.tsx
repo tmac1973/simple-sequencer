@@ -195,6 +195,22 @@ export function TrackList({ footer }: { footer?: ReactNode }) {
   const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 4 } }));
 
   useEffect(() => onScroll((top) => scroller.current && (scroller.current.scrollTop = top)), []);
+  // The browser can scroll this list by itself (focusing a clipped button or row, find-in-page),
+  // and then its lanes no longer line up with the timeline. Follow those scrolls with the
+  // timeline, which stays in charge.
+  useEffect(() => {
+    const el = scroller.current;
+    if (!el) return;
+    const fn = () => {
+      const tl = document.querySelector<HTMLElement>('[data-timeline-scroll]');
+      // (≥1px apart, so sub-pixel rounding on zoomed screens can't bounce back and forth)
+      if (!tl || Math.abs(tl.scrollTop - el.scrollTop) < 1) return;
+      tl.scrollTop = el.scrollTop;
+      if (Math.abs(tl.scrollTop - el.scrollTop) >= 1) el.scrollTop = tl.scrollTop;
+    };
+    el.addEventListener('scroll', fn, { passive: true });
+    return () => el.removeEventListener('scroll', fn);
+  }, []);
 
   const onDragEnd = (e: DragEndEvent) => {
     if (!e.over || e.active.id === e.over.id) return;
