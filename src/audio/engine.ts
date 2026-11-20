@@ -413,6 +413,46 @@ class Engine {
     dispatchEvent(graphs, track, ev, audioNow() + 0.02, beatSeconds(this.song.bpm), this.song);
   }
 
+  private trackPreview: { stop(time: number): void } | null = null;
+
+  /**
+   * Play a track the way it sounds in the song: through its Tone, effects, volume and pan.
+   * 'sound' plays the whole sample at its own pitch (Sound tab ▶); 'note' plays one hit, or
+   * the key's root note for a beat, so effect tails can be heard (Effects tab ▶).
+   */
+  async previewTrack(trackId: string, mode: 'sound' | 'note' = 'note') {
+    await ensureAudioStarted();
+    const song = this.song;
+    const graphs = this.ensureGraphs();
+    const track = song?.tracks.find((t) => t.id === trackId);
+    if (!song || !graphs || !track) return;
+    const g = graphs.tracks.get(track.id);
+    if (!g) return;
+    this.stopPreview();
+    const beatSec = beatSeconds(song.bpm);
+    const at = audioNow() + 0.02;
+    if (track.kind === 'synth') {
+      const midi = degreeToMidi(0, song.key);
+      graphs.synths.get(track.id)?.trigger(midi, beatSec, at, 0.85);
+      return;
+    }
+    const s = track.sample;
+    if (!s) return;
+    const buf = await SampleRegistry.get(s.sampleId);
+    const sIn = graphs.sampleInput(track.id) ?? g.input;
+    const t = audioNow() + 0.02;
+    if (mode === 'sound') {
+      const hold = s.edit.loop ? 2 : Math.min(buf.duration * 4, 6);
+      this.trackPreview = triggerSample(sIn, buf, t, 0.9, s, 1, hold) ?? null;
+    } else if (s.melodic) {
+      const rate = 2 ** ((degreeToMidi(0, song.key) - s.rootMidi) / 12);
+      this.trackPreview = triggerSample(sIn, buf, t, 0.85, s, rate, beatSec) ?? null;
+    } else {
+      const hold = s.edit.loop ? beatSec : undefined;
+      this.trackPreview = triggerSample(sIn, buf, t, 0.9, s, 1, hold) ?? null;
+    }
+  }
+
   /** Audition a sound right now, straight to the master bus. */
   async preview(sampleId: string, settings?: SampleTrackSettings, midi?: number) {
     await ensureAudioStarted();
@@ -444,6 +484,8 @@ class Engine {
 
   /** Cut off any sound being previewed. */
   stopPreview() {
+    this.trackPreview?.stop(audioNow() + 0.01);
+    this.trackPreview = null;
     const p = this.previewOut;
     if (!p) return;
     this.previewOut = null;

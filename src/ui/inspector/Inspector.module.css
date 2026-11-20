@@ -215,3 +215,13 @@
 .pumpBtn {
   border-color: rgba(255, 107, 107, 0.55);
 }
+.previewRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.previewRow button {
+  flex: none;
+  white-space: nowrap;
+}

@@ -275,6 +275,18 @@ export const TIPS: Record<string, TipCopy> = {
     body: 'Make a knob move by itself over the song, e.g. a filter sweep into the drop.',
   },
   preview: { title: 'Preview', body: 'Hear this sound.' },
+  previewTrack: {
+    title: 'Preview',
+    body: "Hear this sound the way it plays in your song, with the track's effects, tone, volume and pan.",
+  },
+  previewFx: {
+    title: 'Preview with effects',
+    body: 'Plays one note through this track’s effects, so you can hear echoes and reverb ring out. The letter keys A–L play notes through them too.',
+  },
+  previewMuted: {
+    title: 'Track is muted',
+    body: 'Unmute this track (or turn off solo on other tracks) to hear the preview.',
+  },
   changeSound: {
     title: 'Change sound',
     body: 'Browse built-in sounds, import a file or record your own.',

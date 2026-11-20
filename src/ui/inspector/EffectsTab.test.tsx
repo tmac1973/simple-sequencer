@@ -4,6 +4,10 @@ import { createSampleTrack, createSong } from '@/model/factories';
 import { EffectsTab } from './EffectsTab';
 
 vi.mock('tone', () => ({}));
+const previewTrack = vi.fn(() => Promise.resolve());
+vi.mock('@/audio/engine', () => ({
+  engine: { previewTrack: (...a: unknown[]) => previewTrack(...(a as [])) },
+}));
 
 const track = () => useSongStore.getState().song.tracks[0]!;
 
@@ -27,5 +31,19 @@ describe('EffectsTab', () => {
     for (let i = 0; i < 6; i++) useSongStore.getState().addFx(track().id, 'eq');
     render(<EffectsTab track={track()} />);
     expect(screen.getByRole('button', { name: '＋ Add effect' })).toBeDisabled();
+  });
+  it('▶ Preview plays the track through its effects', () => {
+    useSongStore.getState().loadSong(createSong({ tracks: [createSampleTrack()] }));
+    previewTrack.mockClear();
+    render(<EffectsTab track={track()} />);
+    fireEvent.click(screen.getByRole('button', { name: '▶ Preview' }));
+    expect(previewTrack).toHaveBeenCalledWith(track().id, 'note');
+  });
+  it('▶ Preview is off for a muted track, and says why', () => {
+    useSongStore.getState().loadSong(createSong({ tracks: [createSampleTrack()] }));
+    useSongStore.getState().toggleMute(track().id);
+    render(<EffectsTab track={track()} />);
+    expect(screen.getByRole('button', { name: '▶ Preview' })).toBeDisabled();
+    expect(screen.getByText(/muted/)).toBeInTheDocument();
   });
 });

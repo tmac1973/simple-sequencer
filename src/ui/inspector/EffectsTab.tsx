@@ -19,6 +19,8 @@ import {
   type ParamDef,
 } from '@/audio/effects/registry';
 import { useSongStore } from '@/store/songStore';
+import { engine } from '@/audio/engine';
+import { isAudible } from '@/audio/scheduler';
 import { Knob } from '../components/Knob';
 import { Segmented, Toggle } from '../components/controls';
 import { tip } from '../tooltips';
@@ -155,6 +157,32 @@ function FxCard({ track, slot }: { track: Track; slot: FxSlot }) {
 }
 
 import { DuckCard } from './DuckCard';
+/** ▶ Hear the track through its effects (one hit, or the key's root note for a beat). */
+function PreviewRow({ track }: { track: Track }) {
+  const anySolo = useSongStore((s) => s.song.tracks.some((t) => t.solo));
+  const audible = isAudible(track, anySolo);
+  return (
+    <div className={styles.previewRow}>
+      <button
+        onClick={() => void engine.previewTrack(track.id, 'note')}
+        disabled={!audible}
+        {...tip(audible ? 'previewFx' : 'previewMuted')}
+      >
+        ▶ Preview
+      </button>
+      <span className="small muted">
+        {audible ? (
+          <>
+            Hear it with these effects. Keys <kbd>A</kbd>–<kbd>L</kbd> play notes too.
+          </>
+        ) : (
+          'This track is muted, so the preview is silent.'
+        )}
+      </span>
+    </div>
+  );
+}
+
 export function EffectsTab({ track }: { track: Track }) {
   const [menu, setMenu] = useState(false);
   const a = useSongStore.getState();
@@ -170,6 +198,7 @@ export function EffectsTab({ track }: { track: Track }) {
   };
   return (
     <>
+      <PreviewRow track={track} />
       <DuckCard track={track} />
       {track.fx.length === 0 && (
         <p className="small muted">

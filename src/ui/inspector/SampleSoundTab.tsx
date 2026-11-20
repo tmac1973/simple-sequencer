@@ -43,8 +43,8 @@ export function SampleSoundTab({ track }: { track: Track }) {
           <button
             className="icon"
             aria-label="Preview sound"
-            onClick={() => void engine.preview(s.sampleId, s)}
-            {...tip('preview')}
+            onClick={() => void engine.previewTrack(track.id, 'sound')}
+            {...tip('previewTrack')}
           >
             ▶
           </button>
