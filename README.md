@@ -3,6 +3,8 @@
 An approachable, browser-based multitrack beat sequencer. Build songs from drum and synth
 tracks, patterns and a song timeline, with no account and no server.
 
+**▶ Try it: https://tmac1973.github.io/simple-sequencer/**
+
 ![Simple Sequencer](docs/screenshot.png)
 
 ## What you can do
