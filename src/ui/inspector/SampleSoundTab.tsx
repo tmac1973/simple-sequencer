@@ -22,6 +22,7 @@ import {
 import { RootNoteSelect } from './RootNoteSelect';
 import { useAutoKnob } from '../hooks/useAutoKnob';
 import styles from './Inspector.module.css';
+import { convertLabel, convertTrack } from '../convertTrack';
 
 export function SampleSoundTab({ track }: { track: Track }) {
   useSoundNamesVersion();
@@ -133,6 +134,13 @@ export function SampleSoundTab({ track }: { track: Track }) {
           />
         </div>
       )}
+      <button
+        className={styles.convertBtn}
+        onClick={() => convertTrack(track.id)}
+        {...tip('toSynth')}
+      >
+        {convertLabel(track)}
+      </button>
     </>
   );
 }

@@ -26,6 +26,7 @@ import { DEFAULT_LFO, LFO_RATES } from '@/model/lfo';
 import { deleteBars, duplicateBars, insertBars } from '@/model/bars';
 import { defaultDuck, defaultDuckSource, DUCK_RELEASES } from '@/model/groove';
 import { dropMissingDuckSources } from '@/model/schema';
+import { convertTrackKind } from '@/model/convertTrack';
 import type {
   AutomationLane,
   AutomationPoint,
@@ -104,6 +105,8 @@ export interface SongStore extends HistoryState {
 
   addTrack(kind: TrackKind, init?: Partial<Track>): string | null;
   duplicateTrack(trackId: string): string | null;
+  /** synth ↔ sample; returns how many automation lanes couldn't come along, or null */
+  convertTrack(trackId: string): { droppedLanes: number } | null;
   removeTrack(trackId: string): void;
   moveTrack(trackId: string, toIndex: number): void;
   renameTrack(trackId: string, name: string): void;
@@ -289,6 +292,17 @@ export const useSongStore = create<SongStore>((set, get) => {
       copy.name = `${copy.name} copy`.slice(0, 40);
       mutate('Duplicate track', (d) => void d.tracks.splice(idx + 1, 0, copy as Draft<Track>));
       return copy.id;
+    },
+    convertTrack(trackId) {
+      const t = get().song.tracks.find((x) => x.id === trackId);
+      if (!t) return null;
+      const r = convertTrackKind(t);
+      const label = r.track.kind === 'sample' ? 'Make sample track' : 'Make synth track';
+      mutate(label, (d) => {
+        const i = d.tracks.findIndex((x) => x.id === trackId);
+        if (i >= 0) d.tracks[i] = r.track as Draft<Track>;
+      });
+      return { droppedLanes: r.droppedLanes };
     },
     removeTrack: (id) =>
       mutate('Delete track', (d) => {

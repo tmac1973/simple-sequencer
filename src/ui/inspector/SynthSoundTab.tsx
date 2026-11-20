@@ -10,6 +10,7 @@ import { tip } from '../tooltips';
 import { fmtPan, fmtPct, knobToPan, panToKnob } from './format';
 import { useAutoKnob } from '../hooks/useAutoKnob';
 import styles from './Inspector.module.css';
+import { convertLabel, convertTrack } from '../convertTrack';
 
 const OSC: { value: OscType; label: string }[] = [
   { value: 'sine', label: 'Sine (pure)' },
@@ -208,6 +209,13 @@ export function SynthSoundTab({ track }: { track: Track }) {
           </button>
         </>
       )}
+      <button
+        className={styles.convertBtn}
+        onClick={() => convertTrack(track.id)}
+        {...tip('toSample')}
+      >
+        {convertLabel(track)}
+      </button>
     </>
   );
 }

@@ -225,3 +225,9 @@
   flex: none;
   white-space: nowrap;
 }
+
+.convertBtn {
+  display: block;
+  margin-top: 18px;
+  width: 100%;
+}

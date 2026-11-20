@@ -326,6 +326,14 @@ export const TIPS: Record<string, TipCopy> = {
     body: "Waveforms, filter, envelope and vibrato settings for when you're curious.",
   },
   resetPreset: { title: 'Reset', body: 'Undo all advanced tweaks and go back to the preset.' },
+  toSample: {
+    title: 'Make it a sample track',
+    body: 'Play these notes with a recorded sound instead of a synth. Patterns, timeline and effects stay.',
+  },
+  toSynth: {
+    title: 'Make it a synth track',
+    body: 'Play this track with a synth instead of a recorded sound. Drum hits become notes on the root, so the rhythm stays.',
+  },
   knob: {
     title: 'Knob',
     body: 'Drag up or down to change. Double-click to reset. Hold Shift for fine control.',

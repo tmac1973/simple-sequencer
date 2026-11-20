@@ -18,6 +18,7 @@ import { presetName } from '@/library/presetNames';
 import { useSongStore } from '@/store/songStore';
 import { useUiStore } from '@/store/uiStore';
 import { ContextMenu, swatchStyles, type MenuItem } from '../components/controls';
+import { convertLabel, convertTrack } from '../convertTrack';
 import { useSelection } from '../hooks/selection';
 import { useSoundNamesVersion } from '../hooks/useSoundNames';
 import { tip } from '../tooltips';
@@ -95,6 +96,11 @@ function TrackRow({ track, index, selected }: { track: Track; index: number; sel
           ))}
         </div>
       ),
+    },
+    {
+      label: convertLabel(track),
+      onClick: () => convertTrack(track.id),
+      tip: track.kind === 'synth' ? 'toSample' : 'toSynth',
     },
     { separator: true, label: '' },
     { label: '🗑 Delete track', onClick: () => a.removeTrack(track.id) },

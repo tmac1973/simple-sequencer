@@ -80,6 +80,17 @@ describe('song store', () => {
     expect(s().duplicateTrack(s().song.tracks[0]!.id)).toBeNull();
   });
 
+  it('convertTrack switches synth and sample in one undo step', () => {
+    const { id } = setupTrack();
+    const kind = s().song.tracks[0]!.kind;
+    expect(s().convertTrack(id)).toEqual({ droppedLanes: 0 });
+    expect(s().song.tracks[0]!.kind).not.toBe(kind);
+    expect(s().song.tracks[0]!.id).toBe(id);
+    s().undo();
+    expect(s().song.tracks[0]!.kind).toBe(kind);
+    expect(s().convertTrack('nope')).toBeNull();
+  });
+
   it('removing an effect removes its automation lanes', () => {
     const { id } = setupTrack();
     const fx = s().addFx(id, 'filter')!;
@@ -110,6 +121,8 @@ describe('song store', () => {
     s().setSampleEdit(id, { reverse: true });
     s().addFx(id, 'reverb');
     s().duplicateTrack(id);
+    s().convertTrack(id);
+    s().convertTrack(id);
     s().removeTrack(id);
     while (s().past.length > base) s().undo();
     const t = JSON.parse(JSON.stringify(s().song));
