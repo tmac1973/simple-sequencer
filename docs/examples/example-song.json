@@ -1,0 +1,618 @@
+{
+  "format": "simple-sequencer-song",
+  "version": 1,
+  "id": "example-song",
+  "name": "Example House Groove",
+  "bpm": 124,
+  "swing": 0,
+  "key": {
+    "root": 9,
+    "scale": "minor"
+  },
+  "lengthBars": 8,
+  "tracks": [
+    {
+      "id": "kick",
+      "name": "Kick",
+      "color": "#ffb84d",
+      "kind": "sample",
+      "volumeDb": 0,
+      "pan": 0,
+      "mute": false,
+      "solo": false,
+      "patterns": [
+        {
+          "id": "kick-A",
+          "name": "A",
+          "lengthBars": 1,
+          "stepsPerBar": 16,
+          "steps": [
+            {
+              "index": 0,
+              "velocity": 1
+            },
+            {
+              "index": 4,
+              "velocity": 1
+            },
+            {
+              "index": 8,
+              "velocity": 1
+            },
+            {
+              "index": 12,
+              "velocity": 1
+            }
+          ],
+          "notes": []
+        }
+      ],
+      "blocks": [
+        {
+          "id": "kick-block",
+          "patternId": "kick-A",
+          "startBar": 0
+        },
+        {
+          "id": "kick-block-2",
+          "patternId": "kick-A",
+          "startBar": 1
+        },
+        {
+          "id": "kick-block-3",
+          "patternId": "kick-A",
+          "startBar": 2
+        },
+        {
+          "id": "kick-block-4",
+          "patternId": "kick-A",
+          "startBar": 3
+        },
+        {
+          "id": "kick-block-5",
+          "patternId": "kick-A",
+          "startBar": 4
+        },
+        {
+          "id": "kick-block-6",
+          "patternId": "kick-A",
+          "startBar": 5
+        },
+        {
+          "id": "kick-block-7",
+          "patternId": "kick-A",
+          "startBar": 6
+        },
+        {
+          "id": "kick-block-8",
+          "patternId": "kick-A",
+          "startBar": 7
+        }
+      ],
+      "fx": [],
+      "automation": [],
+      "sample": {
+        "sampleId": "lib:club-kick",
+        "melodic": false,
+        "rootMidi": 60,
+        "tone": 1,
+        "edit": {
+          "start": 0,
+          "end": 1,
+          "reverse": false,
+          "loop": false,
+          "loopStart": 0,
+          "tuneSemitones": 0,
+          "fadeOut": 0,
+          "normalize": false
+        }
+      }
+    },
+    {
+      "id": "hi-hat",
+      "name": "Hi-hat",
+      "color": "#4dc9ff",
+      "kind": "sample",
+      "volumeDb": -4,
+      "pan": 0.2,
+      "mute": false,
+      "solo": false,
+      "patterns": [
+        {
+          "id": "hi-hat-A",
+          "name": "A",
+          "lengthBars": 1,
+          "stepsPerBar": 16,
+          "steps": [
+            {
+              "index": 2,
+              "velocity": 0.85
+            },
+            {
+              "index": 6,
+              "velocity": 0.85
+            },
+            {
+              "index": 10,
+              "velocity": 0.85
+            },
+            {
+              "index": 14,
+              "velocity": 0.85
+            },
+            {
+              "index": 1,
+              "velocity": 0.4,
+              "chance": 0.5
+            },
+            {
+              "index": 3,
+              "velocity": 0.4,
+              "chance": 0.5
+            },
+            {
+              "index": 5,
+              "velocity": 0.4,
+              "chance": 0.5
+            },
+            {
+              "index": 7,
+              "velocity": 0.4,
+              "chance": 0.5
+            },
+            {
+              "index": 9,
+              "velocity": 0.4,
+              "chance": 0.5
+            },
+            {
+              "index": 11,
+              "velocity": 0.4,
+              "chance": 0.5
+            },
+            {
+              "index": 13,
+              "velocity": 0.4,
+              "chance": 0.5
+            },
+            {
+              "index": 15,
+              "velocity": 0.4,
+              "chance": 0.5
+            }
+          ],
+          "notes": []
+        }
+      ],
+      "blocks": [
+        {
+          "id": "hi-hat-block",
+          "patternId": "hi-hat-A",
+          "startBar": 2
+        },
+        {
+          "id": "hi-hat-block-2",
+          "patternId": "hi-hat-A",
+          "startBar": 3
+        },
+        {
+          "id": "hi-hat-block-3",
+          "patternId": "hi-hat-A",
+          "startBar": 4
+        },
+        {
+          "id": "hi-hat-block-4",
+          "patternId": "hi-hat-A",
+          "startBar": 5
+        },
+        {
+          "id": "hi-hat-block-5",
+          "patternId": "hi-hat-A",
+          "startBar": 6
+        },
+        {
+          "id": "hi-hat-block-6",
+          "patternId": "hi-hat-A",
+          "startBar": 7
+        }
+      ],
+      "fx": [],
+      "automation": [],
+      "sample": {
+        "sampleId": "lib:club-hat",
+        "melodic": false,
+        "rootMidi": 60,
+        "tone": 1,
+        "edit": {
+          "start": 0,
+          "end": 1,
+          "reverse": false,
+          "loop": false,
+          "loopStart": 0,
+          "tuneSemitones": 0,
+          "fadeOut": 0,
+          "normalize": false
+        }
+      },
+      "humanize": 0.4
+    },
+    {
+      "id": "clap",
+      "name": "Clap",
+      "color": "#ff6b6b",
+      "kind": "sample",
+      "volumeDb": -3,
+      "pan": 0,
+      "mute": false,
+      "solo": false,
+      "patterns": [
+        {
+          "id": "clap-A",
+          "name": "A",
+          "lengthBars": 1,
+          "stepsPerBar": 16,
+          "steps": [
+            {
+              "index": 4,
+              "velocity": 0.9
+            },
+            {
+              "index": 12,
+              "velocity": 0.9
+            }
+          ],
+          "notes": []
+        }
+      ],
+      "blocks": [
+        {
+          "id": "clap-block",
+          "patternId": "clap-A",
+          "startBar": 4
+        },
+        {
+          "id": "clap-block-2",
+          "patternId": "clap-A",
+          "startBar": 5
+        },
+        {
+          "id": "clap-block-3",
+          "patternId": "clap-A",
+          "startBar": 6
+        },
+        {
+          "id": "clap-block-4",
+          "patternId": "clap-A",
+          "startBar": 7
+        }
+      ],
+      "fx": [
+        {
+          "id": "clap-reverb",
+          "type": "reverb",
+          "enabled": true,
+          "params": {
+            "size": 0.4,
+            "amount": 0.25
+          }
+        }
+      ],
+      "automation": [],
+      "sample": {
+        "sampleId": "lib:club-clap",
+        "melodic": false,
+        "rootMidi": 60,
+        "tone": 1,
+        "edit": {
+          "start": 0,
+          "end": 1,
+          "reverse": false,
+          "loop": false,
+          "loopStart": 0,
+          "tuneSemitones": 0,
+          "fadeOut": 0,
+          "normalize": false
+        }
+      }
+    },
+    {
+      "id": "bass",
+      "name": "Bass",
+      "color": "#4dc9ff",
+      "kind": "synth",
+      "volumeDb": 0,
+      "pan": 0,
+      "mute": false,
+      "solo": false,
+      "patterns": [
+        {
+          "id": "bass-A",
+          "name": "A",
+          "lengthBars": 4,
+          "stepsPerBar": 16,
+          "steps": [],
+          "notes": [
+            {
+              "start": 2,
+              "length": 2,
+              "degree": 0,
+              "velocity": 0.85
+            },
+            {
+              "start": 6,
+              "length": 2,
+              "degree": 0,
+              "velocity": 0.85
+            },
+            {
+              "start": 10,
+              "length": 2,
+              "degree": 0,
+              "velocity": 0.85
+            },
+            {
+              "start": 14,
+              "length": 2,
+              "degree": 0,
+              "velocity": 0.85
+            },
+            {
+              "start": 18,
+              "length": 2,
+              "degree": 5,
+              "velocity": 0.85
+            },
+            {
+              "start": 22,
+              "length": 2,
+              "degree": 5,
+              "velocity": 0.85
+            },
+            {
+              "start": 26,
+              "length": 2,
+              "degree": 5,
+              "velocity": 0.85
+            },
+            {
+              "start": 30,
+              "length": 2,
+              "degree": 5,
+              "velocity": 0.85
+            },
+            {
+              "start": 34,
+              "length": 2,
+              "degree": 2,
+              "velocity": 0.85
+            },
+            {
+              "start": 38,
+              "length": 2,
+              "degree": 2,
+              "velocity": 0.85
+            },
+            {
+              "start": 42,
+              "length": 2,
+              "degree": 2,
+              "velocity": 0.85
+            },
+            {
+              "start": 46,
+              "length": 2,
+              "degree": 2,
+              "velocity": 0.85
+            },
+            {
+              "start": 50,
+              "length": 2,
+              "degree": 6,
+              "velocity": 0.85
+            },
+            {
+              "start": 54,
+              "length": 2,
+              "degree": 6,
+              "velocity": 0.85
+            },
+            {
+              "start": 58,
+              "length": 2,
+              "degree": 6,
+              "velocity": 0.85
+            },
+            {
+              "start": 62,
+              "length": 2,
+              "degree": 6,
+              "velocity": 0.85
+            }
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "bass-block",
+          "patternId": "bass-A",
+          "startBar": 0
+        },
+        {
+          "id": "bass-block-2",
+          "patternId": "bass-A",
+          "startBar": 4
+        }
+      ],
+      "fx": [],
+      "automation": [],
+      "synth": {
+        "presetId": "warm-bass",
+        "macros": {
+          "tone": 0.45,
+          "punch": 0.7,
+          "space": 0.2,
+          "length": 0.3
+        },
+        "advanced": {}
+      }
+    },
+    {
+      "id": "pad",
+      "name": "Pad",
+      "color": "#ff6b6b",
+      "kind": "synth",
+      "volumeDb": -6,
+      "pan": 0,
+      "mute": false,
+      "solo": false,
+      "patterns": [
+        {
+          "id": "pad-A",
+          "name": "A",
+          "lengthBars": 4,
+          "stepsPerBar": 16,
+          "steps": [],
+          "notes": [
+            {
+              "start": 0,
+              "length": 16,
+              "degree": 0,
+              "velocity": 0.7
+            },
+            {
+              "start": 0,
+              "length": 16,
+              "degree": 2,
+              "velocity": 0.7
+            },
+            {
+              "start": 0,
+              "length": 16,
+              "degree": 4,
+              "velocity": 0.7
+            },
+            {
+              "start": 16,
+              "length": 16,
+              "degree": 5,
+              "velocity": 0.7
+            },
+            {
+              "start": 16,
+              "length": 16,
+              "degree": 7,
+              "velocity": 0.7
+            },
+            {
+              "start": 16,
+              "length": 16,
+              "degree": 9,
+              "velocity": 0.7
+            },
+            {
+              "start": 32,
+              "length": 16,
+              "degree": 2,
+              "velocity": 0.7
+            },
+            {
+              "start": 32,
+              "length": 16,
+              "degree": 4,
+              "velocity": 0.7
+            },
+            {
+              "start": 32,
+              "length": 16,
+              "degree": 6,
+              "velocity": 0.7
+            },
+            {
+              "start": 48,
+              "length": 16,
+              "degree": 6,
+              "velocity": 0.7
+            },
+            {
+              "start": 48,
+              "length": 16,
+              "degree": 8,
+              "velocity": 0.7
+            },
+            {
+              "start": 48,
+              "length": 16,
+              "degree": 10,
+              "velocity": 0.7
+            }
+          ]
+        }
+      ],
+      "blocks": [
+        {
+          "id": "pad-block",
+          "patternId": "pad-A",
+          "startBar": 0
+        },
+        {
+          "id": "pad-block-2",
+          "patternId": "pad-A",
+          "startBar": 4
+        }
+      ],
+      "fx": [
+        {
+          "id": "pad-filter",
+          "type": "filter",
+          "enabled": true,
+          "params": {
+            "cutoff": 0.35
+          }
+        }
+      ],
+      "automation": [
+        {
+          "id": "pad-filter-lane",
+          "target": {
+            "kind": "fx",
+            "fxId": "pad-filter",
+            "param": "cutoff"
+          },
+          "visible": true,
+          "points": [
+            {
+              "bar": 0,
+              "value": 0.3
+            },
+            {
+              "bar": 4,
+              "value": 0.85
+            },
+            {
+              "bar": 8,
+              "value": 0.85
+            }
+          ]
+        }
+      ],
+      "synth": {
+        "presetId": "soft-pad",
+        "macros": {
+          "tone": 0.6,
+          "punch": 0.5,
+          "space": 0.35,
+          "length": 0.6
+        },
+        "advanced": {}
+      },
+      "duck": {
+        "sourceId": "kick",
+        "on": true,
+        "amount": 0.7,
+        "release": 2
+      }
+    }
+  ],
+  "createdAt": 1795190980903,
+  "updatedAt": 1795190980903
+}

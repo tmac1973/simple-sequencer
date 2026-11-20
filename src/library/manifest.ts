@@ -37,6 +37,7 @@ export const CATEGORIES = [
   'Percussion',
   'FX & risers',
   'Melodic one-shots',
+  'Guitars',
   'Vocal chops',
 ] as const;
 

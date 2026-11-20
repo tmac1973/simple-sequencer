@@ -20,3 +20,11 @@ The plan's Freesound packs (menegass, Uberproduktion, oceansonmars, AKUSTIKA, wa
 f-r-a-g-i-l-e) are all CC0 but Freesound requires an API token to download. The build
 script supports entries with a `freesoundId` when `FREESOUND_TOKEN` is set; the shipped
 library uses the Sonic Pi, VCSL and Salamander sources, which download without a token.
+
+## Guitars (considered for the Guitars kit)
+
+| Source | Why it's excluded |
+|---|---|
+| Damien's Funky Guitar, Ovation Guitar (sfzinstruments) | No license stated. |
+| Black And Green Guitars feedback samples | They're background noise beds; the library makes its feedback tone with a sine wave. |
+| tonejs-instruments guitars | Repackaged from other libraries; the Karoryfer originals are used directly instead. |

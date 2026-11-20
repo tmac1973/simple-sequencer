@@ -20,7 +20,7 @@ tracks, patterns and a song timeline, with no account and no server.
 - **MIDI keyboards**: plug one in and play (Chrome, Edge, Firefox); notes snap to the song's key and drum pads play each drum.
 - **● Rec**: count in, loop the pattern with a click, and record what you play from either keyboard. Each pass adds notes and one undo removes the whole take.
 - **Melodic samples**: play any sound in tune in the piano roll (piano, vocal chop…).
-- **124 built-in sounds**: 4 drum kits, a percussion kit (crash, tambourine, congas, bongos, claves…), and melodic, FX and vocal sounds. All are CC0 or CC-BY.
+- **136 built-in sounds**: 4 drum kits, a percussion kit (crash, tambourine, congas, bongos, claves…), guitars (clean, hollow-body and muted electric, acoustic, nylon, banjo, chords and slides), and melodic, FX and vocal sounds. All are CC0 or CC-BY.
 - **Your own sounds**: import WAV, MP3, OGG or FLAC, or **record from your microphone**.
 - **Sample editor**: trim, reverse, tune, loop, fade and normalize. Edits never change the original file.
 - **Sidechain pump**: 💓 Pump to the kick makes a track dip each time the kick hits and swell back, the classic house "breathing" sound (any track can duck to any other).
@@ -30,6 +30,7 @@ tracks, patterns and a song timeline, with no account and no server.
 - **Wobble (LFO) lanes**: switch any lane to Wobble and the knob moves up and down by itself, in time with the song. Pick from 6 shapes and speeds from a 1/16 note to 8 bars, or use a one-click quick wobble (wobble bass, tremolo, auto-pan, slow sweep). The wobble's amount and speed can be automated too.
 - **Share links**: 🔗 Share turns your song into a link. Whoever opens it gets the song in their browser, with no account or server. Sounds you recorded or imported are swapped for similar built-in ones.
 - **Saving and export**: autosave in your browser, a song library, `.json`/`.zip` song files, and **WAV/MP3 export**.
+- **Make songs with code**: the song file format, plus every built-in sound, synth preset and effect, is documented in [docs/SONG_FORMAT.md](docs/SONG_FORMAT.md). There's a runnable example in [docs/examples/make-song.mjs](docs/examples/make-song.mjs).
 - **Help as you go**: undo/redo, keyboard shortcuts (press `?`), and a plain-English tooltip on every control.
 
 ## Run it
@@ -67,8 +68,8 @@ recording needs HTTPS (or localhost).
 
 - **App code**: MIT.
 - **Built-in sounds**: listed in `samples-src/sources.json`, each with its source, author and license.
-  - Most are **CC0** (public domain): the Sonic Pi sample library (originally from freesound.org) and the Versilian Community Sample Library.
-  - The piano is the **Salamander Grand Piano** by Alexander Holm (**CC-BY 3.0**), credited in the app.
+  - Most are **CC0** (public domain): the Sonic Pi sample library (originally from freesound.org), the Versilian Community Sample Library, and Karoryfer Samples' guitar libraries.
+  - The piano is the **Salamander Grand Piano** by Alexander Holm (**CC-BY 3.0**), and the nylon guitar is by quartertone on freesound.org (**CC-BY 4.0**). Both are credited in the app.
 - **Excluded sources**: anything considered and rejected is listed with reasons in `samples-src/EXCLUDED.md`.
 - **Rebuilding the library**: run `node scripts/build-samples.mjs` (needs `ffmpeg`). Entries with a `freesoundId` also need a free Freesound API token in `FREESOUND_TOKEN`.
 - **MP3 encoder**: MP3 export uses [lamejs](https://github.com/shijinyu/lamejs) (**LGPL-3.0**). It ships unmodified as a separate file (`mp3.worker-*.js`) that only loads when you export an MP3.
